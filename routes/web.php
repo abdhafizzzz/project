@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DaftarController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SetPasswordController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +25,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Applying middleware
+Route::middleware('auth')->group(function () {
+    // Protected routes here
+    Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');;
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    // ...
+});
+
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 // New User Registration
@@ -39,10 +50,10 @@ Route::post('set-password', [SetPasswordController::class, 'setPassword']);
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 
-
-Route::get('/daftar', function () {
-    return view('layouts.daftar');
-})->name('daftar');
+//Subsidi Daftar Form Page
+// Route::get('/daftar', function () {
+//     return view('layouts.daftar');
+// })->name('daftar');
 
 Route::view('senaraitanah', 'senaraitanah');
 

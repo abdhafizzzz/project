@@ -68,7 +68,7 @@
                                 </div>
 
                                 <p class="text-center text-muted mt-5 mb-0">Sudah Daftar?
-                                    <a href="http://ebajak.test/login" button type="button" class="btn btn-link btn-outline-primary">Log Masuk disini</button></a></p>
+                                    <a href="login" button type="button" class="btn btn-link btn-outline-primary">Log Masuk disini</button></a></p>
                             </div>
                         </div>
                     </div>

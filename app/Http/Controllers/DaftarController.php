@@ -10,5 +10,10 @@ class DaftarController extends Controller
     {
         return view('layouts.daftar');
     }
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 }
 
