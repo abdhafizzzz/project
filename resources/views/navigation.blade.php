@@ -157,6 +157,7 @@ zaraz.init)
 <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
 </div>
 <li class="nav-item dropdown">
+    @auth {{-- to make sure this part is skipped if session are timed out for the user --}}
     <a class="nav-link dropdown-toggle" href="#" id="logoutDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ Auth::user()->name }}
     </a>
@@ -166,7 +167,9 @@ zaraz.init)
             <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         </form>
     </div>
+    @endauth
 </li>
+
 
 </li>
 </nav>
