@@ -15,7 +15,8 @@
         </ol>
         </section>
     <!-- Main content -->
-    <form method="post" action="pet_act.php" id="pet" name="pet">
+    <form method="post" action="{{ route('store') }}" id="pet" name="pet">
+        @csrf
     <section class="content">
         <div class="row ">
 
@@ -43,9 +44,18 @@
                     <label for="poskod">Poskod</label>
                     <input type="text" class="form-control" id="poskod" name="poskod" placeholder="Poskod">
 
-                    <!-- select -->
+                    <!-- select daerah-->
                     <label for="daerah">Daerah</label>
-                    <select class="form-control"  name="daerah">
+
+                    {{-- <select class="form-control" name="daerah">
+                        <option value="0">Sila pilih...</option>
+                        @foreach($daerahList as $value => $name)
+                            <option value="{{ $value }}">{{ $name }}</option>
+                        @endforeach
+                    </select> --}}
+                    <br>
+
+                    {{-- <select class="form-control"  name="daerah">
                         <option value="0">Sila pilih...</option>
                         <option value="32"
                             >Banggi					</option>
@@ -116,7 +126,8 @@
                         <option value="4"
                             >Tuaran					</option>
 
-                    </select>
+                    </select> --}}
+
 
                     <label for="notelrumah">No. Telefon</label>
                     <input type="text" class="form-control" id="notel" name="notel" placeholder="No.Telefon">

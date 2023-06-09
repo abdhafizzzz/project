@@ -31,6 +31,6 @@ class AuthController extends Controller
 
         // You can customize the logic here after the user is registered successfully
 
-        return redirect()->route('login')->with('success', 'Registration successful. Please login to continue.');
+        return redirect()->route('login')->with('success', 'Daftar Berjaya! Sila Login.');
     }
 }
