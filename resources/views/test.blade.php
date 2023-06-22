@@ -70,3 +70,11 @@
                             >Tuaran					</option>
 
                     </select> --}}
+
+                    {{-- another one... --}}
+                    {{-- <select class="form-control" name="daerah">
+                        <option value="0">Sila pilih...</option>
+                        @foreach($daerahList as $value => $name)
+                            <option value="{{ $value }}">{{ $name }}</option>
+                        @endforeach
+                    </select> --}}

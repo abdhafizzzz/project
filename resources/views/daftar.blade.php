@@ -1,7 +1,5 @@
 @extends('navigation')
-{{-- <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-</head> --}}
+
 @section('navigation')
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -14,8 +12,17 @@
             <li><a href="home"><i class="fa fa-dashboard"></i> Laman Utama</a></li>
         </ol>
         </section>
+
+        <!-- flash message of success -->
+        @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
     <!-- Main content -->
-    <form method="post" action="{{ route('store') }}" id="pet" name="pet">
+    {{-- <form method="post" action="{{ route('store') }}" id="pet" name="pet"> --}}
+        <form action="{{ route('store') }}" method="POST">
         @csrf
     <section class="content">
         <div class="row ">
@@ -47,15 +54,7 @@
                     <!-- select daerah-->
                     <label for="daerah">Daerah</label>
 
-                    {{-- <select class="form-control" name="daerah">
-                        <option value="0">Sila pilih...</option>
-                        @foreach($daerahList as $value => $name)
-                            <option value="{{ $value }}">{{ $name }}</option>
-                        @endforeach
-                    </select> --}}
-                    <br>
-
-                    {{-- <select class="form-control"  name="daerah">
+                    <select class="form-control"  name="daerah_id">
                         <option value="0">Sila pilih...</option>
                         <option value="32"
                             >Banggi					</option>
@@ -126,7 +125,7 @@
                         <option value="4"
                             >Tuaran					</option>
 
-                    </select> --}}
+                    </select>
 
 
                     <label for="notelrumah">No. Telefon</label>
@@ -151,7 +150,7 @@
                 <div class="box-body">
                 <label>No.Kad Petani</label>
                 <div class="input-group date">
-                <input name="nokad" type="text" class="form-control" id="nokad">
+                <input type="text" class="form-control" placeholder="No. Kad Petani ATAU No. Kad Pengenalan" name="nokad" id="nokad">
                 </div>
                 <label>Tahun Permohonan</label>
                 <div class="input-group date">
@@ -197,7 +196,7 @@
                         </label>
                     </div>
                 </div>
-                <label for="tarikh" style="margin-top: 11px">Tarikh</label>
+                <label for="tarikh" style="margin-bottom: 6px">Tarikh</label>
                 <div class="input-group date">
                     <input name="tarikh" type="date" class="form-control" id="tarikh"/>
                     <span class="input-group-addon">
@@ -205,7 +204,8 @@
                 </div>
 
                 <div class="box-footer">
-                    <button type="submit" style="margin-top:2rem" class="btn btn-primary" name="submit1" value="seterusnya">Simpan & Seterusnya</button>
+                    {{-- <button type="submit" style="margin-top:1rem" class="btn btn-primary" name="submit1" value="seterusnya">Simpan & Seterusnya</button> --}}
+                    <button type="submit" style="margin-top:2rem" class="btn btn-primary">Simpan</button>
                 </div>
             </div> <!-- /.form-group -->
             </div> <!-- /.box-body -->

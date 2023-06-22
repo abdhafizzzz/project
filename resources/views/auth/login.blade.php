@@ -36,11 +36,6 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    <div class="form-group row mb-3">
-                                        <div class="text-right">
-                                            <a href="dashboard">skip login utk projek developer sahaja</a>
-                                        </div>
-                                    </div>
                                 </div>
                                 <button class="btn btn-dark btn-outline-primary btn-lg px-5 mb-3" title="Klik untuk Log Masuk" aria-label="Log Masuk">Log Masuk</button>
                                 <p class="small mb-5 pb-lg-2"><a class="text-black-50" href="{{ route('password.request') }}">Lupa kata laluan? sila klik sini</a></p>

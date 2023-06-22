@@ -20,7 +20,7 @@ class CreateDaftarTable extends Migration
             $table->string('poskod');
             $table->unsignedBigInteger('daerah_id');
             $table->string('notel');
-            $table->string('nohp');
+            $table->string('nohp')->nullable();
             $table->string('nokad');
             $table->integer('tahunpohon');
             $table->boolean('rd_daftar');
@@ -30,7 +30,7 @@ class CreateDaftarTable extends Migration
             $table->timestamps();
 
             // Foreign key constraint
-            $table->foreign('daerah_id')->references('id')->on('daerah')->onDelete('cascade');
+            $table->foreign('daerah_id')->references('id')->on('daerah');//->onDelete('cascade');
         });
     }
 
