@@ -60,6 +60,11 @@ class DaftarController extends Controller
         return view('semakdaftar');
     }
 
+    public function cetakindex()
+    {
+        return view('pet_cetak');
+    }
+
     public function store(Request $request)
     {
         DB::table('daftar')->insert([
@@ -81,6 +86,19 @@ class DaftarController extends Controller
         ]);
 
         return redirect('/daftar')->with('success', 'Data berhasil disimpan!');
+    }
+
+    public function edit($id)
+    {
+        // Retrieve the daftar record with the given id
+        $daftar = DB::select('SELECT * FROM daftar WHERE id = ?', [$id]);
+
+        // Check if the daftar record exists
+        if (!$daftar) {
+            abort(404);
+        }
+        // Pass the daftar record to the daftaredit view
+        return view('daftaredit', ['daftar' => $daftar[0]]);
     }
 }
 

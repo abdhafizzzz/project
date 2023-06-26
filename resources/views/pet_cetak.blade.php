@@ -144,7 +144,7 @@
          P.breakhere {page-break-before: always}
     </STYLE>
 
-    <script Language="Javascript">
+    {{-- <script Language="Javascript">
     function printit(){
     if (window.print) {
     window.print() ;
@@ -154,4 +154,4 @@
     WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";
     }
     }
-    </script>
+    </script> --}}

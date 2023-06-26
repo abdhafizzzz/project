@@ -2,10 +2,11 @@
 // Retrieve all daftar records for the logged in user
 $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
 ?>
+
 @extends('navigation')
 
     @section('navigation')
-        <div class="content-wrapper container">
+        <div class="content-wrapper">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -59,7 +60,7 @@ $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
                                             <td>{{ $daftar->ch_musim2 ? 'Yes' : 'No' }}</td>
                                             <td>{{ $daftar->tarikh }}</td>
                                             <td>
-                                                <a href="{{ url('/daftar/' . $daftar->id) }}" class="btn btn-sm btn-info">Lihat</a>
+                                                <a href="{{ route('pet_cetak') }}" class="btn btn-sm btn-info">Lihat</a>
                                                 <a href="{{ url('/daftar/' . $daftar->id . '/edit') }}" class="btn btn-sm btn-primary">Edit</a>
                                                 <form action="{{ url('/daftar/' . $daftar->id) }}" method="POST" style="display: inline-block;">
                                                     @csrf
