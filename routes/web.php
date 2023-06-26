@@ -28,7 +28,10 @@ Route::get('/', function () {
 // Applying middleware
 Route::middleware('auth')->group(function () {
     // Protected routes here
-    Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');;
+    Route::get('/daftar', [DaftarController::class, 'index'])->name('daftar');
+    // Route::get('/daftar/{id}', [DaftarController::class, 'show'])->name('semakdaftar');
+
+    Route::get('/semakan', [DaftarController::class, 'semakindex'])->name('semakindex');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     // Route::get('/daftar/create', [DaftarController::class, 'create'])->name('daftar.create');
     Route::post('/store', [DaftarController::class, 'store'])->name('store');

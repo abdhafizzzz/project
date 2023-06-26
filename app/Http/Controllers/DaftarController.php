@@ -11,84 +11,76 @@ class DaftarController extends Controller
     public function index()
     {
         return view('daftar');
+
+        // Retrieve all daftar records for the logged in user
+        // $daftars = DB::table('daftar')->where('user_id', Auth::id())->get();
+
+        // Pass the daftar records to the view
+        // return view('daftar.index')->with('daftar', $daftars);
+
     }
 
-    // public function __construct()
+    public function show($id = null)
+    {
+        if ($id) {
+            // Retrieve the daftar record with the given id and user_id
+            $daftar = DB::select('SELECT * FROM daftar WHERE id = ? AND user_id = ?', [$id, Auth::id()]);
+
+            // Check if the daftar record exists
+            if (!$daftar) {
+                abort(404);
+            }
+
+            return view('semakdaftar')->with('daftar', $daftar[0]);
+        } else {
+            // Handle the case where no id is provided
+            // For example, show a list of all daftar entries
+            $daftar = DB::select('SELECT * FROM daftar WHERE user_id = ?', [Auth::id()]);
+
+            return view('daftar')->with('daftar', $daftar);
+        }
+    }
+    // public function show($id)
     // {
-    //     $this->middleware('auth');
+    //     // Retrieve the daftar record with the given id and user_id
+    //     $daftar = DB::select('SELECT * FROM daftar WHERE id = ? AND user_id = ?', [$id, Auth::id()]);
+
+    //     // Check if the daftar record exists
+    //     if (!$daftar) {
+    //         abort(404);
+    //     }
+
+    //     // Pass the daftar record to the view
+    //     return view('semakdaftar')->with('daftar', $daftar[0]);
     // }
 
-    // public function create()
-    // {
-    //     $daerahList = DB::table('daerah')->pluck('value', 'name');
 
-    //     return view('daftar', compact('daerahList'));
-    // }
-
-    // public function store(Request $request)
-    // {
-    //     $loggedUser = Auth::user();
-    //     // dd('store method reached');//to check if function called correctly
-    //     $data = $request->validate([
-    //         'pemohon' => 'required',
-    //         'nokp' => 'required',
-    //         'alamat' => 'required',
-    //         'poskod' => 'required',
-    //         'daerah' => 'required',
-    //         'notel' => 'required',
-    //         'nohp' => 'required',
-    //         'nokad' => 'required',
-    //         'tahunpohon' => 'required',
-    //         'rd_daftar' => 'required',
-    //         'ch_musim' => 'nullable',
-    //         'ch_musim2' => 'nullable',
-    //         'tarikh' => 'required',
-    //     ]);
-    //     // dd($data);//debug
-
-    //     // Create a new record in the 'daftar' table
-    //         DB::table('daftar')->insert([
-    //         'pemohon' => $data['pemohon'],
-    //         'nokp' => $data['nokp'],
-    //         'alamat' => $data['alamat'],
-    //         'poskod' => $data['poskod'],
-    //         'daerah' => $data['daerah'],
-    //         'notel' => $data['notel'],
-    //         'nohp' => $data['nohp'],
-    //         'nokad' => $data['nokad'],
-    //         'tahunpohon' => $data['tahunpohon'],
-    //         'rd_daftar' => $data['rd_daftar'],
-    //         'ch_musim' => $data['ch_musim'],
-    //         'ch_musim2' => $data['ch_musim2'],
-    //         'tarikh' => $data['tarikh'],
-    //     ]);
-    //     // dd('Data has been saved successfully.');
-
-    //     // Redirect or perform any other operations
-    //     return redirect()->back()->with('success', 'Data has been saved successfully.');
-    // }
+    public function semakindex()
+    {
+        return view('semakdaftar');
+    }
 
     public function store(Request $request)
-{
-    DB::table('daftar')->insert([
-        'pemohon' => $request->pemohon,
-        'nokp' => $request->nokp,
-        'alamat' => $request->alamat,
-        'poskod' => $request->poskod,
-        'daerah_id' => $request->daerah_id,
-        'notel' => $request->notel,
-        'nohp' => $request->nohp,
-        'nokad' => $request->nokad,
-        'tahunpohon' => $request->tahunpohon,
-        'rd_daftar' => $request->rd_daftar,
-        'ch_musim' => $request->ch_musim ? 1 : 0,
-        'ch_musim2' => $request->ch_musim2 ? 1 : 0,
-        'tarikh' => $request->tarikh,
-        'created_at' => now(),
-        'updated_at' => now()
-    ]);
+    {
+        DB::table('daftar')->insert([
+            'pemohon' => $request->pemohon,
+            'nokp' => $request->nokp,
+            'alamat' => $request->alamat,
+            'poskod' => $request->poskod,
+            'daerah_id' => $request->daerah_id,
+            'notel' => $request->notel,
+            'nohp' => $request->nohp,
+            'nokad' => $request->nokad,
+            'tahunpohon' => $request->tahunpohon,
+            'rd_daftar' => $request->rd_daftar,
+            'ch_musim' => $request->ch_musim ? 1 : 0,
+            'ch_musim2' => $request->ch_musim2 ? 1 : 0,
+            'tarikh' => $request->tarikh,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
-    return redirect('/daftar')->with('success', 'Data berhasil disimpan!');
-}
+        return redirect('/daftar')->with('success', 'Data berhasil disimpan!');
+    }
 }
 
