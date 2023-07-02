@@ -20,6 +20,18 @@ class DaftarController extends Controller
 
     }
 
+    // public function index()
+    // {
+    //     // Retrieve all daftar records for the currently authenticated user
+    //     $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
+
+    //     // Check if the daftar record exists
+    //     $daftar_exists = count($daftars) > 0;
+
+    //     // Pass the daftar records to the daftar index view
+    //     return view('daftar.index', ['daftars' => $daftars, 'daftar_exists' => $daftar_exists]);
+    // }
+
     public function show($id = null)
     {
         if ($id) {

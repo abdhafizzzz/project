@@ -5,30 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>eBajak | Dashboard</title>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<link rel="stylesheet" href="{{ asset('fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback') }}">
 
-<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css') }}">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="{{ asset('cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css') }}">
 
+<link rel="stylesheet" href="{{ asset('code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css') }}">
 
-<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 
-<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
-<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
 
-<link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+<link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css?v=3.2.0') }}">
 
-<link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
+<link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 
-<link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
 
-<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
 
-<link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 
 <script nonce="e0a479ae-8039-4b4a-a221-8b97b1894d38">
 (function(w, d) {
@@ -246,14 +246,14 @@ Tuntutan
 </a>
 <ul class="nav nav-treeview">
 <li class="nav-item">
-<a href="#" class="nav-link">
+<a href="{{ route('ptundaf') }}" class="nav-link">
 <i class="far fa-circle nav-icon"></i>
 <p>Daftar Tuntutan</p>
 </a>
 
 </li>
 <li class="nav-item">
-<a href="#" class="nav-link">
+<a href="{{ route('petsemak') }}" class="nav-link">
 <i class="far fa-circle nav-icon"></i>
 <p>Semak Tuntutan</p>
 </a>
@@ -270,7 +270,7 @@ Carian
 </a>
 <ul class="nav nav-treeview">
 <li class="nav-item">
-<a href="#" class="nav-link">
+<a href="{{ route('carian') }}" class="nav-link">
 <i class="far fa-circle nav-icon"></i>
 <p>Carian Status</p>
 </a>
