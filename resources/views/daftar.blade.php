@@ -43,10 +43,10 @@
             <div class="box-body">
                 <div class="form-group">
                     <label for="pemohon">Nama Pemohon</label>
-                    <input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon">
+                    <input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon" value="{{ Auth::user()->name }}" readonly>
 
                     <label for="pendaftaran">No.Kad Pengenalan</label>
-                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan">
+                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ Auth::user()->kad_pengenalan }}" readonly>
 
                     <!-- textarea -->
                     <label>Alamat</label>
