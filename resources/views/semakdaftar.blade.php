@@ -1,6 +1,6 @@
 <?php
 // Retrieve all daftar records for the logged in user
-$daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
+$daftars = DB::select('SELECT * FROM daftar WHERE user_id = ?', [Auth::id()]);
 ?>
 
 @extends('navigation')
@@ -24,7 +24,7 @@ $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
                             <table class="table mt-3">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        {{-- <th scope="col">#</th> --}}
                                         <th scope="col">Pemohon</th>
                                         <th scope="col">No. KP</th>
                                         <th scope="col">Alamat</th>
@@ -45,7 +45,7 @@ $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
 
                                     @foreach ($daftars as $daftar)
                                         <tr>
-                                            <th scope="row">{{ $loop->iteration }}</th>
+                                            {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
                                             <td>{{ $daftar->pemohon }}</td>
                                             <td>{{ $daftar->nokp }}</td>
                                             <td>{{ $daftar->alamat }}</td>

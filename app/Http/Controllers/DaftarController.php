@@ -11,26 +11,7 @@ class DaftarController extends Controller
     public function index()
     {
         return view('daftar');
-
-        // Retrieve all daftar records for the logged in user
-        // $daftars = DB::table('daftar')->where('user_id', Auth::id())->get();
-
-        // Pass the daftar records to the view
-        // return view('daftar.index')->with('daftar', $daftars);
-
     }
-
-    // public function index()
-    // {
-    //     // Retrieve all daftar records for the currently authenticated user
-    //     $daftars = DB::select('SELECT * FROM daftar WHERE id = ?', [Auth::id()]);
-
-    //     // Check if the daftar record exists
-    //     $daftar_exists = count($daftars) > 0;
-
-    //     // Pass the daftar records to the daftar index view
-    //     return view('daftar.index', ['daftars' => $daftars, 'daftar_exists' => $daftar_exists]);
-    // }
 
     public function show($id = null)
     {
@@ -52,20 +33,6 @@ class DaftarController extends Controller
             return view('daftar')->with('daftar', $daftar);
         }
     }
-    // public function show($id)
-    // {
-    //     // Retrieve the daftar record with the given id and user_id
-    //     $daftar = DB::select('SELECT * FROM daftar WHERE id = ? AND user_id = ?', [$id, Auth::id()]);
-
-    //     // Check if the daftar record exists
-    //     if (!$daftar) {
-    //         abort(404);
-    //     }
-
-    //     // Pass the daftar record to the view
-    //     return view('semakdaftar')->with('daftar', $daftar[0]);
-    // }
-
 
     public function semakindex()
     {
@@ -80,6 +47,7 @@ class DaftarController extends Controller
     public function store(Request $request)
     {
         DB::table('daftar')->insert([
+            'user_id' => Auth::id(),
             'pemohon' => $request->pemohon,
             'nokp' => $request->nokp,
             'alamat' => $request->alamat,
@@ -111,6 +79,19 @@ class DaftarController extends Controller
         }
         // Pass the daftar record to the daftaredit view
         return view('daftaredit', ['daftar' => $daftar[0]]);
+    }
+
+    public function create(Request $request)
+    {
+        // Tallying ID of logged in user with the daftar table
+        $userId = Auth::id();
+
+        DB::table('daftar')->insert([
+            'user_id' => $userId,
+            // Set other column values of daftar as needed
+        ]);
+
+        // Perform any additional logic or redirect as needed
     }
 }
 

@@ -7,7 +7,7 @@
         <div class="card-body">
             @if (session('status'))
                 <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
+                    {{ 'Email Berjaya Dihantar. Sila Periksa Email Anda!' }}
                 </div>
             @endif
 
