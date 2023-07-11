@@ -1,0 +1,58 @@
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #6a11cb;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+    }
+
+    /* styles.css */
+
+    /* styles.css */
+
+/* styles.css */
+
+.vh-100 {
+    height: 100vh;
+  }
+
+  .bg-image {
+    img src=: url('C:\laragon\www\ebajak\resources\views\img\padionlykabur.jpg');
+    background-size: cover;
+  }
+
+  .gradient-custom-3 {
+    /* Add your gradient styles here */
+  }
+/* styles.css */
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback');
+/* Rest of the CSS styles */
+
+  /* Add any other custom styles or overrides as needed */
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+
+  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+
+  <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
+
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
