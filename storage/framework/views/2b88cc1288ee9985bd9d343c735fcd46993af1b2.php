@@ -69,7 +69,8 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                     <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>
                                     <td><?php echo e($item->luasekar); ?></td>
                                     <td><?php echo e($item->luaspohon); ?></td>
-                                    <td><?php echo e($item->pemilikan); ?></td>
+                                    <td><?php echo e(DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi')); ?></td>
+
                                     <td style="text-align: center;">
                                         <a href="<?php echo e(route('edit-tanah', ['id' => $item->pohonid])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
 

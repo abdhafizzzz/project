@@ -74,31 +74,33 @@ class DaftarController extends Controller
 
     public function update(Request $request)
     {
-        $userId = Auth::id();
+        $petanibajakId = Auth::id();
 
-    DB::table('daftar')->updateOrInsert(
-        ['user_id' => $userId],
+    DB::table('petanibajak')->updateOrInsert(
+        ['petanibajak_id' => $petanibajakId],
         [
-            'user_id' => $userId,
-            'pemohon' => $request->pemohon,
+            'petanibajak_id' => $petanibajakId,
+            'nama' => $request->nama,
             'nokp' => $request->nokp,
             'alamat' => $request->alamat,
             'poskod' => $request->poskod,
-            'daerah_id' => $request->daerah_id,
-            'notel' => $request->notel,
-            'nohp' => $request->nohp,
-            'nokad' => $request->nokad,
+            'daerah' => $request->daerah,
+            'telrumah' => $request->telrumah,
+            'telhp' => $request->telhp,
+            'nopetani' => $request->nopetani,
             'tahunpohon' => $request->tahunpohon,
-            'rd_daftar' => $request->rd_daftar,
-            'ch_musim' => $request->ch_musim ? 1 : 0,
-            'ch_musim2' => $request->ch_musim2 ? 1 : 0,
-            'tarikh' => $request->tarikh,
-            'created_at' => now(),
-            'updated_at' => now()
+            'baru' => $request->baru,
+            'musim' => $request->musim ? 1 : 0,
+            'musim2' => $request->musim2 ? 1 : 0,
+            'tarpohon' => $request->tarpohon,
+            // 'created_at' => now(),
+            // 'updated_at' => now()
         ]
     );
 
-    return redirect('/daftar')->with('success', 'Data berhasil disimpan!');
+    // return redirect('/daftar')->with('success', 'Data berhasil disimpan!');
+    return back()->with('success', 'Data berhasil disimpan!');
+
     }
 }
 

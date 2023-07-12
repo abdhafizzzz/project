@@ -1,11 +1,10 @@
-
 <?php $__env->startSection('content'); ?>
-<?php if(session('registration_success')): ?>
-    <div class="alert alert-success">
-        <?php echo e(session('registration_success')); ?>
+    <?php if(session('registration_success')): ?>
+        <div class="alert alert-success">
+            <?php echo e(session('registration_success')); ?>
 
-    </div>
-<?php endif; ?>
+        </div>
+    <?php endif; ?>
 
     <section class="vh-100 gradient-custom">
         <div class="container py-5 h-100">
@@ -98,4 +97,5 @@ unset($__errorArgs, $__bag); ?>
 
 
 
-<?php /**PATH C:\laragon\www\project-master\resources\views/auth/login.blade.php ENDPATH**/ ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/auth/login.blade.php ENDPATH**/ ?>
