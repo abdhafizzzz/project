@@ -22,6 +22,28 @@
     <body>
         <?php echo $__env->make('flash-message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         
+
+                                    
+                    
+
+
+                    
+
+                    
+
+                        
+
+                        <!-- Right Side Of Navbar -->
+                        
+                            <!-- Authentication Links -->
+                            
+                                    
+                                
+                                    
+                                
+
+
+                                    
             </nav>
 
             <main class="py-4">

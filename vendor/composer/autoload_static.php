@@ -615,7 +615,6 @@ class ComposerStaticInit444fbe2a815fe00373cbf95417223d52
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DaftarController' => __DIR__ . '/../..' . '/app/Http/Controllers/DaftarController.php',
         'App\\Http\\Controllers\\FileController' => __DIR__ . '/../..' . '/app/Http/Controllers/FileController.php',
-        'App\\Http\\Controllers\\GeranController' => __DIR__ . '/../..' . '/app/Http/Controllers/GeranController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\TanahController' => __DIR__ . '/../..' . '/app/Http/Controllers/TanahController.php',
         'App\\Http\\Controllers\\TuntutanController' => __DIR__ . '/../..' . '/app/Http/Controllers/TuntutanController.php',

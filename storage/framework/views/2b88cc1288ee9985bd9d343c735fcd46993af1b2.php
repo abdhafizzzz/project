@@ -2,11 +2,19 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+
+
 $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
-// $userData = DB::table('tanah')->where('pohonid', Auth::user()->id)->first();
 ?>
 
 
+
+<?php if(session('success')): ?>
+    <div class="alert alert-success">
+        <?php echo e(session('success')); ?>
+
+    </div>
+<?php endif; ?>
 
 <?php $__env->startSection('navigation'); ?>
 <div class="content-wrapper">
@@ -54,13 +62,11 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                     
                                     <td><?php echo e($item->table_id); ?></td>
                                     <td><?php echo e($counter++); ?></td>
-
-
                                     <td><?php echo e($item->bil); ?></td>
                                     <td><?php echo e($item->pohonid); ?></td>
                                     <td><?php echo e($item->pemilikgeran); ?></td>
                                     <td><?php echo e($item->nogeran); ?></td>
-                                    <td><?php echo e($item->lokasi); ?></td>
+                                    <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>
                                     <td><?php echo e($item->luasekar); ?></td>
                                     <td><?php echo e($item->luaspohon); ?></td>
                                     <td><?php echo e($item->pemilikan); ?></td>
@@ -72,9 +78,7 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                         <a href="<?php echo e(route('edit-tanah', ['id' => $item->pohonid])); ?>" class="btn btn-primary" style="margin-bottom: 10px;">Tambah Geran</a>
 
                                         <a href="<?php echo e(route('tanah.delete', ['id' => $item->table_id, 'success' => true])); ?>" class="btn btn-danger" style="margin-bottom: 10px;" onclick="return confirm('Are you sure you want to delete this?')">Padam</a>
-
                                     </td>
-
 
                                     
                                 </tr>

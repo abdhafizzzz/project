@@ -80,8 +80,8 @@ class TanahController extends Controller
         // Set a success message
         $message = 'Geran Berjaya Di Padam!';
 
-        // Store the success message in the session
-        session()->flash('Geran Berjaya Di Padam!', $message);
+        // Store the success message in the session with the key 'success'
+        session()->flash('success', 'Geran Berjaya Di Padam!');
 
         // Return the response to the same page
         return back();

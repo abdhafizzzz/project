@@ -2,11 +2,18 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+
+
 $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
-// $userData = DB::table('tanah')->where('pohonid', Auth::user()->id)->first();
 @endphp
 
 @extends('navigation')
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
 @section('navigation')
 <div class="content-wrapper">
@@ -53,13 +60,11 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                     {{-- {{ var_dump($item) }} --}}
                                     <td>{{ $item->table_id }}</td>
                                     <td>{{ $counter++}}</td>
-
-
                                     <td>{{ $item->bil }}</td>
                                     <td>{{ $item->pohonid }}</td>
                                     <td>{{ $item->pemilikgeran }}</td>
                                     <td>{{ $item->nogeran }}</td>
-                                    <td>{{ $item->lokasi }}</td>
+                                    <td>{{ DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi') }}</td>
                                     <td>{{ $item->luasekar }}</td>
                                     <td>{{ $item->luaspohon }}</td>
                                     <td>{{ $item->pemilikan }}</td>

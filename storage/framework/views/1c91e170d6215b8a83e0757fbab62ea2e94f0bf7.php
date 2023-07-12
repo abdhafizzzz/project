@@ -53,8 +53,6 @@
                     <label>Alamat :</label>
                     <textarea class="form-control" rows="3" placeholder="Alamat ..." name="alamat" maxlength="255" required><?php echo e(DB::table('daftar')->where('user_id', Auth::user()->id)->value('alamat')); ?></textarea>
 
-
-
                     <label for="poskod">Poskod :</label>
                     <input type="text" class="form-control" id="poskod" name="poskod" placeholder="Poskod" pattern="[0-9]{5}" maxlength="5" required value="<?php echo e(DB::table('daftar')->where('user_id', Auth::user()->id)->value('poskod')); ?>">
 
