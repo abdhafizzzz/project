@@ -67,7 +67,7 @@ class DaftarController extends Controller
 
     public function edit()
     {
-        $userData = DB::table('daftar')->where('user_id', Auth::user()->id)->first();
+        $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
 
         return view('daftar', compact('userData'));
     }

@@ -137,7 +137,7 @@
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
 
-                    <input type="date" name="tardaftar" id="tardaftar" class="form-control" value="<?php echo e($userData && $userData->tardaftar ? $userData->tardaftar : ''); ?>">
+                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="<?php echo e($userData && $userData->tarpohon ? $userData->tarpohon : ''); ?>">
                 </div><p id="dateValidationMessage" style="color: red; display: none;">Tarikh tidak boleh sebelum tarikh semasa.</p>
 
                 <div class="box-footer">
