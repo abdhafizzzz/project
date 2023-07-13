@@ -21,20 +21,25 @@ Route::middleware('auth')->group(function () {
     // Protected routes here
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    // Route for handling and displaying the edit form
+    // Route for handling and displaying the edit form of daftar blade
     Route::get('/daftar/edit', [DaftarController::class, 'edit'])->name('daftar.edit');
     Route::post('/daftar/update', [DaftarController::class, 'update'])->name('daftar.update');
     Route::match(['GET', 'POST'], '/daftar', [DaftarController::class, 'edit'])->name('daftar'); // Make it handle both GET (view) and POST (create, edit, and store) method
-    Route::get('/cetakan', [DaftarController::class, 'cetakindex'])->name('pet_cetak');
-    Route::get('/semakan', [DaftarController::class, 'semakindex'])->name('semakindex');
 
+    //Route for handling the pet_cetak
+    Route::get('/cetakan', [DaftarController::class, 'cetakindex'])->name('pet_cetak');
+
+    //Route tanahindex blade
     Route::get('/tanah/{id}/edit', [TanahController::class, 'edit'])->name('edit-tanah');
-    Route::post('/senaraitanah', [TanahController::class, 'store'])->name('senaraitanah.store');
-    Route::put('/senaraitanah/{id}', [TanahController::class, 'update'])->name('senaraitanah.update');
     Route::get('/tanahindex', [TanahController::class, 'index'])->name('tanahindex'); // Define the tanahindex route with the TanahController's index method
-    Route::get('/senaraitanah', [TanahController::class, 'create'])->name('senaraitanah'); // Define the tanahindex route with the TanahController's index method
     Route::get('/tanah/{id}/delete', [TanahController::class, 'delete'])->name('tanah.delete');
 
+    //Route senaraitanah blade
+    Route::post('/senaraitanah/store', [TanahController::class, 'store'])->name('senaraitanah.store');
+    Route::post('/senaraitanah/{petanibajak_id}', [TanahController::class, 'update'])->name('senaraitanah.update');
+    Route::match(['GET', 'POST'], '/senaraitanah', [TanahController::class, 'index2'])->name('senaraitanah'); // Define the tanahindex route with the TanahController's index method
+
+    Route::get('/get-latest-table-id', [TanahController::class, 'getLatestTableId']);//retrieve the latest table id
 
     Route::get('/carian', function () {
         return view('carian');

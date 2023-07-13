@@ -1,5 +1,7 @@
 @extends('navigation')
 @section('navigation')
+
+
 <div class="content-wrapper">
 
 <div class="content-header">
@@ -20,6 +22,12 @@
 
 <section class="content">
     <div class="container-fluid">
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <a>You are logged IN!</a>
 

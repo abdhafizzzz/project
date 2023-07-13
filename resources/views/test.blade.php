@@ -519,3 +519,33 @@
             ),
         );
 
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    const tableIdInput = document.getElementById('table_id');
+
+    // Check if the table_id input already has a value
+    if (!tableIdInput.value) {
+        // Check if the table_id is stored in the session
+        let previousTableId = sessionStorage.getItem('previousTableId');
+        let newTableId = previousTableId ? parseInt(previousTableId) : 1;
+
+        // Check if the newTableId is less than 94447
+        if (newTableId < 94447) {
+            newTableId = 94447; // Set the initial value to 94447
+        }
+
+        // Set the new table_id value
+        tableIdInput.value = newTableId;
+
+        // Store the new table_id in the session for future use
+        sessionStorage.setItem('previousTableId', newTableId);
+
+        // Add event listener to the form submission event
+        const form = document.getElementById('yourFormId'); // Replace 'yourFormId' with the actual form ID
+        form.addEventListener('submit', (event) => {
+            newTableId++; // Increment the table_id after form submission
+            sessionStorage.setItem('previousTableId', newTableId); // Update the stored table_id in the session
+        });
+    }
+});
+</script>

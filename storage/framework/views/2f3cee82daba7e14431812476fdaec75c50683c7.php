@@ -1,4 +1,6 @@
 <?php $__env->startSection('navigation'); ?>
+
+
 <div class="content-wrapper">
 
 <div class="content-header">
@@ -19,6 +21,13 @@
 
 <section class="content">
     <div class="container-fluid">
+
+        <?php if(session('success')): ?>
+            <div class="alert alert-success">
+                <?php echo e(session('success')); ?>
+
+            </div>
+        <?php endif; ?>
 
         <a>You are logged IN!</a>
 

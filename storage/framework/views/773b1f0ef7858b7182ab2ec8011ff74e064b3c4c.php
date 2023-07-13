@@ -1,10 +1,3 @@
-<?php
-    use Illuminate\Support\Facades\DB;
-    $user_id = DB::table('daftar')->where('user_id', Auth::user()->id)->value('user_id');
-?>
-
-
-
 <?php $__env->startSection('navigation'); ?>
 <div class="content-wrapper">
 
@@ -28,29 +21,17 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <form action="<?php echo e(isset($tanah) ? route('senaraitanah.update', $tanah->table_id) : route('senaraitanah.store')); ?>" method="POST">
+                        <form action="<?php echo e(route('senaraitanah.update', ['petanibajak_id' => Auth::user()->id])); ?>" method="POST">
                             <?php echo csrf_field(); ?>
 
-                            <!-- Add a hidden input field to store the tanah record ID -->
-                            <?php if(isset($tanah)): ?>
-                                <?php echo method_field('PUT'); ?>
-                                <input type="hidden" name="id" value="<?php echo e(isset($tanah) ? $tanah->table_id : ''); ?>">
-                            <?php endif; ?>
-
                             <div class="form-group">
-                                <label for="table_id">Table ID</label>
-                                <input type="text" class="form-control" id="table_id" name="table_id" value="<?php echo e(DB::table('tanah')->where('table_id', Auth::user()->id)->value('table_id')); ?>">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="bil">Bil</label>
-                                <input type="text" class="form-control" id="bil" name="bil" value="<?php echo e(DB::table('tanah')->where('table_id', Auth::user()->id)->value('bil')); ?>">
+                                
+                                <input type="text" class="form-control" id="table_id" name="table_id" value="<?php echo e($latestTableId); ?>" readonly style="display: none;">
                             </div>
 
                             <div class="form-group">
                                 <label for="pohonid">Pohon ID</label>
-                                <input type="text" class="form-control" id="pohonid" name="pohonid"
-                                value="<?php echo e($user_id); ?>" readonly>
+                                <input type="text" class="form-control" id="pohonid" name="pohonid" value="<?php echo e($user_id); ?>" readonly>
                             </div>
 
 
@@ -96,27 +77,23 @@
 
                             <button type="submit" class="btn btn-success">Tambah Tanah</button>
                         </form>
+
                         <script>
                             window.addEventListener('DOMContentLoaded', (event) => {
                                 const tableIdInput = document.getElementById('table_id');
 
-                                // Check if the table_id input already has a value
-                                if (!tableIdInput.value) {
-                                    // Generate a new table_id
-                                    const previousTableId = localStorage.getItem('previousTableId');
-                                    let newTableId = previousTableId ? parseInt(previousTableId) + 1 : 1;
+                                // Fetch the latest table_id from the server
+                                fetch('/get-latest-table-id')
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const latestTableId = data.latestTableId;
 
-                                    // Check if the newTableId is less than 94446
-                                    if (newTableId < 94446) {
-                                        newTableId = 94446; // Set the initial value to 94446
-                                    }
-
-                                    // Set the new table_id value
-                                    tableIdInput.value = newTableId;
-
-                                    // Store the new table_id in local storage for future use
-                                    localStorage.setItem('previousTableId', newTableId);
-                                }
+                                        // Set the new table_id value
+                                        tableIdInput.value = latestTableId;
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
                             });
                         </script>
 
@@ -131,32 +108,6 @@
     </section>
     <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-    </script>
-
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-
-<script src="dist/js/pages/dashboard.js"></script>
 <?php $__env->stopSection(); ?>
 
 

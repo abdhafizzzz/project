@@ -70,11 +70,11 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                     <td>{{ DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi') }}</td>
 
                                     <td style="text-align: center;">
-                                        <a href="{{ route('edit-tanah', ['id' => $item->pohonid]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                        <a href="{{ route('edit-tanah', ['id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
 
                                         <a href="{{ route('pet_cetak', ['table_id' => isset($tanah->table_id) ? $tanah->table_id : '']) }}" class="btn btn-info" style="margin-bottom: 10px;">PDF Cetak</a>
 
-                                        <a href="{{ route('edit-tanah', ['id' => $item->pohonid]) }}" class="btn btn-primary" style="margin-bottom: 10px;">Tambah Geran</a>
+                                        <a href="{{ route('edit-tanah', ['id' => $item->pohonid]) }}" class="btn btn-primary" style="margin-bottom: 10px;">Tambah Geran</a>{{-- upload file code, still in progress --}}
 
                                         <a href="{{ route('tanah.delete', ['id' => $item->table_id, 'success' => true]) }}" class="btn btn-danger" style="margin-bottom: 10px;" onclick="return confirm('Are you sure you want to delete this?')">Padam</a>
                                     </td>
