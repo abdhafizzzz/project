@@ -1,5 +1,6 @@
 <?php
     use Illuminate\Support\Facades\DB;
+    use Carbon\Carbon;
     $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
 ?>
 
@@ -136,12 +137,11 @@
 
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
-
-                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="<?php echo e($userData && $userData->tarpohon ? $userData->tarpohon : ''); ?>">
-                </div><p id="dateValidationMessage" style="color: red; display: none;">Tarikh tidak boleh sebelum tarikh semasa.</p>
+                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="<?php echo e($userData ? \Carbon\Carbon::parse($userData->tarpohon)->toDateString() : ''); ?>">
+                </div>
+                
 
                 <div class="box-footer">
-                    
                     <button type="submit" style="margin-top:2rem" class="btn btn-primary">Simpan</button>
                 </div>
                 </div> <!-- /.form-group -->
@@ -161,14 +161,9 @@
 
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#notel').inputmask('(999) 999-9999', {
-            greedy: false,
-            placeholder: '(___) ___-____'
-        });
-    });
-</script>
+
+
+
 <script>
     const tahunPohonInput = document.getElementById('tahunpohon');
     const yearValidationMessage = document.getElementById('yearValidationMessage');
@@ -183,18 +178,6 @@
         } else {
             yearValidationMessage.style.display = 'none';
             this.setCustomValidity('');
-        }
-    });
-</script>
-<script>
-    const tarikhInput = document.getElementById('tarikh');
-
-    tarikhInput.addEventListener('input', function() {
-        const inputDate = new Date(this.value);
-        const currentDate = new Date();
-
-        if (inputDate.getTime() < currentDate.getTime()) {
-            this.value = currentDate.toISOString().split('T')[0];
         }
     });
 </script>

@@ -14,49 +14,7 @@ class TanahController extends Controller
         return view('tanahindex');
     }
 
-    public function store(Request $request)
-    {
-        // Validate the form data
-        $validatedData = $request->validate([
-            'table_id' => 'required',
-            'pohonid' => 'required',
-            'pemilikgeran' => 'required',
-            'nogeran' => 'required',
-            'lokasi' => 'required',
-            'luasekar' => 'required',
-            'luaspohon' => 'required',
-            'pemilikan' => 'required',
-        ]);
-
-        // Create a new record in the 'tanah' table using the validated data
-        $tanah = DB::table('tanah')->insertGetId([
-            'table_id' => $validatedData['table_id'],
-            'pohonid' => $validatedData['pohonid'],
-            'pemilikgeran' => $validatedData['pemilikgeran'],
-            'nogeran' => $validatedData['nogeran'],
-            'lokasi' => $validatedData['lokasi'],
-            'luasekar' => $validatedData['luasekar'],
-            'luaspohon' => $validatedData['luaspohon'],
-            'pemilikan' => $validatedData['pemilikan'],
-        ]);
-
-      // Redirect the user to the 'tanahindex' page after storing the data
-        return redirect()->route('tanahindex');
-    }
-
     public function update(Request $request, $id)
-    // {
-    //     // Validate the form data
-    //     $validatedData = $request->validate([
-    //         'pohonid' => 'required',
-    //         'pemilikgeran' => 'required',
-    //         'nogeran' => 'required',
-    //         'lokasi' => 'required',
-    //         'luasekar' => 'required',
-    //         'luaspohon' => 'required',
-    //         'pemilikan' => 'required',
-    //     ]);
-    // }
     {
         // Validate the form data
         $validatedData = $request->validate([
@@ -82,7 +40,12 @@ class TanahController extends Controller
             'pemilikan' => $validatedData['pemilikan'],
         ]);
 
-      // Redirect the user to the 'tanahindex' page after storing the data
+        // Set a success message
+        $message = 'Data berjaya disimpan!';
+
+        // Store the success message in the session with the key 'success'
+        session()->flash('success', $message);
+        // Redirect the user to the 'tanahindex' page after storing the data
         return redirect()->route('tanahindex');
     }
 
@@ -127,6 +90,11 @@ class TanahController extends Controller
         return view('senaraitanah', compact('latestTableId', 'user_id'));
     }
 
+    /**
+     * Retrieves the latest table ID from the 'tanah' table.
+     *
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response containing the latest table ID incremented by 1.
+     */
     public function getLatestTableId()
     {
         $latestTableId = DB::table('tanah')->max('table_id');

@@ -22,7 +22,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Route for handling and displaying the edit form of daftar blade
-    Route::get('/daftar/edit', [DaftarController::class, 'edit'])->name('daftar.edit');
     Route::post('/daftar/update', [DaftarController::class, 'update'])->name('daftar.update');
     Route::match(['GET', 'POST'], '/daftar', [DaftarController::class, 'edit'])->name('daftar'); // Make it handle both GET (view) and POST (create, edit, and store) method
 

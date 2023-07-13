@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Facades\DB;
+    use Carbon\Carbon;
     $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
 @endphp
 
@@ -134,12 +135,11 @@
 
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
-
-                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="{{ $userData && $userData->tarpohon ? $userData->tarpohon : '' }}">
-                </div><p id="dateValidationMessage" style="color: red; display: none;">Tarikh tidak boleh sebelum tarikh semasa.</p>
+                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="{{ $userData ? \Carbon\Carbon::parse($userData->tarpohon)->toDateString() : '' }}">
+                </div>
+                {{-- <p id="dateValidationMessage" style="color: red; display: none;">Tarikh tidak boleh sebelum tarikh semasa.</p> --}}
 
                 <div class="box-footer">
-                    {{-- <button type="submit" style="margin-top:1rem" class="btn btn-primary" name="submit1" value="seterusnya">Simpan & Seterusnya</button> --}}
                     <button type="submit" style="margin-top:2rem" class="btn btn-primary">Simpan</button>
                 </div>
                 </div> <!-- /.form-group -->
@@ -159,14 +159,16 @@
 {{-- <script src="plugins/jquery/jquery.min.js"></script> , after commented this, logout dropout working herm--}}
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-<script>
+
+{{-- <script>
     $(document).ready(function() {
         $('#notel').inputmask('(999) 999-9999', {
             greedy: false,
             placeholder: '(___) ___-____'
         });
     });
-</script>
+</script> need to modify later--}}
+
 <script>
     const tahunPohonInput = document.getElementById('tahunpohon');
     const yearValidationMessage = document.getElementById('yearValidationMessage');
@@ -184,8 +186,9 @@
         }
     });
 </script>
-<script>
-    const tarikhInput = document.getElementById('tarikh');
+
+{{-- <script>
+    const tarikhInput = document.getElementById('tarpohon');
 
     tarikhInput.addEventListener('input', function() {
         const inputDate = new Date(this.value);
@@ -195,9 +198,7 @@
             this.value = currentDate.toISOString().split('T')[0];
         }
     });
-</script>
-
-
+</script> can use later--}}
 
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>

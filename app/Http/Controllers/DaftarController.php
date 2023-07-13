@@ -51,13 +51,8 @@ class DaftarController extends Controller
 
         // Perform any additional logic or redirect as needed
         $userId = Auth::id();
-
-        // DB::table('tanah')->insert([
-        //     'pohonid' => $userId,
-            // Set other column values of daftar as needed
-        // ]);
-
     }
+
     public function showPetCetakForm()
     {
         $user = Auth::user();
@@ -93,8 +88,6 @@ class DaftarController extends Controller
             'musim' => $request->musim ? 1 : 0,
             'musim2' => $request->musim2 ? 1 : 0,
             'tarpohon' => $request->tarpohon,
-            // 'created_at' => now(),
-            // 'updated_at' => now()
         ]
     );
 
