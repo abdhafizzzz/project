@@ -39,11 +39,11 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                         <table id="tanahTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th width="6%">Table ID</th>
+                                    
                                     <th width="6%">Bilangan</th>
 
-                                    <th width="6%">Bil ID</th>
-                                    <th width="25%">Pohon ID</th>
+                                    
+                                    
                                     <th width="25%">Pemilik Geran</th>
                                     <th width="15%">No Geran</th>
                                     <th width="10%">Lokasi</th>
@@ -60,10 +60,10 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                 <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     
-                                    <td><?php echo e($item->table_id); ?></td>
+                                    
                                     <td><?php echo e($counter++); ?></td>
-                                    <td><?php echo e($item->bil); ?></td>
-                                    <td><?php echo e($item->pohonid); ?></td>
+                                    
+                                    
                                     <td><?php echo e($item->pemilikgeran); ?></td>
                                     <td><?php echo e($item->nogeran); ?></td>
                                     <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>

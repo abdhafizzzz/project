@@ -1,7 +1,7 @@
 @php
     use Illuminate\Support\Facades\DB;
     use Carbon\Carbon;
-    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
+    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->latest('id')->first();
 @endphp
 
 @extends('navigation')

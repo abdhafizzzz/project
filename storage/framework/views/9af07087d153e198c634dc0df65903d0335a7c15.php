@@ -1,6 +1,8 @@
 <?php
     use Illuminate\Support\Facades\DB;
+    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
 ?>
+
 
 <?php $__env->startSection('navigation'); ?>
     <html>
@@ -9,26 +11,12 @@
     </head>
 
 
-
-
-    <!-- Left side column. contains the logo and sidebar -->
-
-
-    <!-- sidebar: style can be found in sidebar.less -->
-
-
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-
-    <!-- /.sidebar -->
-
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
                 Sistem Pembayaran Subsidi Pembajakan Sawah Padi
-                
             </h1>
             <ol class="breadcrumb">
                 <li><a href="index.php"><i class="fa fa-dashboard"></i> Laman Utama</a></li>
@@ -73,7 +61,7 @@
 
                                         <td>3. Alamat Perhubungan</td>
                                         <td>:</td>
-                                        <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" value="<?php echo e(DB::table('daftar')->where('user_id', Auth::id())->value('alamat')); ?>" readonly></td>
+                                        <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" value="<?php echo e(DB::table('daftar')->where('user_id', Auth::id())->value('alamat')); ?> <?php echo e(DB::table('daftar')->where('user_id', Auth::id())->value('poskod')); ?>" readonly></td>
                                     </tr>
                                 </table>
                             </div>
@@ -84,12 +72,13 @@
                                 <tr>
                                     <td width="17%">No. Pendaftaran</td>
                                     <td width="2%">:</td>
-                                    <td width="81%"><input type="text" class="form-control" id="user_id" name="user_id" placeholder="user_id" value="<?php echo e(Auth::user()->user_id); ?>" readonly></td>
+                                    <td width="81%"><input type="text" class="form-control" id="user_id" name="user_id" placeholder="user_id" value="<?php echo e(Auth::user()->nopetani); ?>" readonly></td>
                                 </tr>
                                 <tr>
+
                                     <td>Tarikh Permohonan</td>
                                     <td>:</td>
-                                    <td><input type="text" class="form-control" id="tarikh" name="tarikh" placeholder="tarikh" value="<?php echo e(Auth::user()->tarikh); ?>" readonly></td></td>
+                                    <td><input type="text" class="form-control" id="tarikh" name="tarikh" value="<?php echo e(date('d-m-Y')); ?>" readonly></td>
                                 </tr>
                                 <tr>
                                     <td>No. Geran</td>
@@ -102,7 +91,7 @@
                                     <td>
                                         <div class="input-group">
                                             <input type="text" name="luas" id="luas" class="form-control"
-                                                value=1.83 onChange="return nilaiRM(this)">
+                                                value=<?php echo e($tanah->luaspohon); ?> onChange="return nilaiRM(this)">
                                         </div>
                                     </td>
                                 </tr>
@@ -110,8 +99,8 @@
                                     <td>Kampung</td>
                                     <td>:</td>
                                     <td>
-                                        <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="lokasi" value="<?php echo e($tanah->lokasi); ?>" readonly></td></td></td>
-                                </tr>
+                                        <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="lokasi">
+                                    </tr>
                                 <tr>
                                     <td>Siap Bajak</td>
                                     <td>:</td>
@@ -129,11 +118,11 @@
                                         <div class="input-group">
 
                                             <input type="text" name="tuntutan" id="tuntutan" class="form-control"
-                                                value=366>
+                                                >
                                             <input type="hidden" name="subsidi" id="subsidi" class="form-control"
-                                                value=200>
+                                               >
                                             <input type="hidden" name="bilnya" id="bilnya" class="form-control"
-                                                value=1>
+                                                >
                                     </td>
                                 </tr>
                             </table>
@@ -141,16 +130,7 @@
 
                         <div class="box box-primary">
                             <table width="96%" class="table table-noborder table-hover" id="bayaran">
-                                <tr>
-                                    <td width="17%">Nama Penerima</td>
-                                    <td width="2%">:</td>
-                                    <td width="81%"><input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon" value="<?php echo e(Auth::user()->name); ?>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td>No.Kad Pengenalan</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" value="<?php echo e(Auth::user()->alamat); ?>" readonly></td>
-                                </tr>
+                                
                                 <tr>
                                     <td>No Akaun Bank</td>
                                     <td>:</td>
@@ -182,10 +162,8 @@
                             </table>
                         </div>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary" name="submit1" value="daftar">Daftar Tuntutan &
-                                Seterusnya</button>
-                            <button onclick="window.close()" type="button" class="btn btn-primary" name="tutup"
-                                id="tutup" value="Tutup">Tutup</button>
+                            <button type="submit" class="btn btn-primary" name="submit1" value="daftar">Daftar Tuntutan </button>
+                            
                             </button>
                         </div>
                     </div>

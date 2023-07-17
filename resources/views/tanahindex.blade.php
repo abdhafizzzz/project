@@ -37,11 +37,11 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                         <table id="tanahTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th width="6%">Table ID</th>
+                                    {{-- <th width="6%">Table ID</th> --}}
                                     <th width="6%">Bilangan</th>
 
-                                    <th width="6%">Bil ID</th>
-                                    <th width="25%">Pohon ID</th>
+                                    {{-- <th width="6%">Bil ID</th> --}}
+                                    {{-- <th width="25%">Pohon ID</th> --}}
                                     <th width="25%">Pemilik Geran</th>
                                     <th width="15%">No Geran</th>
                                     <th width="10%">Lokasi</th>
@@ -58,10 +58,10 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
                                 @foreach($tanah as $item)
                                 <tr>
                                     {{-- {{ var_dump($item) }} --}}
-                                    <td>{{ $item->table_id }}</td>
+                                    {{-- <td>{{ $item->table_id }}</td> --}}
                                     <td>{{ $counter++}}</td>
-                                    <td>{{ $item->bil }}</td>
-                                    <td>{{ $item->pohonid }}</td>
+                                    {{-- <td>{{ $item->bil }}</td> --}}
+                                    {{-- <td>{{ $item->pohonid }}</td> --}}
                                     <td>{{ $item->pemilikgeran }}</td>
                                     <td>{{ $item->nogeran }}</td>
                                     <td>{{ DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi') }}</td>

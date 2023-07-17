@@ -1,15 +1,13 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DaftarController;
-use App\Http\Controllers\TanahController;
-use App\Http\Controllers\TuntutanController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SetPasswordController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DaftarController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TanahController;
+use App\Http\Controllers\TuntutanController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
