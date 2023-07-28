@@ -22,7 +22,7 @@ class User extends Authenticatable
 
     public function username()
     {
-        return 'kad_pengenalan';
+        return 'nokp';
     }
 
     /**
@@ -31,8 +31,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'kad_pengenalan',
+        'nama',
+        'nokp',
         'email',
         'password',
     ];

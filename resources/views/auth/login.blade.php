@@ -19,11 +19,11 @@
                                 <h2 class="fw-bold mb-2">eBajak</h2>
                                 <p class="text-black-50 mb-5">Sistem Subsidi Petani</p>
                                 <div class="form-outline form-white mb-4">
-                                    <label for="kad_pengenalan" class="col-md-4 col-form-label text-md-right">{{ __('Kad Pengenalan') }}</label>
-                                    <input id="kad_pengenalan" type="text" class="form-control @error('kad_pengenalan') is-invalid @enderror" name="kad_pengenalan" value="{{ old('kad_pengenalan') }}" required autocomplete="kad_pengenalan" autofocus aria-label="Kad Pengenalan" aria-describedby="kad_pengenalan_error">
+                                    <label for="nokp" class="col-md-4 col-form-label text-md-right">{{('No Kad Pengenalan')}}</label>
+                                    <input id="nokp" type="text" class="form-control @error('nokp') is-invalid @enderror" name="nokp"  required autocomplete="nokp" autofocus aria-label="Kad Pengenalan" aria-describedby="nokp_error">
                                     <small>(Masukkan nombor kad pengenalan anda tanpa tanda '-')</small>
-                                    @error('kad_pengenalan')
-                                        <span id="kad_pengenalan_error" class="invalid-feedback" role="alert">
+                                    @error('nokp')
+                                        <span id="nokp_error" class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -37,10 +37,18 @@
                                         </span>
                                     @enderror
                                 </div>
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                    <label class="form-check-label" for="remember">
+                                        {{ __('Remember Me') }}
+                                    </label>
+                                </div>
                                 <button class="btn btn-dark btn-outline-primary btn-lg px-5 mb-3" title="Klik untuk Log Masuk" aria-label="Log Masuk">Log Masuk</button>
                                 <p class="small mb-5 pb-lg-2"><a class="text-black-50" href="{{ route('password.request') }}">Lupa kata laluan? sila klik sini</a></p>
-                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href="http://ebajak.test/register" class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
+                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href="{{route('register')}}" class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
                             </form>
+
+
                         </div>
                     </div>
                     <footer class="container text-center">
@@ -56,17 +64,3 @@
         </div>
     </section>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-

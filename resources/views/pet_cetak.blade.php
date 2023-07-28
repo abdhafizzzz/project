@@ -1,4 +1,15 @@
 <html>
+    @php
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
+
+
+$tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
+
+$item = DB::table('daerah')->first();
+
+@endphp
 
 <head>
     <title>JABATAN PERTANIAN SABAH, MALAYSIA (BORANG PERMOHONAN SUBSIDI BAJAK) </title>
@@ -7,6 +18,12 @@
             size: A4
         }
     </style>
+	    {{-- <script>
+			function convertToUpperCase(elementId) {
+				var element = document.getElementById(elementId);
+				element.value = element.value.toUpperCase();
+			}
+		</script> --}}
 </head>
 
 <style>
@@ -52,8 +69,11 @@
                     <td>2. No. Kad Pengenalan: {{ Auth::user()->kad_pengenalan }}</td>
                     <td>3. No. Telefon/Handphone: {{ DB::table('daftar')->where('user_id', Auth::id())->value('notel') }}{{ DB::table('daftar')->where('user_id', Auth::id())->value('nohp') }}</td>
                 <tr>
-                    <td colspan=2>4. Alamat Perhubungan:{{ DB::table('daftar')->where('user_id', Auth::id())->value('alamat') }}&nbsp;{{ DB::table('daftar')->where('user_id', Auth::id())->value('poskod') }}&nbsp;{{ DB::table('daftar')->where('user_id', Auth::id())->value('daerah_id') }}
+                    <td colspan="2">
+                        4. Alamat Perhubungan:{{ DB::table('daftar')->where('user_id', Auth::id())->value('alamat') }}&nbsp;{{ DB::table('daftar')->where('user_id', Auth::id())->value('poskod') }}&nbsp;
+                        {{ DB::table('daerah')->where('koddaerah', $item->koddaerah)->value('namadaerah') }}
                     </td>
+
                 </tr>
                 <tr>
                     <td colspan=2>
@@ -70,7 +90,6 @@
                 </tr>
             </table>
 
-
 																<table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2"
 																				cellspacing="1" width="90%">
 																				<tr>
@@ -82,14 +101,11 @@
 																								<th width="100" align="middle">Luas Dalam Geran (Ekar)
 																								<th width="100" align="middle">Luas Dipohon/Musim (Ekar)
 																								<th width="100" align="middle">Pemilikan Tanah
-
-
-                                                                                                    @php
+                                                                                                    {{-- @php
                                                                                                     use Illuminate\Support\Facades\DB;
                                                                                                     $userId = Auth::id();
                                                                                                     $tanah = DB::table('tanah')->where('pohonid', $userId)->paginate(5);
-                                                                                                @endphp
-
+                                                                                                @endphp --}}
                                                                                                 @foreach($tanah as $item)
                                                                                                     <tr>
                                                                                                         <td class="text-center">{{ $item->bil }}</td>
@@ -99,17 +115,6 @@
                                                                                                         <td class="text-center">{{ $item->luasekar }}</td>
                                                                                                         <td class="text-center">{{ $item->luaspohon }}</td>
                                                                                                         <td class="text-center">{{ $item->pemilikgeran }}</td>
-
-
-
-
-
-
-
-{{--
-																								<th align="right" colspan="4">Jumlah Ekar&nbsp;
-																								<th width="100" align="middle">
-																								<th width="100" align="middle"> --}}
 																				</tr>
                                                                                 @endforeach
                                                                                 <tr>
@@ -120,15 +125,9 @@
                                                                                     <th width="15%" class="text-center">0</th>
                                                                                     <th width="15%" class="text-center">0</th>
                                                                                     <th width="15%" class="text-center"></th>
-
-
-
-
                                                                                 </tr>
 																</table>
 																</td>
-
-
 								</table>
 
 								<table align="center" style=" FONT-FAMILY: Arial Narrow; FONT-SIZE:14px" border="0" cellPadding="2"

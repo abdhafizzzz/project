@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.0",
         "almasaeed2010/adminlte": "~3.2",
-        "biscolab/laravel-recaptcha": "^6.0",
         "doctrine/dbal": "^3.6",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",

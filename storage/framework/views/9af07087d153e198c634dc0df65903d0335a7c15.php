@@ -1,189 +1,101 @@
 <?php
     use Illuminate\Support\Facades\DB;
     $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
+    $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
 ?>
 
 
+
 <?php $__env->startSection('navigation'); ?>
-    <html>
-
-    <head>
-    </head>
-
-
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Sistem Pembayaran Subsidi Pembajakan Sawah Padi
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="index.php"><i class="fa fa-dashboard"></i> Laman Utama</a></li>
-            </ol>
-        </section>
-
-        <!-- Main content -->
-        <form method="post" action="ptun_daf2act.php" id="ptun_daf2" name="ptun_daf2">
-            <section class="content">
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Tuntutan Tanah</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="height: 800px; overflow: auto;">
+                            <table class="table table-striped projects">
+                                <thead>
+                                    <?php echo e($tanah->links()); ?>
 
 
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><b>A. TUNTUTAN SUBSIDI PEMBAJAKAN (LUAR MUSIM)</b></h3>
-                                </div>
-                                <table id="pemohon" class="table table-noborder table-hover">
                                     <tr>
-
-
-                                            <td width="15%">1. Nama Pemohon</td>
-                                            <td width="2%">:</td>
-                                            <td width="83%"><input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon" value="<?php echo e(Auth::user()->name); ?>" readonly></td>
-
+                                        <th style="width: 1%">Bil</th>
+                                        <th width="25%">Pemilik Geran</th>
+                                        <th width="15%">No Geran</th>
+                                        <th width="10%">Lokasi</th>
+                                        <th width="10%">Luas Ekar</th>
+                                        <th width="10%">Luas Pohon</th>
+                                        <th width="15%">Pemilikan</th>
+                                        <th width="10%">Status</th>
+                                        <th width="10%">Kemaskini</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $counter = ($tanah->currentPage() - 1) * $tanah->perPage() + 1;
+                                    ?>
+                                    <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-
-                                            <td>2. Kad Pengenalan</td>
-                                            <td>:</td>
-                                            <td><input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="<?php echo e(Auth::user()->kad_pengenalan); ?>" readonly></td>
-
-                                        <input type="hidden" name="tahun" id="tahun" class="form-control" value=2021>
-                                        <input type="hidden" name="nokp" id="nokp" class="form-control"
-                                            value=751027125135>
-                                        <input type="hidden" name="musimini" id="musimini" class="form-control" value=1>
-                                        <input type="hidden" name="pohonid" id="pohonid" class="form-control" value=2148>
+                                        
+                                        <td><?php echo e($counter++); ?></td>
+                                        <td><?php echo e($item->pemilikgeran); ?></td>
+                                        <td><?php echo e($item->nogeran); ?></td>
+                                        <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>
+                                        <td><?php echo e($item->luasekar); ?></td>
+                                        <td><?php echo e($item->luaspohon); ?></td>
+                                        <td><?php echo e(DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi')); ?></td>
+                                        <td class="project-state">
+                                            <span class="badge badge-danger">Belum Tuntut</span>
+                                        </td>
+                                        <td class="project-actions text-right">
+                                            <a class="btn btn-info btn-sm" href=http://ebajak.test/ptundaf2>
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
                                         </td>
                                     </tr>
-                                    <tr>
-
-                                        <td>3. Alamat Perhubungan</td>
-                                        <td>:</td>
-                                        <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" value="<?php echo e(DB::table('daftar')->where('user_id', Auth::id())->value('alamat')); ?> <?php echo e(DB::table('daftar')->where('user_id', Auth::id())->value('poskod')); ?>" readonly></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <!--box primary-->
-                        <div class="box box-primary">
-                            <table width="96%" class="table table-noborder table-hover" id="details">
-                                <tr>
-                                    <td width="17%">No. Pendaftaran</td>
-                                    <td width="2%">:</td>
-                                    <td width="81%"><input type="text" class="form-control" id="user_id" name="user_id" placeholder="user_id" value="<?php echo e(Auth::user()->nopetani); ?>" readonly></td>
-                                </tr>
-                                <tr>
-
-                                    <td>Tarikh Permohonan</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="tarikh" name="tarikh" value="<?php echo e(date('d-m-Y')); ?>" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td>No. Geran</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="nogeran" name="nogeran" placeholder="No. Geran"></td></td>
-                                </tr>
-                                <tr>
-                                    <td>Luas Permohonan (Ekar)</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="luas" id="luas" class="form-control"
-                                                value=<?php echo e($tanah->luaspohon); ?> onChange="return nilaiRM(this)">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Kampung</td>
-                                    <td>:</td>
-                                    <td>
-                                        <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="lokasi">
-                                    </tr>
-                                <tr>
-                                    <td>Siap Bajak</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            <?php $__currentLoopData = DB::table('bulan')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bulan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($bulan->kodbulan); ?>"><?php echo e($bulan->bulan); ?></option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select></td>
-                                </tr>
-                                <tr>
-                                    <td>Tuntutan (RM)</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-
-                                            <input type="text" name="tuntutan" id="tuntutan" class="form-control"
-                                                >
-                                            <input type="hidden" name="subsidi" id="subsidi" class="form-control"
-                                               >
-                                            <input type="hidden" name="bilnya" id="bilnya" class="form-control"
-                                                >
-                                    </td>
-                                </tr>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </tbody>
                             </table>
-                        </div>
+                            <?php echo e($tanah->links()); ?>
 
-                        <div class="box box-primary">
-                            <table width="96%" class="table table-noborder table-hover" id="bayaran">
-                                
-                                <tr>
-                                    <td>No Akaun Bank</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="akaun" id="akaun" class="form-control" value=>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nama Bank</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            <?php $__currentLoopData = DB::table('bank')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $bank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($bank->kodbank); ?>"><?php echo e($bank->namabank); ?></option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select></td>
-                                </tr>
-                                <tr>
-                                    <td>Cawangan Bank</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            <?php $__currentLoopData = DB::table('daerah')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $daerah): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($daerah->koddaerah); ?>"><?php echo e($daerah->namadaerah); ?></option>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary" name="submit1" value="daftar">Daftar Tuntutan </button>
-                            
-                            </button>
+
                         </div>
                     </div>
-                    <!--box primary-->
                 </div>
-                <!--box-->
-    </div>
-    <!--col-xs-12-->
-    </div>
-    <!--row-->
-
+            </div>
+        </div>
     </section>
-    </form>
-    <!-- /.content -->
+</div>
 
-    </div>
 
-    </body>
-
-    </html>
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js?v=3.2.0"></script>
+<script src="dist/js/demo.js"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/ptundaf.blade.php ENDPATH**/ ?>

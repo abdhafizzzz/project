@@ -1,10 +1,19 @@
 <?php
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Auth;
 
+    // Get the logged-in user's nokp
+$nokp = Auth::user()->nokp;
 
+// Get the current year and the last year
+$currentYear = date('Y');
+$lastYear = $currentYear - 1;
 
-$tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
+// Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is between the current and last year
+    $tanah = DB::table('tanah')
+        ->where('nokppetani', $nokp)
+        ->whereBetween(DB::raw('YEAR(tarikh)'), [$lastYear, $currentYear])
+        ->get();
 ?>
 
 
@@ -17,119 +26,84 @@ $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
 <?php endif; ?>
 
 <?php $__env->startSection('navigation'); ?>
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>Senarai Tanah</h1>
-    </section>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Senarai Tanah</h1>
+        </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <?php echo e($tanah->links()); ?>
+        <!-- Main content -->
+        <section class="content">
 
-                        <a class="btn btn-success" style="float:right;margin-bottom: 15px;margin-right: 15px" href="<?php echo e(route('senaraitanah')); ?>">Tambah Tanah Baru</a>
-
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table id="tanahTable" class="table table-bordered table-hover">
+            <div class="card">
+                <div class="card-body">
+                    <a class="btn btn-success float-left mr-2 mb-3" href="<?php echo e(route('senaraitanah')); ?>">Tambah Tanah Baru</a>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    
-                                    <th width="6%">Bilangan</th>
-
-                                    
-                                    
-                                    <th width="25%">Pemilik Geran</th>
-                                    <th width="15%">No Geran</th>
-                                    <th width="10%">Lokasi</th>
-                                    <th width="10%">Luas Ekar</th>
-                                    <th width="10%">Luas Pohon</th>
-                                    <th width="15%">Pemilikan</th>
-                                    <th width="10%">Tindakan</th>
+                                    <th>Bil</th>
+                                    <th>Pemilik Geran</th>
+                                    <th>No Geran</th>
+                                    <th>Status</th>
+                                    <th>Tahun Mohon</th>
+                                    <th>Tindakan</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $counter = ($tanah->currentPage() - 1) * $tanah->perPage() + 1;
+                                    $counter = 1;
                                 ?>
                                 <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <tr>
-                                    
-                                    
-                                    <td><?php echo e($counter++); ?></td>
-                                    
-                                    
-                                    <td><?php echo e($item->pemilikgeran); ?></td>
-                                    <td><?php echo e($item->nogeran); ?></td>
-                                    <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>
-                                    <td><?php echo e($item->luasekar); ?></td>
-                                    <td><?php echo e($item->luaspohon); ?></td>
-                                    <td><?php echo e(DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi')); ?></td>
+                                    <tr data-widget="expandable-table" aria-expanded="false">
+                                        <td><?php echo e($counter++); ?></td>
+                                        <td><?php echo e($item->pemilikgeran); ?></td>
+                                        <td><?php echo e($item->nogeran); ?></td>
+                                        <td><span class="badge bg-danger">Belum Tuntut</span></td>
+                                        <td><?php echo e(date('Y', strtotime($item->tarikh))); ?></td>
+                                        <td> <a href="<?php echo e(route('edit-tanah', ['id' => $item->table_id])); ?>"
+                                                class="btn btn-warning" style="margin-bottom: 10px;"
+                                                onclick=" return confirm('Sila kemaskini data geran tanah')">Edit</a>
 
-                                    <td style="text-align: center;">
-                                        <a href="<?php echo e(route('edit-tanah', ['id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                            <a href="<?php echo e(route('pet_cetak', ['table_id' => isset($item->table_id) ? $item->table_id : ''])); ?>"
+                                                class="btn btn-info" style="margin-bottom: 10px;">PDF Cetak</a>
 
-                                        <a href="<?php echo e(route('pet_cetak', ['table_id' => isset($tanah->table_id) ? $tanah->table_id : ''])); ?>" class="btn btn-info" style="margin-bottom: 10px;">PDF Cetak</a>
 
-                                        <a href="<?php echo e(route('edit-tanah', ['id' => $item->pohonid])); ?>" class="btn btn-primary" style="margin-bottom: 10px;">Tambah Geran</a>
+                                            <a href="#" class="btn btn-primary" style="margin-bottom: 10px;"
+                                                id="uploadButton">Tambah Geran</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="expandable-body d-none">
+                                        <td colspan="5">
+                                            <div>
+                                                <form action="<?php echo e(route('upload')); ?>" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    <?php echo csrf_field(); ?>
+                                                    <div class="form-group">
+                                                        <input type="file" name="file" accept=".pdf" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Muatnaik fail</button>
+                                                    <small>*PDF sahaja</small>
+                                                </form>
 
-                                        <a href="<?php echo e(route('tanah.delete', ['id' => $item->table_id, 'success' => true])); ?>" class="btn btn-danger" style="margin-bottom: 10px;" onclick="return confirm('Are you sure you want to delete this?')">Padam</a>
-                                    </td>
-
-                                    
-                                </tr>
+                                            </div>
+                                            <div>
+                                                <p>
+                                                    something to put here for future reference etc </p>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
-                            <tfoot>
-
-                                
-
-
-
-
-                        <tr>
-                            <th width="6%"></th>
-                            <th width="25%">JUMLAH</th>
-                            <th width="11%"></th>
-                            <th width="15%"></th>
-                            <th width="15%"></th>
-                            <th width="15%"></th>
-                            <th width="15%"></th>
-                            <th width="15%"><input type="text" class="form-control"
-                                    placeholder="Luas Geran" name="jumlahluasgeran" value=0>
-                            </th>
-                            <th width="12%"><input type="text" class="form-control"
-                                    placeholder="Luas DiPohon" name="jumlahluaspohon" value=0>
-                            </th>
-                            <th width="11%"></th>
-                            <th width="11%"></th>
-                        </tr>
-
-
-
-
-                    </tfoot>
-                </table>
-                <?php echo e($tanah->links()); ?>
-
-
+                        </table>
                     </div>
-                    <!-- /.box-body -->
                 </div>
-                <!-- /.box -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/tanahindex.blade.php ENDPATH**/ ?>

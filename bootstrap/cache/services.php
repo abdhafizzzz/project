@@ -38,10 +38,11 @@
     34 => 'Flasher\\Laravel\\FlasherServiceProvider',
     35 => 'Flasher\\Noty\\Laravel\\FlasherNotyServiceProvider',
     36 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
-    37 => 'App\\Providers\\AppServiceProvider',
-    38 => 'App\\Providers\\AuthServiceProvider',
-    39 => 'App\\Providers\\EventServiceProvider',
-    40 => 'App\\Providers\\RouteServiceProvider',
+    37 => 'Mews\\Captcha\\CaptchaServiceProvider',
+    38 => 'App\\Providers\\AppServiceProvider',
+    39 => 'App\\Providers\\AuthServiceProvider',
+    40 => 'App\\Providers\\EventServiceProvider',
+    41 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -68,10 +69,11 @@
     20 => 'Flasher\\Laravel\\FlasherServiceProvider',
     21 => 'Flasher\\Noty\\Laravel\\FlasherNotyServiceProvider',
     22 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
-    23 => 'App\\Providers\\AppServiceProvider',
-    24 => 'App\\Providers\\AuthServiceProvider',
-    25 => 'App\\Providers\\EventServiceProvider',
-    26 => 'App\\Providers\\RouteServiceProvider',
+    23 => 'Mews\\Captcha\\CaptchaServiceProvider',
+    24 => 'App\\Providers\\AppServiceProvider',
+    25 => 'App\\Providers\\AuthServiceProvider',
+    26 => 'App\\Providers\\EventServiceProvider',
+    27 => 'App\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (

@@ -1,197 +1,103 @@
 @php
     use Illuminate\Support\Facades\DB;
-    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
+    use Illuminate\Support\Facades\Auth;
+
+    // Get the logged-in user's nokp
+$nokp = Auth::user()->nokp;
+
+// Get the current year and the last year
+$currentYear = date('Y');
+$lastYear = $currentYear - 1;
+
+// Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is between the current and last year
+    $tanah = DB::table('tanah')
+        ->where('nokppetani', $nokp)
+        ->whereBetween(DB::raw('YEAR(tarikh)'), [$lastYear, $currentYear])
+        ->get();
 @endphp
 
 @extends('navigation')
+
 @section('navigation')
-    <html>
-
-    <head>
-    </head>
-
-
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Sistem Pembayaran Subsidi Pembajakan Sawah Padi
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="index.php"><i class="fa fa-dashboard"></i> Laman Utama</a></li>
-            </ol>
-        </section>
-
-        <!-- Main content -->
-        <form method="post" action="ptun_daf2act.php" id="ptun_daf2" name="ptun_daf2">
-            <section class="content">
-
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><b>A. TUNTUTAN SUBSIDI PEMBAJAKAN (LUAR MUSIM)</b></h3>
-                                </div>
-                                <table id="pemohon" class="table table-noborder table-hover">
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Tuntutan Tanah</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="height: 800px; overflow: auto;">
+                            <table class="table table-striped projects">
+                                <thead>
                                     <tr>
-
-
-                                            <td width="15%">1. Nama Pemohon</td>
-                                            <td width="2%">:</td>
-                                            <td width="83%"><input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon" value="{{ Auth::user()->name }}" readonly></td>
-
+                                        <th style="width: 1%">Bil</th>
+                                        <th width="25%">Pemilik Geran</th>
+                                        <th width="15%">No Geran</th>
+                                        <th width="10%">Lokasi</th>
+                                        <th width="10%">Luas Ekar</th>
+                                        <th width="10%">Luas Pohon</th>
+                                        <th width="15%">Pemilikan</th>
+                                        <th width="10%">Status</th>
+                                        <th width="10%">Kemaskini</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                    $counter = 1; // Start the counter
+                                    @endphp
+                                    @foreach($tanah as $item)
                                     <tr>
-
-                                            <td>2. Kad Pengenalan</td>
-                                            <td>:</td>
-                                            <td><input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ Auth::user()->kad_pengenalan }}" readonly></td>
-
-                                        <input type="hidden" name="tahun" id="tahun" class="form-control" value=2021>
-                                        <input type="hidden" name="nokp" id="nokp" class="form-control"
-                                            value=751027125135>
-                                        <input type="hidden" name="musimini" id="musimini" class="form-control" value=1>
-                                        <input type="hidden" name="pohonid" id="pohonid" class="form-control" value=2148>
+                                        <td>{{ $counter++ }}</td>
+                                        <td>{{ $item->pemilikgeran }}</td>
+                                        <td>{{ $item->nogeran }}</td>
+                                        <td>{{ DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi') }}</td>
+                                        <td>{{ $item->luasekar }}</td>
+                                        <td>{{ $item->luaspohon }}</td>
+                                        <td>{{ DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi') }}</td>
+                                        <td class="project-state">
+                                            <span class="badge badge-danger">Belum Tuntut</span>
+                                        </td>
+                                        <td class="project-actions text-right">
+                                            <a class="btn btn-info btn-sm" href="http://ebajak.test/ptundaf2">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
                                         </td>
                                     </tr>
-                                    <tr>
-
-                                        <td>3. Alamat Perhubungan</td>
-                                        <td>:</td>
-                                        <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" value="{{ DB::table('daftar')->where('user_id', Auth::id())->value('alamat') }} {{ DB::table('daftar')->where('user_id', Auth::id())->value('poskod') }}" readonly></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <!--box primary-->
-                        <div class="box box-primary">
-                            <table width="96%" class="table table-noborder table-hover" id="details">
-                                <tr>
-                                    <td width="17%">No. Pendaftaran</td>
-                                    <td width="2%">:</td>
-                                    <td width="81%"><input type="text" class="form-control" id="user_id" name="user_id" placeholder="user_id" value="{{ Auth::user()->nopetani }}" readonly></td>
-                                </tr>
-                                <tr>
-
-                                    <td>Tarikh Permohonan</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="tarikh" name="tarikh" value="{{ date('d-m-Y') }}" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td>No. Geran</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="nogeran" name="nogeran" placeholder="No. Geran"></td></td>
-                                </tr>
-                                <tr>
-                                    <td>Luas Permohonan (Ekar)</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="luas" id="luas" class="form-control"
-                                                value={{ $tanah->luaspohon }} onChange="return nilaiRM(this)">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Kampung</td>
-                                    <td>:</td>
-                                    <td>
-                                        <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="lokasi">
-                                    </tr>
-                                <tr>
-                                    <td>Siap Bajak</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            @foreach (DB::table('bulan')->get() as $bulan)
-                                                <option value="{{ $bulan->kodbulan }}">{{ $bulan->bulan }}</option>
-                                            @endforeach
-                                        </select></td>
-                                </tr>
-                                <tr>
-                                    <td>Tuntutan (RM)</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-
-                                            <input type="text" name="tuntutan" id="tuntutan" class="form-control"
-                                                >
-                                            <input type="hidden" name="subsidi" id="subsidi" class="form-control"
-                                               >
-                                            <input type="hidden" name="bilnya" id="bilnya" class="form-control"
-                                                >
-                                    </td>
-                                </tr>
+                                    @endforeach
+                                </tbody>
                             </table>
-                        </div>
-
-                        <div class="box box-primary">
-                            <table width="96%" class="table table-noborder table-hover" id="bayaran">
-                                {{-- <tr>
-                                    <td width="17%">Nama Penerima</td>
-                                    <td width="2%">:</td>
-                                    <td width="81%"><input type="text" class="form-control" id="pemohon" name="pemohon" placeholder="Nama Pemohon" ></td>
-                                </tr>
-                                <tr>
-                                    <td>No.Kad Pengenalan</td>
-                                    <td>:</td>
-                                    <td><input type="text" class="form-control" id="nokp" name="alamat" placeholder="alamat" ></td>
-                                </tr> --}}
-                                <tr>
-                                    <td>No Akaun Bank</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="text" name="akaun" id="akaun" class="form-control" value=>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Nama Bank</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            @foreach (DB::table('bank')->get() as $bank)
-                                                <option value="{{ $bank->kodbank }}">{{ $bank->namabank }}</option>
-                                            @endforeach
-                                        </select></td>
-                                </tr>
-                                <tr>
-                                    <td>Cawangan Bank</td>
-                                    <td>:</td>
-                                    <td> <select class="form-control" name="daerah_id">
-                                            <option value="">Sila pilih...</option>
-                                            @foreach (DB::table('daerah')->get() as $daerah)
-                                                <option value="{{ $daerah->koddaerah }}">{{ $daerah->namadaerah }}</option>
-                                            @endforeach
-                                        </select></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary" name="submit1" value="daftar">Daftar Tuntutan </button>
-                            {{-- <button onclick="window.close()" type="button" class="btn btn-primary" name="tutup"
-                                id="tutup" value="Tutup">Tutup</button> --}}
-                            </button>
                         </div>
                     </div>
-                    <!--box primary-->
                 </div>
-                <!--box-->
-    </div>
-    <!--col-xs-12-->
-    </div>
-    <!--row-->
-
+            </div>
+        </div>
     </section>
-    </form>
-    <!-- /.content -->
+</div>
 
-    </div>
-
-    </body>
-
-    </html>
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js?v=3.2.0"></script>
+<script src="dist/js/demo.js"></script>
 @endsection

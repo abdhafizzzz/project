@@ -1,11 +1,3 @@
-<?php
-    use Illuminate\Support\Facades\DB;
-    use Carbon\Carbon;
-    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
-?>
-
-
-
 <?php $__env->startSection('navigation'); ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -44,35 +36,48 @@
             <div class="box-body">
                 <div class="form-group">
                     <label for="pemohon">Nama Pemohon :</label>
-                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Pemohon" value="<?php echo e(Auth::user()->name); ?>" readonly>
+                    <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Pemohon" value="<?php echo e($userData && $userData->nama ? $userData->nama : Auth::user()->nama); ?>" readonly><br>
 
                     <label for="pendaftaran">No.Kad Pengenalan :</label>
-                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="<?php echo e(Auth::user()->kad_pengenalan); ?>" readonly>
+                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="<?php echo e($userData && $userData->nokp ? $userData->nokp : Auth::user()->nokp); ?>" readonly><br>
+
+                    <div class="form-group">
+                        <label>Jantina</label><br>
+                        <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
+                            <input class="form-check-input" type="radio" name="jantina" id="rd_jantina1" value="L" <?php echo e($userData->jantina == 'L' ? 'checked' : ''); ?>>
+                            <label class="form-check-label" for="rd_jantina1">Lelaki</label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="jantina" id="rd_jantina2" value="P" <?php echo e($userData->jantina == 'P' ? 'checked' : ''); ?>>
+                            <label class="form-check-label" for="rd_jantina2">Perempuan</label>
+                        </div>
+                    </div>
 
                     <!-- textarea -->
                     <label>Alamat :</label>
-                    <textarea class="form-control" rows="3" placeholder="Alamat ..." name="alamat" maxlength="255" required><?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('alamat')); ?></textarea>
+                    <textarea class="form-control" rows="3" placeholder="Alamat ..." name="alamat" maxlength="255" required><?php echo e($userData->alamat); ?></textarea><br>
 
                     <label for="poskod">Poskod :</label>
-                    <input type="text" class="form-control" id="poskod" name="poskod" placeholder="Poskod" pattern="[0-9]{5}" maxlength="5" required value="<?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('poskod')); ?>">
+                    <input type="text" class="form-control" id="poskod" name="poskod" placeholder="Poskod" pattern="[0-9]{5}" maxlength="5" required value="<?php echo e($userData->poskod); ?>"><br>
 
                     <!-- select daerah-->
                     <label for="daerah">Daerah :</label>
                     <select class="form-control" name="daerah">
                         <option value="">Sila pilih...</option>
                         <?php $__currentLoopData = DB::table('daerah')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $daerah): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($daerah->koddaerah); ?>" <?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('daerah') == $daerah->koddaerah ? 'selected' : ''); ?>>
+                            <option value="<?php echo e($daerah->koddaerah); ?>" <?php echo e(DB::table('petanibajak')->where('nokp', Auth::user()->nokp)->value('daerah') == $daerah->koddaerah ? 'selected' : ''); ?>>
                                 <?php echo e($daerah->namadaerah); ?>
 
                             </option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
+                    </select><br>
 
                     <label for="notelrumah">No. Telefon :</label>
-                    <input type="text" class="form-control" id="telrumah" name="telrumah" placeholder="No.Telefon" value="<?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('telrumah')); ?>">
+                    <input type="text" class="form-control" id="telrumah" name="telrumah" placeholder="No.Telefon" value="<?php echo e($userData->telrumah); ?>"><br>
 
                     <label for="notel">No. Lain yang boleh dihubungi :</label>
-                    <input type="text" class="form-control" id="telhp" name="telhp" placeholder="Handphone" data-inputmask="'mask': ['999-999-99999 ', '+099 99 99 9999[9]-9999']" data-mask="" inputmode="text" placeholder="___-___-_____" pattern="[0-9]{1,11}" title="Sila masukkan nombor telefon lengkap" value="<?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('telhp')); ?>">
+                    <input type="text" class="form-control" id="telhp" name="telhp" placeholder="Handphone" data-inputmask="'mask': ['999-999-99999 ', '+099 99 99 9999[9]-9999']" data-mask=""
+                    inputmode="text" placeholder="___-___-_____" pattern="[0-9]{1,11}" title="Sila masukkan nombor telefon lengkap" value="<?php echo e($userData->telhp); ?>"><br>
 
             </div> <!-- /.form-group -->
             </div> <!-- /.box-body -->
@@ -91,28 +96,23 @@
                         <div class="box-body">
                             <label>No.Kad Petani</label><small>(jika ada)</small>
                             <div class="input-group date">
-                                <input type="text" class="form-control" placeholder="No. Kad Petani (jika ada)" name="nopetani" id="nopetani" value="<?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('nopetani')); ?>">
-                            </div>
+                                <input type="text" class="form-control" placeholder="No. Kad Petani (jika ada)" name="nopetani" id="nopetani" value="<?php echo e($userData->nopetani); ?>">
+                            </div><br>
                             <label>Tahun Permohonan :</label>
                             <div class="input-group date">
                                 <input name="tahunpohon" type="text" class="form-control" id="tahunpohon" value="<?php echo e(date('Y')); ?>">
                             </div><p id="yearValidationMessage" style="color: red; display: none;">Tahun permohonan tidak boleh kurang daripada tahun kini.</p>
                             <br>
 
-                <!-- radio -->
                 <div class="form-group">
-                    <label>Pendaftaran</label>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="baru" id="rd_daftar1" value=1 <?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('baru') == 1 ? 'checked' : ''); ?>>
-                            Baru
-                        </label>
+                    <label>Pendaftaran</label><br>
+                    <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
+                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar1" value=1 <?php echo e($userData->baru == 1 ? 'checked' : ''); ?>>
+                        <label class="form-check-label" for="rd_daftar1">Baru</label>
                     </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="baru" id="rd_daftar2" value=2 <?php echo e(DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->value('baru') == 2 ? 'checked' : ''); ?>>
-                            Lama
-                        </label>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar2" value=2 <?php echo e($userData->baru == 2 ? 'checked' : ''); ?>>
+                        <label class="form-check-label" for="rd_daftar2">Lama</label>
                     </div>
                 </div>
 
@@ -135,14 +135,25 @@
                     </div>
                 </div>
 
+                <label for="stesen">Jabatan :</label>
+                    <select class="form-control" name="stesen">
+                        <option value="">Sila pilih...</option>
+                        <?php $__currentLoopData = DB::table('stesen')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $stesen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($stesen->stationcode); ?>" <?php echo e(DB::table('petanibajak')->where('nokp', Auth::user()->nokp)->value('stesen') == $stesen->stationcode ? 'selected' : ''); ?>>
+                                <?php echo e($stesen->stationdesc); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select><br>
+
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
-                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="<?php echo e($userData ? \Carbon\Carbon::parse($userData->tarpohon)->toDateString() : ''); ?>">
+                    <input type="date" name="tarpohon" id="tarpohon" class="form-control" value="<?php echo e($tarikhMemohon); ?>">
                 </div>
                 
 
                 <div class="box-footer">
-                    <button type="submit" style="margin-top:2rem" class="btn btn-primary">Simpan</button>
+                    <button type="submit" style="margin-top:2rem" class="btn btn-primary">Kemaskini</button>
                 </div>
                 </div> <!-- /.form-group -->
                 </div> <!-- /.box-body -->

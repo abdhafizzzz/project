@@ -1,27 +1,15 @@
 <?php
 
-namespace Illuminate\Foundation\Auth;
+namespace App\Traits;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\RedirectsUsers; // Add this line for RedirectsUsers trait
 
-trait RegistersUsers
+trait CustomRegistersUsers
 {
     use RedirectsUsers;
-
-    /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
-
     /**
      * Handle a registration request for the application.
      *
@@ -32,17 +20,13 @@ trait RegistersUsers
     {
         $this->validator($request->all())->validate();
 
-        // Create a new user based on the registration data
+        // Custom 'create' method from RegisterController
         $user = $this->create($request->all());
 
-        // If user creation was successful, log in the user
-        if ($user) {
-            event(new Registered($user));
+        event(new \Illuminate\Auth\Events\Registered($user));
 
-            $this->guard()->login($user);
-        }
+        $this->guard()->login($user);
 
-        // Check if a custom response is defined for after registration
         if ($response = $this->registered($request, $user)) {
             return $response;
         }

@@ -85,7 +85,7 @@
                     @auth {{-- to make sure this part is skipped if session are timed out for the user --}}
                         <a class="nav-link dropdown-toggle" href="#" id="logoutDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->nama }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="logoutDropdown">
                             <form id="logout-form" method="POST" action="{{ route('logout') }}">
@@ -100,7 +100,7 @@
 
                 </li>
         </nav>
-        /
+
 
         <aside class="main-sidebar sidebar-dark-primary elevation-2">
 
@@ -168,7 +168,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('daftar') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Kemaskini Profil Petani</p>
+                                        <p>Butiran Petani</p>
                                     </a>
                                 </li>
                             </ul>
@@ -230,7 +230,7 @@
             <strong>Put Necessary Footer Here.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Put Necessary Version</b> e.g; 3.2.0
+                <b>Versi</b>1.0
             </div>
         </footer>
 
