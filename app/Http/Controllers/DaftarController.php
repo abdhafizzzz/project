@@ -9,34 +9,9 @@ use Carbon\Carbon;
 
 class DaftarController extends Controller
 {
-    public function show($id = null)
-    {
-        if ($id) {
-            // Retrieve the daftar record with the given id and user_id
-            $daftar = DB::select('SELECT * FROM daftar WHERE id = ? AND user_id = ?', [$id, Auth::id()]);
-
-            // Check if the daftar record exists
-            if (!$daftar) {
-                abort(404);
-            }
-
-        } else {
-            // Handle the case where no id is provided
-            // For example, show a list of all daftar entries
-            $daftar = DB::select('SELECT * FROM daftar WHERE user_id = ?', [Auth::id()]);
-
-            return view('daftar')->with('daftar', $daftar);
-        }
-    }
-
     public function cetakindex()
     {
         return view('pet_cetak');
-    }
-
-    public function create(Request $request)
-    {
-        //
     }
 
     public function showPetCetakForm()
