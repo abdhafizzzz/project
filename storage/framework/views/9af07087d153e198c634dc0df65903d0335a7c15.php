@@ -1,7 +1,19 @@
 <?php
     use Illuminate\Support\Facades\DB;
-    $userData = DB::table('petanibajak')->where('petanibajak_id', Auth::user()->id)->first();
-    $tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
+    use Illuminate\Support\Facades\Auth;
+
+    // Get the logged-in user's nokp
+$nokp = Auth::user()->nokp;
+
+// Get the current year and the last year
+$currentYear = date('Y');
+$lastYear = $currentYear - 1;
+
+// Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is between the current and last year
+    $tanah = DB::table('tanah')
+        ->where('nokppetani', $nokp)
+        ->whereBetween(DB::raw('YEAR(tarikh)'), [$lastYear, $currentYear])
+        ->get();
 ?>
 
 
@@ -20,9 +32,6 @@
                         <div class="table-responsive" style="height: 800px; overflow: auto;">
                             <table class="table table-striped projects">
                                 <thead>
-                                    <?php echo e($tanah->links()); ?>
-
-
                                     <tr>
                                         <th style="width: 1%">Bil</th>
                                         <th width="25%">Pemilik Geran</th>
@@ -37,11 +46,10 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $counter = ($tanah->currentPage() - 1) * $tanah->perPage() + 1;
+                                    $counter = 1; // Start the counter
                                     ?>
                                     <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        
                                         <td><?php echo e($counter++); ?></td>
                                         <td><?php echo e($item->pemilikgeran); ?></td>
                                         <td><?php echo e($item->nogeran); ?></td>
@@ -53,7 +61,7 @@
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>
                                         <td class="project-actions text-right">
-                                            <a class="btn btn-info btn-sm" href=http://ebajak.test/ptundaf2>
+                                            <a class="btn btn-info btn-sm" href="<?php echo e(url('/ptundaf2')); ?>">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                         </td>
@@ -61,9 +69,6 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                             </table>
-                            <?php echo e($tanah->links()); ?>
-
-
                         </div>
                     </div>
                 </div>
@@ -71,7 +76,6 @@
         </div>
     </section>
 </div>
-
 
 <script>
     $.widget.bridge('uibutton', $.ui.button)

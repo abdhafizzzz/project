@@ -61,7 +61,7 @@ $lastYear = $currentYear - 1;
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>
                                         <td class="project-actions text-right">
-                                            <a class="btn btn-info btn-sm" href="http://ebajak.test/ptundaf2">
+                                            <a class="btn btn-info btn-sm" href="{{ url('/ptundaf2') }}">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                         </td>

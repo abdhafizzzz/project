@@ -110,6 +110,7 @@
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
                     <div class="image">
+                        <a href="{{ route ('home') }}">
                         <svg class="flex" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"
                             xmlns:bx="https://boxy-svg.com" alt="Logo" width="40" height="40">
                             <g transform="matrix(1, 0, 0, 1, -219.201312, -71.125489)">
@@ -145,7 +146,9 @@
                                 </g>
                             </g>
                         </svg>
+                        </a>
                     </div>
+
                     <div class="info">
                         <a href="{{ route('home') }}">eBajak</a>
                     </div>

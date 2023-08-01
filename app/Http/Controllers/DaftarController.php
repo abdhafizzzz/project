@@ -23,32 +23,30 @@ class DaftarController extends Controller
 
     public function edit($id = null)//this function is used to retrieve the petanibajak record
     {
-        // Retrieve the $userData object
+        // Retrieve the $userData object using the DB::table() method.
         $userData = DB::table('petanibajak')
         ->where('nokp', Auth::user()->nokp)
         ->orderBy('tarpohon', 'desc')
         ->first();
 
-        // Check if $userData is null, if so, create an empty object
-        if (!$userData) {
-            $userData = (object) [
-                'nama' => null,
-                'nokp' => null,
-                'jantina' => null,
-                'alamat' => null,
-                'poskod' => null,
-                'daerah' => null,
-                'telrumah' => null,
-                'telhp' => null,
-                'nopetani' => null,
-                'tahunpohon' => null,
-                'baru' => null,
-                'musim' => null,
-                'musim2' => null,
-                'stesen' => null,
-                'tarpohon' => null,
-            ];
-        }
+        //Then, the null coalescing operator (??) is used to assign the default object with null values if $userData is null.
+        $userData = $userData ?? (object) [
+            'nama' => null,
+            'nokp' => null,
+            'jantina' => null,
+            'alamat' => null,
+            'poskod' => null,
+            'daerah' => null,
+            'telrumah' => null,
+            'telhp' => null,
+            'nopetani' => null,
+            'tahunpohon' => null,
+            'baru' => null,
+            'musim' => null,
+            'musim2' => null,
+            'stesen' => null,
+            'tarpohon' => null,
+        ];
 
         // Create a new variable to hold the formatted date value
         $tarikhMemohon = $userData ? Carbon::parse($userData->tarpohon)->toDateString() : '';
@@ -65,26 +63,40 @@ class DaftarController extends Controller
             ->first();
 
         if ($existingData) {
-            // Update the existing row
-            DB::table('petanibajak')
-                ->where('nokp', Auth::user()->nokp)
-                ->where('tahunpohon', $request->tahunpohon)
-                ->update([
-                    'nama' => $request->nama,
-                    'nokp' => $request->nokp,
-                    'jantina' => $request->jantina,
-                    'alamat' => $request->alamat,
-                    'poskod' => $request->poskod,
-                    'daerah' => $request->daerah,
-                    'telrumah' => $request->telrumah,
-                    'telhp' => $request->telhp,
-                    'nopetani' => $request->nopetani,
-                    'baru' => $request->baru,
-                    'musim' => $request->musim ? 1 : 0,
-                    'musim2' => $request->musim2 ? 1 : 0,
-                    'stesen' => $request->stesen,
-                    'tarpohon' => $request->tarpohon,
-                ]);
+            // Update the existing row with parameter binding (to prevent SQL injection)
+            DB::update('UPDATE petanibajak SET
+                            nama = ?,
+                            nokp = ?,
+                            jantina = ?,
+                            alamat = ?,
+                            poskod = ?,
+                            daerah = ?,
+                            telrumah = ?,
+                            telhp = ?,
+                            nopetani = ?,
+                            baru = ?,
+                            musim = ?,
+                            musim2 = ?,
+                            stesen = ?,
+                            tarpohon = ?
+                        WHERE nokp = ? AND tahunpohon = ?', [
+                            $request->nama,
+                            $request->nokp,
+                            $request->jantina,
+                            $request->alamat,
+                            $request->poskod,
+                            $request->daerah,
+                            $request->telrumah,
+                            $request->telhp,
+                            $request->nopetani,
+                            $request->baru,
+                            $request->musim ? 1 : 0,
+                            $request->musim2 ? 1 : 0,
+                            $request->stesen,
+                            $request->tarpohon,
+                            Auth::user()->nokp,
+                            $request->tahunpohon
+                        ]);
 
             return back()->with('success', 'Data berhasil diperbaharui!');
         } else {
