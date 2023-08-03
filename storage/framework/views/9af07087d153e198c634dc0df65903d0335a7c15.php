@@ -3,17 +3,15 @@
     use Illuminate\Support\Facades\Auth;
 
     // Get the logged-in user's nokp
-$nokp = Auth::user()->nokp;
+    $nokp = Auth::user()->nokp;
 
-// Get the current year and the last year
-$currentYear = date('Y');
-$lastYear = $currentYear - 1;
+    // Get the current year
+    $currentDate = date('Y-m-d');
 
-// Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is between the current and last year
+    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
     $tanah = DB::table('tanah')
-        ->where('nokppetani', $nokp)
-        ->whereBetween(DB::raw('YEAR(tarikh)'), [$lastYear, $currentYear])
-        ->get();
+            ->whereDate('tarikh', $currentDate)
+            ->get();
 ?>
 
 
@@ -61,7 +59,8 @@ $lastYear = $currentYear - 1;
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>
                                         <td class="project-actions text-right">
-                                            <a class="btn btn-info btn-sm" href="<?php echo e(url('/ptundaf2')); ?>">
+                                            <a href="<?php echo e(route('ptundaf.edit', ['id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
                                         </td>
@@ -77,29 +76,6 @@ $lastYear = $currentYear - 1;
     </section>
 </div>
 
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js?v=3.2.0"></script>
-<script src="dist/js/demo.js"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/ptundaf.blade.php ENDPATH**/ ?>

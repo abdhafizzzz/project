@@ -1,132 +1,116 @@
+<!DOCTYPE html>
 <html>
-    @php
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-
-
-
-$tanah = DB::table('tanah')->where('pohonid', Auth::user()->id)->paginate(10);
-
-$item = DB::table('daerah')->first();
-
-@endphp
 
 <head>
-    <title>JABATAN PERTANIAN SABAH, MALAYSIA (BORANG PERMOHONAN SUBSIDI BAJAK) </title>
+    <title>JABATAN PERTANIAN SABAH, MALAYSIA (BORANG PERMOHONAN SUBSIDI BAJAK)</title>
     <style>
         @page {
-            size: A4
+            size: A4;
         }
     </style>
-	    {{-- <script>
-			function convertToUpperCase(elementId) {
-				var element = document.getElementById(elementId);
-				element.value = element.value.toUpperCase();
-			}
-		</script> --}}
 </head>
 
-<style>
-    /* Custom styles for disabled checkboxes */
-    input[type="checkbox"]:disabled {
-        opacity: 1; /* Set the opacity to 1 to make the checkbox fully visible */
-        filter: none; /* Remove the grayscale filter */
-        color: black; /* Set the color to black */
-    }
-</style>
-
-<body onLoad="printit()" bgcolor="#FFFFFF" text="#000000">
+<body bgcolor="#FFFFFF" text="#000000">
     <form ACTION="pet_cetak.php" NAME="pet_cetak" ID="pet_cetak" METHOD="post" LANGUAGE="javascript" target="_new">
-        <p align=right>
-            <font size=2>Borang PP 13.1 <BR>Pindaan 3/2016</font>
-        <p align=right>
-            <font size=2>No.Kad Petani {{ DB::table('daftar')->where('user_id', Auth::id())->value('nokad') }}</font>
-            <center><img src="img/doalogo.gif" WIDTH="57" HEIGHT="56"><br>
-                <font size=2>JABATAN PERTANIAN SABAH<br></font>
-
-                <font size="3"><b>BORANG PERMOHONAN SUBSIDI PEMBAJAKAN SAWAH PADI</b><br></FONT>
-                <font size=2>(Diisi Dalam 2 Salinan )</font><br>
-                <font size="3">Tahun: 2023<br>
-                    <font style="text-align:left;"><b>BUTIR-BUTIR PEMOHON (Diisi oleh pemohon)</b></font><br>
-                    <font size="2" style="text-align:center;">
-                        <i>Pendaftaran Baru
-                            <input type="checkbox" id="chkbaru" name="chkbaru" {{ DB::table('daftar')->where('user_id', Auth::id())->value('rd_daftar') == 1 ? 'checked' : '' }} disabled>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            Pendaftaran Lama&nbsp;
-                            <input type="checkbox" id="chklama" name="chklama" {{ DB::table('daftar')->where('user_id', Auth::id())->value('rd_daftar') == 2 ? 'checked' : '' }} disabled>
-                            &nbsp;
-                        </i>
-                    </font>
-            </center>
+        <p align="right">
+            <font size="2">Borang PP 13.1 <BR>Pindaan 3/2016</font>
+        </p>
+        <p align="right">
+            <font size="2">No.Kad Petani {{ $petanibajakData->nopetani }}</font>
+        </p>
+        <center>
+            <img src="img/doalogo.gif" WIDTH="57" HEIGHT="56"><br>
+            <font size="2">JABATAN PERTANIAN SABAH<br></font>
+            <font size="3"><b>BORANG PERMOHONAN SUBSIDI PEMBAJAKAN SAWAH PADI</b></font><br>
+            <font size="2">(Diisi Dalam 2 Salinan)</font><br>
+            <font size="3">Tahun: {{ $petanibajakData->tahunpohon }}<br></font>
+            <font style="text-align:left;"><b>BUTIR-BUTIR PEMOHON (Diisi oleh pemohon)</b></font><br>
+            <font size="2" style="text-align:center;">
+                <i>Pendaftaran Baru
+                    <input type="checkbox" id="chkbaru" name="chkbaru" {{ $petanibajakData->baru == 1 ? 'checked' : '' }} style="opacity: 1; cursor: not-allowed; pointer-events: none;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    Pendaftaran Lama&nbsp;
+                    <input type="checkbox" id="chklama" name="chklama" {{ $petanibajakData->baru == 2 ? 'checked' : '' }} style="opacity: 1; cursor: not-allowed; pointer-events: none;">
+                    &nbsp;
+                </i>
+            </font>
+        </center>
 
             <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:14px" border="0" cellPadding="2"
                 cellSpacing="1" width="90%">
                 <tr>
                 <tr>
-                    <td>1. Nama Pemohon: {{ Auth::user()->name }}</td>
+                    <td>1. Nama Pemohon: {{ $petanibajakData->nama }}</td>
                     <td></td>
                 <tr>
-                    <td>2. No. Kad Pengenalan: {{ Auth::user()->kad_pengenalan }}</td>
-                    <td>3. No. Telefon/Handphone: {{ DB::table('daftar')->where('user_id', Auth::id())->value('notel') }}{{ DB::table('daftar')->where('user_id', Auth::id())->value('nohp') }}</td>
+                    <td>2. No. Kad Pengenalan: {{ $petanibajakData->nokp }}</td>
+                    <td>3. No. Telefon/Handphone: {{ $petanibajakData->telrumah }} ,&nbsp;{{$petanibajakData->telhp }}</td>
                 <tr>
                     <td colspan="2">
-                        4. Alamat Perhubungan:{{ DB::table('daftar')->where('user_id', Auth::id())->value('alamat') }}&nbsp;{{ DB::table('daftar')->where('user_id', Auth::id())->value('poskod') }}&nbsp;
-                        {{ DB::table('daerah')->where('koddaerah', $item->koddaerah)->value('namadaerah') }}
+                        4. Alamat Perhubungan: {{ $petanibajakData->alamat }}&nbsp;{{ $petanibajakData->poskod }}&nbsp;{{ $daerah }}
                     </td>
 
                 </tr>
                 <tr>
                     <td colspan=2>
                         5. Musim Penanaman: Luar Musim
-                        <input type="checkbox" id="chkmusim" name="chkmusim" {{ DB::table('daftar')->where('user_id', Auth::id())->value('ch_musim') == 1 ? 'checked' : '' }} disabled>
+                        <input type="checkbox" id="chkmusim" name="chkmusim" {{ $petanibajakData->musim == 1 ? 'checked' : '' }} style="opacity: 1; cursor: not-allowed; pointer-events: none;">
                         Bulan Mac - Julai
 
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         Musim Utama
-                        <input type="checkbox" id="chkmusim2" name="chkmusim2" {{ DB::table('daftar')->where('user_id', Auth::id())->value('ch_musim2') == 1 ? 'checked' : '' }} disabled>
+                        <input type="checkbox" id="chkmusim2" name="chkmusim2" {{ $petanibajakData->musim2 == 1 ? 'checked' : '' }} style="opacity: 1; cursor: not-allowed; pointer-events: none;">
                         Bulan Ogos - Feb
                         &nbsp;
                     </td>
                 </tr>
             </table>
 
-																<table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2"
-																				cellspacing="1" width="90%">
-																				<tr>
-																				<tr>
-																								<th width="50" align="middle">Bil
-																								<th width="500" align="middle">Nama Pemilik Geran
-																								<th width="100" align="middle">No. Geran
-																								<th width="100" align="middle">Lokasi Tanah
-																								<th width="100" align="middle">Luas Dalam Geran (Ekar)
-																								<th width="100" align="middle">Luas Dipohon/Musim (Ekar)
-																								<th width="100" align="middle">Pemilikan Tanah
-                                                                                                    {{-- @php
-                                                                                                    use Illuminate\Support\Facades\DB;
-                                                                                                    $userId = Auth::id();
-                                                                                                    $tanah = DB::table('tanah')->where('pohonid', $userId)->paginate(5);
-                                                                                                @endphp --}}
-                                                                                                @foreach($tanah as $item)
-                                                                                                    <tr>
-                                                                                                        <td class="text-center">{{ $item->bil }}</td>
-                                                                                                        <td class="text-center">{{ $item->pemilikgeran }}</td>
-                                                                                                        <td class="text-center">{{ $item->nogeran }}</td>
-                                                                                                        <td class="text-center">{{ $item->lokasi }}</td>
-                                                                                                        <td class="text-center">{{ $item->luasekar }}</td>
-                                                                                                        <td class="text-center">{{ $item->luaspohon }}</td>
-                                                                                                        <td class="text-center">{{ $item->pemilikgeran }}</td>
-																				</tr>
-                                                                                @endforeach
-                                                                                <tr>
-                                                                                    <th width="6%" class="text-center"></th>
-                                                                                    <th width="25%" class="text-center"></th>
-                                                                                    <th width="11%" class="text-center"></th>
-                                                                                    <th width="15%" class="text-center">JUMLAH</th>
-                                                                                    <th width="15%" class="text-center">0</th>
-                                                                                    <th width="15%" class="text-center">0</th>
-                                                                                    <th width="15%" class="text-center"></th>
-                                                                                </tr>
-																</table>
+            <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
+                @php
+                // Get the logged-in user's nokp
+                $nokp = Auth::id();
+
+                // Get the current year
+                $currentYear = date('Y');
+
+                // Fetch data from 'petanibajak' table where 'nokppetani' matches the user's 'nokp' and 'tarikh' is in the current year
+                $petanibajak = DB::table('tanah')
+                    ->where('nokppetani', $nokp)
+                    ->whereYear('tarikh', $currentYear)
+                    ->get();
+                @endphp
+
+                <!-- Your table markup here -->
+                <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
+                    <tr>
+                        <!-- Add your table headers here -->
+                    </tr>
+
+                    @foreach ($petanibajak as $item)
+                        <tr>
+                            <!-- Display data in each row -->
+                            <td class="text-center">{{ $item->bil }}</td>
+                            <td class="text-center">{{ $item->pemilikgeran }}</td>
+                            <td class="text-center">{{ $item->nogeran }}</td>
+                            <td class="text-center">{{ $item->lokasi }}</td>
+                            <td class="text-center">{{ $item->luasekar }}</td>
+                            <td class="text-center">{{ $item->luaspohon }}</td>
+                            <td class="text-center">{{ $item->pemilikan }}</td>
+                            <!-- Add more columns if needed -->
+                        </tr>
+                    @endforeach
+
+                <tr>
+                    <th width="6%" class="text-center"></th>
+                    <th width="25%" class="text-center"></th>
+                    <th width="11%" class="text-center"></th>
+                    <th width="15%" class="text-center">JUMLAH</th>
+                    <th width="15%" class="text-center">0</th>
+                    <th width="15%" class="text-center">0</th>
+                    <th width="15%" class="text-center"></th>
+                </tr>
+            </table>
 																</td>
 								</table>
 
@@ -146,7 +130,7 @@ $item = DB::table('daerah')->first();
 												<tr>
 																<td align="left" valign="top" width="38%">
 																				(...............................................)<br>Tandatangan/Cop Ibu Jari Kanan
-																				Pemohon<br>Tarikh Permohonan: {{ DB::table('daftar')->where('user_id', Auth::id())->value('tarikh') }}
+																				Pemohon<br>Tarikh Permohonan: {{ $tarikhPohon }}
 																<td align="middle" valign="top" width="10%"><B><BR>COP<BR>JABATAN</B>
 																<td align="middle" valign="top" width="4%">
 																<td align="left" valign="top" width="38%">

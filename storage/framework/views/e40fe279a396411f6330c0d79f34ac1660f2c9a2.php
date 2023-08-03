@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>eBajak | Dashboard</title>
 
-    
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-    
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <link rel="stylesheet" href="<?php echo e(asset('plugins/fontawesome-free/css/all.min.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('plugins/fontawesome-free/css/combined.css')); ?>">
@@ -221,6 +225,44 @@
         </aside>
 
         <main class="py-4" style="margin-left: 30px;margin-right: 30px;">
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var preloader = document.getElementById("preloader");
+                    preloader.style.display = "none";
+                });
+            </script>
+
+            <script src="plugins/jquery/jquery.min.js"></script>
+
+            <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+
+            <script>
+                $.widget.bridge('uibutton', $.ui.button)
+            </script>
+
+            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+            <script src="plugins/chart.js/Chart.min.js"></script>
+
+            <script src="plugins/sparklines/sparkline.js"></script>
+
+            <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+            <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+
+            <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+
+            <script src="plugins/moment/moment.min.js"></script>
+            <script src="plugins/daterangepicker/daterangepicker.js"></script>
+
+            <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+
+            <script src="plugins/summernote/summernote-bs4.min.js"></script>
+
+            <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+            <script src="dist/js/adminlte.js?v=3.2.0"></script>
+
+            <script src="dist/js/pages/dashboard.js"></script>
             <?php echo $__env->yieldContent('navigation'); ?>
         </main>
 
@@ -239,45 +281,8 @@
         </aside>
 
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var preloader = document.getElementById("preloader");
-            preloader.style.display = "none";
-        });
-    </script>
-
-    <script src="plugins/jquery/jquery.min.js"></script>
-
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-
-    <script>
-        $.widget.bridge('uibutton', $.ui.button)
-    </script>
-
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <script src="plugins/chart.js/Chart.min.js"></script>
-
-    <script src="plugins/sparklines/sparkline.js"></script>
-
-    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-
-    <script src="dist/js/adminlte.js?v=3.2.0"></script>
-
-    <script src="dist/js/pages/dashboard.js"></script>
+    
+    <?php echo $__env->yieldContent('scripts'); ?>
 </body>
 
 </html>

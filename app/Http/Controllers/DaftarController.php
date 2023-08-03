@@ -9,16 +9,19 @@ use Carbon\Carbon;
 
 class DaftarController extends Controller
 {
-    public function cetakindex()
-    {
-        return view('pet_cetak');
-    }
-
     public function showPetCetakForm()
     {
         $user = Auth::user();
+
+        $tarikhPohon = DB::table('petanibajak')->where('nokp', $user->nokp)->latest('tarpohon')->value('tarpohon');
+        $tarikhPohon = Carbon::parse($tarikhPohon)->format('Y-m-d');
+
         $tanah = DB::table('tanah')->where('pohonid', $user->id)->first();
-        return view('pet_cetak', compact('user', 'tanah'));
+
+        $petanibajakData = DB::table('petanibajak')->where('nokp', $user->nokp)->latest('tarpohon')->first();
+        $daerah = DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->value('namadaerah');
+
+        return view('pet_cetak', compact('user', 'tanah', 'petanibajakData', 'tarikhPohon', 'daerah'));
     }
 
     public function edit($id = null)//this function is used to retrieve the petanibajak record
@@ -60,6 +63,7 @@ class DaftarController extends Controller
         $existingData = DB::table('petanibajak')
             ->where('nokp', Auth::user()->nokp)
             ->where('tahunpohon', $request->tahunpohon)
+            ->latest('tahunpohon')
             ->first();
 
         if ($existingData) {
@@ -101,13 +105,10 @@ class DaftarController extends Controller
             return back()->with('success', 'Data berhasil diperbaharui!');
         } else {
             // Retrieve the last petanibajak_id
-            $lastPetanibajakId = DB::table('petanibajak')->orderBy('petanibajak_id', 'desc')->value('petanibajak_id');
+            $lastPetanibajakId = DB::table('petanibajak')->max('petanibajak_id');
 
             // Retrieve the last pohonid for the given stesen
-            $lastPohonId = DB::table('petanibajak')
-            ->where('stesen', $request->stesen)
-            ->orderBy('pohonid', 'desc')
-            ->value('pohonid');
+            $lastPohonId = DB::table('petanibajak')->where('stesen', $request->stesen)->max('pohonid');
 
             // Generate the new petanibajak_id
             $petanibajakId = $lastPetanibajakId + 1;
