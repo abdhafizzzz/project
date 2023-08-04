@@ -165,14 +165,9 @@ class TuntutanController extends Controller
 
             // Insert the duplicated Tuntutan record with the updated 'tarikh' value
             $newId = DB::table('tanah')->insertGetId($tuntutanArray);
-
-            if ($newId) {
-                // Redirect or perform any other actions as needed
-                return redirect()->back()->with('success', 'Sila kemaskini data di bahagian Tuntutan.');
-            }
         }
 
         // Handle the case when the Tuntutan record is not found
-        return redirect()->back()->with('error', 'Tuntutan not found.');
+        return redirect()->back()->with('success', 'Sila kemaskini data di bahagian Tuntutan.');
     }
 }

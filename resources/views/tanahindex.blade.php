@@ -89,9 +89,14 @@ $nokp = Auth::user()->nokp;
                                                                         onclick="return confirm('Anda pasti untuk memadam geran tanah ini?')">Padam</a>
                                                                     <a href="#" class="btn btn-primary" style="margin-bottom: 10px;"
                                                                         onclick="toggleRowExpansion(event, '{{ $index }}')">Tambah Geran</a>
-                                                                        <a href="{{ route('tanah.changeDate', ['id' => $item->table_id, 'success' => true]) }}"
-                                                                            class="btn btn-secondary" style="margin-bottom: 10px;"
-                                                                            onclick="return confirm('Anda pasti untuk membuat tuntutan?')">Hantar untuk Tuntut</a>
+                                                                    @if (date('Y', strtotime($item->tarikh)) != date('Y'))
+                                                                    <a href="{{ route('tanah.changeDate', ['id' => $item->table_id, 'success' => true]) }}"
+                                                                        class="btn btn-secondary" style="margin-bottom: 10px;"
+                                                                        onclick="return confirm('Anda pasti untuk membuat tuntutan?')">Hantar untuk Tuntut</a>
+                                                                    @else
+                                                                        <a href="#" class="btn btn-secondary disabled" style="margin-bottom: 10px;"
+                                                                            onclick="return false;">Hantar untuk Tuntut</a>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
                                                             <tr class="collapse" id="expandableRow{{ $index }}">
@@ -210,5 +215,6 @@ $nokp = Auth::user()->nokp;
             }
         }
     </script>
+
 @endsection
 

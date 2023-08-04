@@ -6,11 +6,12 @@
     $nokp = Auth::user()->nokp;
 
     // Get the current year
-    $currentDate = date('Y-m-d');
+    $Date = date('Y');
 
     // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
     $tanah = DB::table('tanah')
-            ->whereDate('tarikh', $currentDate)
+            ->whereYear('tarikh', $Date)
+            ->where('nokppetani', $nokp)
             ->get();
 @endphp
 

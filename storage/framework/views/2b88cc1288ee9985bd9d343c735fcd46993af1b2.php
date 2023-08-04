@@ -91,9 +91,14 @@ $nokp = Auth::user()->nokp;
                                                                         onclick="return confirm('Anda pasti untuk memadam geran tanah ini?')">Padam</a>
                                                                     <a href="#" class="btn btn-primary" style="margin-bottom: 10px;"
                                                                         onclick="toggleRowExpansion(event, '<?php echo e($index); ?>')">Tambah Geran</a>
-                                                                        <a href="<?php echo e(route('tanah.changeDate', ['id' => $item->table_id, 'success' => true])); ?>"
-                                                                            class="btn btn-secondary" style="margin-bottom: 10px;"
-                                                                            onclick="return confirm('Anda pasti untuk membuat tuntutan?')">Hantar untuk Tuntut</a>
+                                                                    <?php if(date('Y', strtotime($item->tarikh)) != date('Y')): ?>
+                                                                    <a href="<?php echo e(route('tanah.changeDate', ['id' => $item->table_id, 'success' => true])); ?>"
+                                                                        class="btn btn-secondary" style="margin-bottom: 10px;"
+                                                                        onclick="return confirm('Anda pasti untuk membuat tuntutan?')">Hantar untuk Tuntut</a>
+                                                                    <?php else: ?>
+                                                                        <a href="#" class="btn btn-secondary disabled" style="margin-bottom: 10px;"
+                                                                            onclick="return false;">Hantar untuk Tuntut</a>
+                                                                    <?php endif; ?>
                                                                 </td>
                                                             </tr>
                                                             <tr class="collapse" id="expandableRow<?php echo e($index); ?>">
@@ -212,6 +217,7 @@ $nokp = Auth::user()->nokp;
             }
         }
     </script>
+
 <?php $__env->stopSection(); ?>
 
 
