@@ -52,8 +52,8 @@
                                     <label for="lokasi_tanah">Lokasi Tanah</label>
                                     <select class="form-control" id="lokasi" name="lokasi">
                                         <option value="">Sila pilih...</option>
-                                        <?php $__currentLoopData = DB::table('lokasitanah')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($lokasi->kodlokasi); ?>"><?php echo e($lokasi->namalokasi); ?></option>
+                                        <?php $__currentLoopData = $lokasiOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($lokasi->id); ?>"><?php echo e($lokasi->namalokasi); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>

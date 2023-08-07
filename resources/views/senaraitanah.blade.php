@@ -54,8 +54,8 @@
                                     <label for="lokasi_tanah">Lokasi Tanah</label>
                                     <select class="form-control" id="lokasi" name="lokasi">
                                         <option value="">Sila pilih...</option>
-                                        @foreach (DB::table('lokasitanah')->get() as $lokasi)
-                                            <option value="{{ $lokasi->kodlokasi }}">{{ $lokasi->namalokasi }}</option>
+                                        @foreach ($lokasiOptions as $lokasi)
+                                            <option value="{{ $lokasi->id }}">{{ $lokasi->namalokasi }}</option>
                                         @endforeach
                                     </select>
                                 </div>

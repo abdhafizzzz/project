@@ -5,25 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+// use Carbon\Carbon;
 
 class TuntutanController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        $daftar = DB::table('petanibajak')->where('petanibajak_id', $user->id)->first();
-        $tanah = DB::table('tanah')->where('pohonid', $user->id)->first();
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
 
-        return view('ptundaf', compact('daftar', 'tanah'));
+        // Show the current year
+        $Date = date('Y');
+
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
+        $tanah = DB::table('tanah')
+                ->whereYear('tarikh', $Date)
+                ->where('nokppetani', $nokp)
+                ->get();
+
+        // Retrieve the 'namalokasi' value for each 'lokasi' in the 'tanah' collection
+        //map() method to iterate through the collection to include the 'namalokasi' into the $item
+        $tanahWithLokasi = $tanah->map(function ($item) {
+        $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+        $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+        return $item;
+        });
+
+        return view('ptundaf', compact('tanah'));
     }
-    public function edit($id = null)//this function is used to retrieve the petanibajak record
+
+    public function edit($bil = null)//this function is used to retrieve the petanibajak record
     {
         // Retrieve the $userData object
         $userData = DB::table('petanibajak')
-        ->where('nokp', Auth::user()->nokp)
-        ->orderBy('tarpohon', 'desc')
-        ->first();
+        ->join('tanah', 'petanibajak.nokp', '=', 'tanah.nokppetani')
+        ->where('petanibajak.nokp', Auth::user()->nokp)
+        ->orderBy('petanibajak.tarpohon', 'desc')
+        ->select('petanibajak.*','tanah.pemilikgeran', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.stesen', 'tanah.bil as id')
+        ->get();
 
         // Check if $userData is null, if so, create an empty object
         if (!$userData) {
@@ -54,10 +73,7 @@ class TuntutanController extends Controller
             ];
         }
 
-        // Create a new variable to hold the formatted date value
-        $tarikhMemohon = $userData ? Carbon::parse($userData->tarpohon)->toDateString() : '';
-
-        return view('ptundaf2', compact('userData', 'tarikhMemohon'));
+        return view('ptundaf2', compact('userData'));
     }
 
     public function update(Request $request)//this function is used to update the petanibajak record

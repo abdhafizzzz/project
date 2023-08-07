@@ -15,7 +15,9 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
-                                <img src="{{ asset('img/doalogo.gif') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 200px;">
+                                <a href="{{ url('/') }}">
+                                    <img src="{{ asset('img/doalogo.gif') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 200px;">
+                                </a>
                                 <h2 class="fw-bold mb-2">eBajak</h2>
                                 <p class="text-black-50 mb-5">Sistem Subsidi Petani</p>
                                 <div class="form-outline form-white mb-4">

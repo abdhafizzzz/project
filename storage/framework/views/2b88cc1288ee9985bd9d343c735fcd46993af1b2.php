@@ -1,18 +1,3 @@
-<?php
-    use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Auth;
-
-    // Get the logged-in user's nokp
-$nokp = Auth::user()->nokp;
-
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
-    $tanah = DB::table('tanah')
-        ->where('nokppetani', $nokp)
-        ->get();
-?>
-
-
-
 <?php if(session('success')): ?>
     <div class="alert alert-success">
         <?php echo e(session('success')); ?>
@@ -70,6 +55,8 @@ $nokp = Auth::user()->nokp;
                                                         <th class="text-center">Bil</th>
                                                         <th class="text-center">Pemilik Geran</th>
                                                         <th class="text-center">No Geran</th>
+                                                        <th class="text-center">Lokasi</th>
+                                                        <th class="text-center">Pemilikan</th>
                                                         <th class="text-center">Status</th>
                                                         <th class="text-center">Tindakan</th>
                                                     </tr>
@@ -84,6 +71,8 @@ $nokp = Auth::user()->nokp;
                                                                 <td class="text-center"><?php echo e($counter++); ?></td>
                                                                 <td class="text-center"><?php echo e($item->pemilikgeran); ?></td>
                                                                 <td class="text-center"><?php echo e($item->nogeran); ?></td>
+                                                                <td class="text-center"><?php echo e($item->lokasi); ?></td>
+                                                                <td class="text-center"><?php echo e($item->deskripsi); ?></td>
                                                                 <td class="text-center"><span class="badge bg-danger">Belum Tambah Geran</span></td>
                                                                 <td class="text-center">
                                                                     <a href="<?php echo e(route('tanah.delete', ['id' => $item->table_id, 'success' => true])); ?>"

@@ -32,7 +32,6 @@ Route::middleware('auth')->group(function () {
 
     //Route senaraitanah blade
     Route::post('/senaraitanah/store', [TanahController::class, 'store'])->name('senaraitanah.store');
-    Route::match(['GET', 'POST'], '/senaraitanah/create', [TanahController::class, 'create'])->name('senaraitanah.create');
     Route::get('/senaraitanah', [TanahController::class, 'index2'])->name('senaraitanah'); // Define the tanahindex route with the TanahController's index method
     Route::get('/senaraitanah/change-date/{id}', [TuntutanController::class, 'changeDate'])->name('tanah.changeDate');//for ptundaf to be able to read tuntutan user
 

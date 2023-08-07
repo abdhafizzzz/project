@@ -1,20 +1,3 @@
-@php
-    use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Auth;
-
-    // Get the logged-in user's nokp
-    $nokp = Auth::user()->nokp;
-
-    // Get the current year
-    $Date = date('Y');
-
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
-    $tanah = DB::table('tanah')
-            ->whereYear('tarikh', $Date)
-            ->where('nokppetani', $nokp)
-            ->get();
-@endphp
-
 @extends('navigation')
 
 @section('navigation')
@@ -52,10 +35,10 @@
                                         <td>{{ $counter++ }}</td>
                                         <td>{{ $item->pemilikgeran }}</td>
                                         <td>{{ $item->nogeran }}</td>
-                                        <td>{{ DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi') }}</td>
+                                        <td>{{ $item->lokasi }}</td>
                                         <td>{{ $item->luasekar }}</td>
                                         <td>{{ $item->luaspohon }}</td>
-                                        <td>{{ DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi') }}</td>
+                                        <td>{{ $item->deskripsi }}</td>
                                         <td class="project-state">
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>

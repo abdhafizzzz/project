@@ -1,22 +1,3 @@
-<?php
-    use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Auth;
-
-    // Get the logged-in user's nokp
-    $nokp = Auth::user()->nokp;
-
-    // Get the current year
-    $Date = date('Y');
-
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
-    $tanah = DB::table('tanah')
-            ->whereYear('tarikh', $Date)
-            ->where('nokppetani', $nokp)
-            ->get();
-?>
-
-
-
 <?php $__env->startSection('navigation'); ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -52,10 +33,10 @@
                                         <td><?php echo e($counter++); ?></td>
                                         <td><?php echo e($item->pemilikgeran); ?></td>
                                         <td><?php echo e($item->nogeran); ?></td>
-                                        <td><?php echo e(DB::table('lokasitanah')->where('kodlokasi', $item->lokasi)->value('namalokasi')); ?></td>
+                                        <td><?php echo e($item->lokasi); ?></td>
                                         <td><?php echo e($item->luasekar); ?></td>
                                         <td><?php echo e($item->luaspohon); ?></td>
-                                        <td><?php echo e(DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi')); ?></td>
+                                        <td><?php echo e($item->deskripsi); ?></td>
                                         <td class="project-state">
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>

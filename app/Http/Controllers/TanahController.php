@@ -11,20 +11,21 @@ class TanahController extends Controller
 {
     public function index()
     {
-        return view('tanahindex');
-    }
+    // Get the logged-in user's nokp
+    $nokp = Auth::user()->nokp;
 
-    public function create()
-    {
+    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
+    $tanah = DB::table('tanah')
+        ->where('nokppetani', $nokp)
+        ->get();
 
-        // Call the getLatestTableId() method to fetch the latest table_id value
-        $latestTableId = $this->getLatestTableId();
+        $tanahWithLokasi = $tanah->map(function ($item) {
+        $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+        $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+        return $item;
+        });
 
-        // Fetch the user_id value
-        $user_id = Auth::id();
-
-        // Pass the latestTableId and user_id variables to the view for creating new tanah
-        return view('senaraitanah_create', compact('latestTableId', 'user_id'));
+        return view('tanahindex', compact('tanah'));
     }
 
     public function store(Request $request)
@@ -47,10 +48,11 @@ class TanahController extends Controller
         $stesen = DB::table('petanibajak')->where('nokp', $nokppetani)->latest('tarpohon')->value('stesen');
         $tahunpohon = DB::table('petanibajak')->where('nokp', $nokppetani)->latest('tarpohon')->value('tahunpohon');
 
+        $selectedLokasiId = $request->input('lokasi'); //read from the form
+        $lokasi = DB::table('lokasitanah')->where('id', $selectedLokasiId)->first(); //read from the database, matching the id from the form
+
         // Find the maximum bil value for the current user
-        $maxBil = DB::table('tanah')
-            ->where('nokppetani', $nokppetani)
-            ->max('bil');
+        $maxBil = DB::table('tanah')->where('nokppetani', $nokppetani)->max('bil');
 
         // Calculate the new bil value
         $newBil = $maxBil ? $maxBil + 1 : 1;
@@ -66,6 +68,9 @@ class TanahController extends Controller
             'pemilikgeran' => $validatedData['pemilikgeran'],
             'nogeran' => $validatedData['nogeran'],
             'lokasi' => $validatedData['lokasi'],
+            'zon' => $lokasi->kodzon,
+            'mukim' => $lokasi->kodmukim,
+            'kawasan' => $lokasi->kodkawasan,
             'luasekar' => $validatedData['luasekar'],
             'luaspohon' => $validatedData['luaspohon'],
             'pemilikan' => $validatedData['pemilikan'],
@@ -98,11 +103,13 @@ class TanahController extends Controller
 
     public function index2()
     {
+        $lokasiOptions = DB::table('lokasitanah')->get();
+
         // Call the getLatestTableId() method to fetch the latest table_id value
         $latestTableId = $this->getLatestTableId();
 
         // Pass the latestTableId and user_id variables to the view
-        return view('senaraitanah', compact('latestTableId'));
+        return view('senaraitanah', compact('latestTableId', 'lokasiOptions'));
     }
 
     public function getLatestTableId()
