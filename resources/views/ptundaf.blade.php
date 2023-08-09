@@ -43,10 +43,9 @@
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>
                                         <td class="project-actions text-right">
-                                            <a href="{{ route('ptundaf.edit', ['id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
-
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </a>
+                                            <a href="{{ route('ptundaf2.show', ['table_id' => $item->table_id, 'selectedRow' => $item->bil]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                            <!-- Remove the extra closing </a> tag -->
+                                            <i class="fas fa-pencil-alt"></i>
                                         </td>
                                     </tr>
                                     @endforeach

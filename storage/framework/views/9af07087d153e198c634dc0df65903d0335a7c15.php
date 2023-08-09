@@ -41,10 +41,9 @@
                                             <span class="badge badge-danger">Belum Tuntut</span>
                                         </td>
                                         <td class="project-actions text-right">
-                                            <a href="<?php echo e(route('ptundaf.edit', ['id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
-
-                                                <i class="fas fa-pencil-alt"></i>
-                                            </a>
+                                            <a href="<?php echo e(route('ptundaf2.show', ['table_id' => $item->table_id, 'selectedRow' => $item->bil])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                            <!-- Remove the extra closing </a> tag -->
+                                            <i class="fas fa-pencil-alt"></i>
                                         </td>
                                     </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

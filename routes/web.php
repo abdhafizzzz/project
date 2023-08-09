@@ -38,15 +38,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-latest-table-id', [TanahController::class, 'getLatestTableId']);//retrieve the latest table id
 
     //Route ptundaf blade
-    Route::post('/ptundaf/update', [TuntutanController::class, 'update'])->name('ptundaf.update');
-    Route::match(['GET', 'POST'], '/ptundaf/edit', [TuntutanController::class, 'edit'])->name('ptundaf.edit');
     Route::get('/ptundaf', [TuntutanController::class, 'index'])->name('ptundaf');
+      // Define the route for displaying the search form (GET request)
+    Route::get('/carian ', [TuntutanController::class, 'showSearchForm'])->name('carian');
+
+    Route::get('/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2.show');
+    Route::post('/tanah/store/{table_id}', [TuntutanController::class, 'storeTuntutan'])->name('tuntutan.store');
+
+
+// Define the route for handling the search request (POST request)
+Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
 
     Route::post('/upload', [TanahController::class, 'upload'])->name('upload');
 
-    Route::get('/carian', function () {
-        return view('carian');
-    })->name('carian');
+
 });
 
 Auth::routes();
@@ -67,6 +72,6 @@ Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkReques
 Route::get('/pet_cetak', [DaftarController::class, 'showPetCetakForm'])->name('pet_cetak');
 Route::get('/ptundaf', [TuntutanController::class, 'index'])->name('ptundaf');
 
-Route::get('/ptundaf2', function () {
-    return view('ptundaf2');
-});
+
+
+
