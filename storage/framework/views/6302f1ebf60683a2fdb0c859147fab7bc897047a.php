@@ -43,30 +43,26 @@
 
                                         <div class="col-sm-4 border-right">
                                             <div class="description-block">
-                                                <h5 class="description-header"> <input type="text" name="tahun"
-                                                        class="form-control" placeholder="Tahun">
+                                                <h5 class="description-header">
+                                                    <input type="text" name="tahun" class="form-control" placeholder="Tahun">
                                                 </h5>
                                             </div>
-
                                         </div>
-
                                         <div class="col-sm-4">
                                             <div class="description-block">
-                                                <h5 class="description-header"> <button type="submit" name="submit1"
+                                                <h5 class="description-header">
+                                                    <button type="submit" name="submit1"
                                                         class="btn btn-danger">
                                                         <span style="margin-right: 5px;">Cari</span>
                                                         <i class="fas fa-search"></i>
-                                                    </button></h5>
+                                                    </button>
+                                                </h5>
                                             </div>
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div> <!-- /.box-body -->
                 </div> <!-- /.box -->
             </div><!--/.col (center) -->

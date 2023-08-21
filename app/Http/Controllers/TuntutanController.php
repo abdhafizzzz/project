@@ -14,7 +14,6 @@ class TuntutanController extends Controller
         // Get the logged-in user's nokp
         $nokp = Auth::user()->nokp;
 
-        $id = DB::table('tanah')->where('nokppetani', $nokp)->value('bil');
         // Show the current year
         $Date = date('Y');
 
@@ -32,74 +31,76 @@ class TuntutanController extends Controller
         return $item;
         });
 
-    // Retrieve the specific item based on your requirements
-    $specificItem = DB::table('tanah')->where('bil', $id)->first();
+        return view('ptundaf', compact('tanah'));
+    }
+// Function to show the view with necessary data
+public function showTanah($table_id)
+{
+    // Get the logged-in user's nokp
+    $nokp = Auth::user()->nokp;
 
-    // Pass the $tanahWithLokasi and $specificItem variables to the view
-    return view('ptundaf', compact('tanah'))->with('tanahWithLokasi', $tanahWithLokasi)->with('specificItem', $specificItem);
+    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
+    $tanah = DB::table('tanah')
+        ->where('nokppetani', $nokp)
+        ->where('table_id', $table_id)
+        ->first();
+
+    // Check if the $tanah is found
+    if (!$tanah) {
+        // If the $tanah is not found, redirect back with an error message
+        return redirect()->back()->with('error', 'Data not found.');
     }
 
-    // Function to show the view with necessary data
-    public function showTanah($table_id)
-    {
-        // Get the logged-in user's nokp
-        $nokp = Auth::user()->nokp;
+    // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
+    $nama = DB::table('users')->where('nokp', $tanah->nokppetani)->value('nama');
 
-        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
-        $tanah = DB::table('tanah')
-            ->where('nokppetani', $nokp)
-            ->where('table_id', $table_id)
-            ->first();
+    // Fetch the lastkodbank value from the 'petanibajak' table
+    $petaniBajak = DB::table('petanibajak')->where('nokp', $nokp)->first();
 
-            // //if dd correct data pula cilakak
-            // dd($nokp, $table_id, $tanah);
+    // Use map to add additional fields to the $tanah object
+    $tanahWithLokasi = collect([$tanah])->map(function ($item) {
+        $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+        $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+        return $item;
+    })->first(); // Retrieve the first item from the collection
 
-        // Check if the $tanah is found
-        if (!$tanah) {
-            // If the $tanah is not found, redirect back with an error message
-            return redirect()->back()->with('error', 'Data not found.');
-        }
+    return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak'));
+}
 
-        // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
-        $nama = DB::table('users')->pluck('nama')->first();
 
-        // Retrieve the 'namalokasi' value for the 'lokasi' in the 'tanah' record
-        $tanah->lokasi = DB::table('lokasitanah')->pluck('namalokasi')->first();
 
-        // Retrieve the 'deskripsi' value for the 'pemilikan' in the 'tanah' record
-        $tanah->deskripsi = DB::table('pemilikan')->pluck('deskripsi')->first();
+public function storeTuntutan(Request $request)
+{
+    // Validate the input data
+    $request->validate([
+        'bulanbajak' => 'required',
+        'noakaun' => 'required',
+        'bank' => 'required',
+        'bankcwgn' => 'required',
+        'tartuntut' => 'required',
+        'table_id' => 'required|exists:tanah,table_id',
+    ]);
 
-        return view('ptundaf2', compact('nama', 'tanah'));
-    }
+    $amaunField = $request->input('bulanbajak') >= 3 && $request->input('bulanbajak') <= 7 ? 'amaunlulus' : 'amaunlulus2';
 
-    // Function to store the tuntutan data
-    public function storeTuntutan(Request $request)
-    {
-        // Validate the input data
-        $request->validate([
-            'bulan' => 'required',
-            'tuntutan' => 'required',
-            'akaun' => 'required',
-            'bank' => 'required',
-            'daerah' => 'required',
-            'tarpohon' => 'required',
-            'tanah_id' => 'required|exists:tanah,table_id',
-        ]);
+    $dataToUpdate = [
+        'bulanbajak' => $request->input('bulanbajak'),
+        'amaunlulus' => $amaunField === 'amaunlulus' ? $request->input('amaunlulus') : null,
+        'amaunlulus2' => $amaunField === 'amaunlulus2' ? $request->input('amaunlulus2') : null,
+        'noakaun' => $request->input('noakaun'),
+        'bank' => $request->input('bank'),
+        'bankcwgn' => $request->input('bankcwgn'),
+        'tartuntut' => $request->input('tartuntut'),
+    ];
 
-        // Store the tuntutan data in the database
-        DB::table('tuntutan')->insert([
-            'bulan' => $request->input('bulan'),
-            'tuntutan' => $request->input('tuntutan'),
-            'akaun' => $request->input('akaun'),
-            'bank' => $request->input('bank'),
-            'daerah' => $request->input('daerah'),
-            'tarpohon' => $request->input('tarpohon'),
-            'tanah_id' => $request->input('tanah_id'),
-        ]);
+    DB::table('tanah')
+        ->where('table_id', $request->input('table_id'))
+        ->update($dataToUpdate);
+    // Redirect to the 'ptundaf' route with a success message
+    return redirect()->route('ptundaf')->with('success', 'Tuntutan data has been stored successfully.');
+}
 
-        // Redirect back with a success message
-        return redirect()->back()->with('success', 'Tuntutan data has been stored successfully.');
-    }
+
 
     public function changeDate($id)
     {
@@ -147,7 +148,7 @@ class TuntutanController extends Controller
                     ->orWhere('tanah.tahunpohon', $tahunpohon);
             })
             ->orderBy('tanah.tahunpohon', 'desc')
-            ->select('tanah.*', 'tanah.tahunpohon', 'tanah.pemilikgeran', 'stesen.stationdesc', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.amaunlulus')
+            ->select('tanah.*', 'tanah.tahunpohon', 'tanah.pemilikgeran', 'stesen.stationdesc', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.amaunlulus', 'tanah.nopenyatamusim')
             ->get();
     } else {
         // If the "tahun" input is empty, set an empty collection for searchResults

@@ -30,7 +30,7 @@
 
                             <div class="form-group">
                                 <label for="tarikh">Tarikh</label>
-                                <input type="date" class="form-control" id="tarikh" name="tarikh"  required>
+                                <input type="date" class="form-control" id="tarikh" name="tarikh" disabled>
                             </div>
 
 
@@ -113,6 +113,19 @@
     </section>
     <!-- /.content -->
 </div>
+
+<script>
+    // Get the current date
+    var currentDate = new Date();
+
+    // Format the date as "YYYY-MM-DD"
+    var formattedDate = currentDate.toISOString().split('T')[0];
+
+    // Set the value of the input field to the current date
+    document.getElementById('tarikh').value = formattedDate;
+</script>
 <?php $__env->stopSection(); ?>
+
+
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/senaraitanah.blade.php ENDPATH**/ ?>

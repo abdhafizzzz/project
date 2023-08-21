@@ -15,9 +15,7 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
-                                <a href="{{ url('/') }}">
-                                    <img src="{{ asset('img/doalogo.gif') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 200px;">
-                                </a>
+                                <img src="{{ asset('img/doalogo.gif') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 200px;">
                                 <h2 class="fw-bold mb-2">eBajak</h2>
                                 <p class="text-black-50 mb-5">Sistem Subsidi Petani</p>
                                 <div class="form-outline form-white mb-4">
@@ -47,7 +45,7 @@
                                 </div>
                                 <button class="btn btn-dark btn-outline-primary btn-lg px-5 mb-3" title="Klik untuk Log Masuk" aria-label="Log Masuk">Log Masuk</button>
                                 <p class="small mb-5 pb-lg-2"><a class="text-black-50" href="{{ route('password.request') }}">Lupa kata laluan? sila klik sini</a></p>
-                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href="{{route('register')}}" class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
+                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href="http://ebajak.test/register" class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
                             </form>
 
 
