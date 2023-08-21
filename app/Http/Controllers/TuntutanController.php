@@ -34,73 +34,69 @@ class TuntutanController extends Controller
         return view('ptundaf', compact('tanah'));
     }
 // Function to show the view with necessary data
-public function showTanah($table_id)
-{
-    // Get the logged-in user's nokp
-    $nokp = Auth::user()->nokp;
+    public function showTanah($table_id)
+    {
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
 
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
-    $tanah = DB::table('tanah')
-        ->where('nokppetani', $nokp)
-        ->where('table_id', $table_id)
-        ->first();
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
+        $tanah = DB::table('tanah')
+            ->where('nokppetani', $nokp)
+            ->where('table_id', $table_id)
+            ->first();
 
-    // Check if the $tanah is found
-    if (!$tanah) {
-        // If the $tanah is not found, redirect back with an error message
-        return redirect()->back()->with('error', 'Data not found.');
+        // Check if the $tanah is found
+        if (!$tanah) {
+            // If the $tanah is not found, redirect back with an error message
+            return redirect()->back()->with('error', 'Data not found.');
+        }
+
+        // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
+        $nama = DB::table('users')->where('nokp', $tanah->nokppetani)->value('nama');
+
+        // Fetch the lastkodbank value from the 'petanibajak' table
+        $petaniBajak = DB::table('petanibajak')->where('nokp', $nokp)->first();
+
+        // Use map to add additional fields to the $tanah object
+        $tanahWithLokasi = collect([$tanah])->map(function ($item) {
+            $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+            $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+            return $item;
+        })->first(); // Retrieve the first item from the collection
+
+        return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak'));
     }
 
-    // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
-    $nama = DB::table('users')->where('nokp', $tanah->nokppetani)->value('nama');
+    public function storeTuntutan(Request $request)
+    {
+        // Validate the input data
+        $request->validate([
+            'bulanbajak' => 'required',
+            'noakaun' => 'required',
+            'bank' => 'required',
+            'bankcwgn' => 'required',
+            'tartuntut' => 'required',
+            'table_id' => 'required|exists:tanah,table_id',
+        ]);
 
-    // Fetch the lastkodbank value from the 'petanibajak' table
-    $petaniBajak = DB::table('petanibajak')->where('nokp', $nokp)->first();
+        $amaunField = $request->input('bulanbajak') >= 3 && $request->input('bulanbajak') <= 7 ? 'amaunlulus' : 'amaunlulus2';
 
-    // Use map to add additional fields to the $tanah object
-    $tanahWithLokasi = collect([$tanah])->map(function ($item) {
-        $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-        $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
-        return $item;
-    })->first(); // Retrieve the first item from the collection
+        $dataToUpdate = [
+            'bulanbajak' => $request->input('bulanbajak'),
+            'amaunlulus' => $amaunField === 'amaunlulus' ? $request->input('amaunlulus') : null,
+            'amaunlulus2' => $amaunField === 'amaunlulus2' ? $request->input('amaunlulus2') : null,
+            'noakaun' => $request->input('noakaun'),
+            'bank' => $request->input('bank'),
+            'bankcwgn' => $request->input('bankcwgn'),
+            'tartuntut' => $request->input('tartuntut'),
+        ];
 
-    return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak'));
-}
-
-
-
-public function storeTuntutan(Request $request)
-{
-    // Validate the input data
-    $request->validate([
-        'bulanbajak' => 'required',
-        'noakaun' => 'required',
-        'bank' => 'required',
-        'bankcwgn' => 'required',
-        'tartuntut' => 'required',
-        'table_id' => 'required|exists:tanah,table_id',
-    ]);
-
-    $amaunField = $request->input('bulanbajak') >= 3 && $request->input('bulanbajak') <= 7 ? 'amaunlulus' : 'amaunlulus2';
-
-    $dataToUpdate = [
-        'bulanbajak' => $request->input('bulanbajak'),
-        'amaunlulus' => $amaunField === 'amaunlulus' ? $request->input('amaunlulus') : null,
-        'amaunlulus2' => $amaunField === 'amaunlulus2' ? $request->input('amaunlulus2') : null,
-        'noakaun' => $request->input('noakaun'),
-        'bank' => $request->input('bank'),
-        'bankcwgn' => $request->input('bankcwgn'),
-        'tartuntut' => $request->input('tartuntut'),
-    ];
-
-    DB::table('tanah')
-        ->where('table_id', $request->input('table_id'))
-        ->update($dataToUpdate);
-    // Redirect to the 'ptundaf' route with a success message
-    return redirect()->route('ptundaf')->with('success', 'Tuntutan data has been stored successfully.');
-}
-
-
+        DB::table('tanah')
+            ->where('table_id', $request->input('table_id'))
+            ->update($dataToUpdate);
+        // Redirect to the 'ptundaf' route with a success message
+        return redirect()->route('ptundaf')->with('success', 'Tuntutan data has been stored successfully.');
+    }
 
     public function changeDate($id)
     {
@@ -133,31 +129,30 @@ public function storeTuntutan(Request $request)
         return view('carian'); // Replace 'search_form' with the name of your Blade view for the search form
     }
     public function search(Request $request)
-{
-    $user = Auth::user();
-    $searchKeyword = $request->input('tahun');
-    $tahunpohon = $request->input('tahun');
+    {
+        $user = Auth::user();
+        $searchKeyword = $request->input('tahun');
+        $tahunpohon = $request->input('tahun');
 
-    // Check if the "tahun" input is not empty before executing the search query
-    if (!empty($tahunpohon)) {
-        $searchResults = DB::table('tanah')
-            ->join('stesen', 'tanah.stesen', '=', 'stesen.stationcode')
-            ->where('tanah.nokppetani', $user->nokp)
-            ->where(function ($query) use ($tahunpohon) {
-                $query->where('tanah.tahunpohon', 'like', '%' . $tahunpohon . '%')
-                    ->orWhere('tanah.tahunpohon', $tahunpohon);
-            })
-            ->orderBy('tanah.tahunpohon', 'desc')
-            ->select('tanah.*', 'tanah.tahunpohon', 'tanah.pemilikgeran', 'stesen.stationdesc', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.amaunlulus', 'tanah.nopenyatamusim')
-            ->get();
-    } else {
-        // If the "tahun" input is empty, set an empty collection for searchResults
-        $searchResults = collect();
+        // Check if the "tahun" input is not empty before executing the search query
+        if (!empty($tahunpohon)) {
+            $searchResults = DB::table('tanah')
+                ->join('stesen', 'tanah.stesen', '=', 'stesen.stationcode')
+                ->where('tanah.nokppetani', $user->nokp)
+                ->where(function ($query) use ($tahunpohon) {
+                    $query->where('tanah.tahunpohon', 'like', '%' . $tahunpohon . '%')
+                        ->orWhere('tanah.tahunpohon', $tahunpohon);
+                })
+                ->orderBy('tanah.tahunpohon', 'desc')
+                ->select('tanah.*', 'tanah.tahunpohon', 'tanah.pemilikgeran', 'stesen.stationdesc', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.amaunlulus', 'tanah.nopenyatamusim')
+                ->get();
+        } else {
+            // If the "tahun" input is empty, set an empty collection for searchResults
+            $searchResults = collect();
+        }
+
+        return view('carian', compact('searchResults'));
     }
-
-    return view('carian', compact('searchResults'));
-}
-
 
 }
 
