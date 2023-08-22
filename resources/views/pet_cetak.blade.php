@@ -68,29 +68,27 @@
 
             <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
                 @php
-                // Get the logged-in user's nokp
-                $nokp = Auth::id();
-
-                // Get the current year
-                $currentYear = date('Y');
-
-                // Fetch data from 'petanibajak' table where 'nokppetani' matches the user's 'nokp' and 'tarikh' is in the current year
-                $petanibajak = DB::table('tanah')
-                    ->where('nokppetani', $nokp)
-                    ->whereYear('tarikh', $currentYear)
-                    ->get();
+                $counter = 1;
                 @endphp
 
                 <!-- Your table markup here -->
                 <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
                     <tr>
                         <!-- Add your table headers here -->
+                        <td class="text-center"><b>BIL</b></td>
+                        <td class="text-center"><b>PEMILIK GERAN</b></td>
+                        <td class="text-center"><b>NO. GERAN</b></td>
+                        <td class="text-center"><b>LOKASI TANAH</b></td>
+                        <td class="text-center"><b>LUAS TANAH (Ekar)</b></td>
+                        <td class="text-center"><b>LUAS DIPOHON (Ekar)</b></td>
+                        <td class="text-center"><b>STATUS PEMILIKAN</b></td>
                     </tr>
 
-                    @foreach ($petanibajak as $item)
+                    </tr>
+                    @foreach ($tanah as $item)
                         <tr>
                             <!-- Display data in each row -->
-                            <td class="text-center">{{ $item->bil }}</td>
+                            <td class="text-center">{{ $counter++ }}</td>
                             <td class="text-center">{{ $item->pemilikgeran }}</td>
                             <td class="text-center">{{ $item->nogeran }}</td>
                             <td class="text-center">{{ $item->lokasi }}</td>

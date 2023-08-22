@@ -84,14 +84,17 @@ $currentYear = date('Y');
                                 <tr>
                                     <td width="25%">No. Petani</td>
                                     <td width="5%">:</td>
-                                    <td width="70%"><input type="text" class="form-control" id="user_id"
-                                            name="user_id" placeholder="user_id" value="{{ $petanibajak->nopetani }}"
-                                            readonly></td>
+                                    <td width="70%">
+                                        <input type="text" class="form-control" id="nopetani" name="nopetani"
+                                            placeholder="No Petani (JIKA ADA)" value="{{ $petanibajak->nopetani ?? null }}"
+                                            readonly>
+                                    </td>
                                 </tr>
+
                                 <tr>
                                     <td>3. Alamat Perhubungan</td>
                                     <td>:</td>
-                                    <td><input type="text" class="form-control" id="nokp" name="alamat"
+                                    <td><input type="text" class="form-control" id="alamat" name="alamat"
                                             placeholder="alamat"
                                             value="{{ $petanibajak->alamat }} {{ $petanibajak->poskod }}" readonly></td>
                                 </tr>
@@ -114,8 +117,9 @@ $currentYear = date('Y');
                             <tr>
                                 <td width="25%">Nama Pemilik Geran</td>
                                 <td width="5%">:</td>
-                                <td width="70%"><input type="text" class="form-control" id="nama" name="nama"
-                                        placeholder="Nama Pemohon" value="{{ $specificItem->pemilikgeran }}" readonly></td>
+                                <td width="70%"><input type="text" class="form-control" id="pemilikgeran"
+                                        name="pemilikgeran" placeholder="Nama Pemohon"
+                                        value="{{ $specificItem->pemilikgeran }}" readonly></td>
                             </tr>
                             <tr>
                                 <td width="25%">Pemilikan Geran</td>
@@ -151,7 +155,7 @@ $currentYear = date('Y');
                                 <td>:</td>
                                 <td>
                                     <div class="input-group">
-                                        <input type="text" name="luas" id="luas" class="form-control"
+                                        <input type="text" name="luaspohon" id="luaspohon" class="form-control"
                                             value="{{ $specificItem->luaspohon }}" readonly>
                                     </div>
                                 </td>
@@ -308,9 +312,10 @@ $currentYear = date('Y');
                                     <td>:</td>
                                     <td>
                                         <input type="date" class="form-control" id="tartuntut" name="tartuntut"
-                                            value="{{ date('Y-m-d') }}" required>
+                                            value="{{ now()->format('Y-m-d') }}" readonly required>
                                     </td>
                                 </tr>
+
 
                         </table>
                     </div>

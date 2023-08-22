@@ -19,21 +19,25 @@ class TuntutanController extends Controller
 
         // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
         $tanah = DB::table('tanah')
-                ->whereYear('tarikh', $Date)
-                ->where('nokppetani', $nokp)
-                ->get();
+            ->whereYear('tarikh', $Date)
+            ->where('nokppetani', $nokp)
+            ->get();
 
         // Retrieve the 'namalokasi' value for each 'lokasi' in the 'tanah' collection
         //map() method to iterate through the collection to include the 'namalokasi' into the $item
         $tanahWithLokasi = $tanah->map(function ($item) {
-        $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-        $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
-        return $item;
+            $item->lokasi = DB::table('lokasitanah')
+                ->where('id', $item->lokasi)
+                ->value('namalokasi');
+            $item->deskripsi = DB::table('pemilikan')
+                ->where('kodmilik', $item->pemilikan)
+                ->value('deskripsi');
+            return $item;
         });
 
         return view('ptundaf', compact('tanah'));
     }
-// Function to show the view with necessary data
+    // Function to show the view with necessary data
     public function showTanah($table_id)
     {
         // Get the logged-in user's nokp
@@ -48,21 +52,33 @@ class TuntutanController extends Controller
         // Check if the $tanah is found
         if (!$tanah) {
             // If the $tanah is not found, redirect back with an error message
-            return redirect()->back()->with('error', 'Data not found.');
+            return redirect()
+                ->back()
+                ->with('error', 'Data not found.');
         }
 
         // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
-        $nama = DB::table('users')->where('nokp', $tanah->nokppetani)->value('nama');
+        $nama = DB::table('users')
+            ->where('nokp', $tanah->nokppetani)
+            ->value('nama');
 
         // Fetch the lastkodbank value from the 'petanibajak' table
-        $petaniBajak = DB::table('petanibajak')->where('nokp', $nokp)->first();
+        $petaniBajak = DB::table('petanibajak')
+            ->where('nokp', $nokp)
+            ->first();
 
         // Use map to add additional fields to the $tanah object
-        $tanahWithLokasi = collect([$tanah])->map(function ($item) {
-            $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-            $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
-            return $item;
-        })->first(); // Retrieve the first item from the collection
+        $tanahWithLokasi = collect([$tanah])
+            ->map(function ($item) {
+                $item->lokasi = DB::table('lokasitanah')
+                    ->where('id', $item->lokasi)
+                    ->value('namalokasi');
+                $item->deskripsi = DB::table('pemilikan')
+                    ->where('kodmilik', $item->pemilikan)
+                    ->value('deskripsi');
+                return $item;
+            })
+            ->first(); // Retrieve the first item from the collection
 
         return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak'));
     }
@@ -95,13 +111,17 @@ class TuntutanController extends Controller
             ->where('table_id', $request->input('table_id'))
             ->update($dataToUpdate);
         // Redirect to the 'ptundaf' route with a success message
-        return redirect()->route('ptundaf')->with('success', 'Tuntutan data has been stored successfully.');
+        return redirect()
+            ->route('ptundaf')
+            ->with('success', 'Tuntutan data has been stored successfully.');
     }
 
     public function changeDate($id)
     {
         // Find the Tanah record based on the given ID
-        $tanah = DB::table('tanah')->where('table_id', $id)->first();
+        $tanah = DB::table('tanah')
+            ->where('table_id', $id)
+            ->first();
 
         if ($tanah) {
             // Create a new array with the same data as the original record
@@ -121,7 +141,9 @@ class TuntutanController extends Controller
         }
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Sila kemaskini data di bahagian Tuntutan.');
+        return redirect()
+            ->back()
+            ->with('success', 'Sila kemaskini data di bahagian Tuntutan.');
     }
 
     public function showSearchForm()
@@ -133,6 +155,20 @@ class TuntutanController extends Controller
         $user = Auth::user();
         $searchKeyword = $request->input('tahun');
         $tahunpohon = $request->input('tahun');
+        $musim = $request->input('musim');
+        $musim2 = $request->input('musim2');
+
+        // Validate checkboxes only if none is selected
+        $request->validate(
+            [
+                'musim' => 'required_without:musim2',
+                'musim2' => 'required_without:musim',
+            ],
+            [
+                'musim.required_without' => 'Sila Pilih Musim Penanaman untuk Luar Musim (Bulan Mac - Julai) DAN/ATAU',
+                'musim2.required_without' => 'Sila Pilih Musim Penanaman untuk Musim Utama (Bulan Ogos - Feb) dan masukkan tahun carian ',
+            ],
+        );
 
         // Check if the "tahun" input is not empty before executing the search query
         if (!empty($tahunpohon)) {
@@ -140,8 +176,7 @@ class TuntutanController extends Controller
                 ->join('stesen', 'tanah.stesen', '=', 'stesen.stationcode')
                 ->where('tanah.nokppetani', $user->nokp)
                 ->where(function ($query) use ($tahunpohon) {
-                    $query->where('tanah.tahunpohon', 'like', '%' . $tahunpohon . '%')
-                        ->orWhere('tanah.tahunpohon', $tahunpohon);
+                    $query->where('tanah.tahunpohon', 'like', '%' . $tahunpohon . '%')->orWhere('tanah.tahunpohon', $tahunpohon);
                 })
                 ->orderBy('tanah.tahunpohon', 'desc')
                 ->select('tanah.*', 'tanah.tahunpohon', 'tanah.pemilikgeran', 'stesen.stationdesc', 'tanah.nogeran', 'tanah.luaspohon', 'tanah.amaunlulus', 'tanah.nopenyatamusim')
@@ -153,11 +188,4 @@ class TuntutanController extends Controller
 
         return view('carian', compact('searchResults'));
     }
-
 }
-
-
-
-
-
-

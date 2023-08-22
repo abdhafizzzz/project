@@ -11,15 +11,28 @@ class DaftarController extends Controller
 {
     public function showPetCetakForm()
     {
-        $user = Auth::user();
+        $user = Auth::user()->nokp;
 
-        $tarikhPohon = DB::table('petanibajak')->where('nokp', $user->nokp)->latest('tarpohon')->value('tarpohon');
+        $tarikhPohon = DB::table('petanibajak')->where('nokp', $user)->latest('tarpohon')->value('tarpohon');
         $tarikhPohon = Carbon::parse($tarikhPohon)->format('Y-m-d');
 
-        $tanah = DB::table('tanah')->where('pohonid', $user->id)->first();
+        $Date = date('Y');
 
-        $petanibajakData = DB::table('petanibajak')->where('nokp', $user->nokp)->latest('tarpohon')->first();
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
+        $tanah = DB::table('tanah')
+            ->whereYear('tarikh', $Date)
+            ->where('nokppetani', $user)
+            ->get();
+
+
+        $petanibajakData = DB::table('petanibajak')->where('nokp', $user)->latest('tarpohon')->first();
         $daerah = DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->value('namadaerah');
+
+        $tanahname = $tanah->map(function ($item) {
+            $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+            $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+            return $item;
+        });
 
         return view('pet_cetak', compact('user', 'tanah', 'petanibajakData', 'tarikhPohon', 'daerah'));
     }
