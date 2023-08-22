@@ -64,8 +64,11 @@ class TuntutanController extends Controller
 
         // Fetch the lastkodbank value from the 'petanibajak' table
         $petaniBajak = DB::table('petanibajak')
-            ->where('nokp', $nokp)
-            ->first();
+        ->where('nokp', $nokp)
+        ->latest('tarpohon')
+        ->first();
+
+        $petaniBajak->daerah = DB::table('daerah')->where('koddaerah', $petaniBajak->daerah)->value('namadaerah');
 
         // Use map to add additional fields to the $tanah object
         $tanahWithLokasi = collect([$tanah])
@@ -73,14 +76,21 @@ class TuntutanController extends Controller
                 $item->lokasi = DB::table('lokasitanah')
                     ->where('id', $item->lokasi)
                     ->value('namalokasi');
-                $item->deskripsi = DB::table('pemilikan')
+                $item->pemilikan = DB::table('pemilikan')
                     ->where('kodmilik', $item->pemilikan)
                     ->value('deskripsi');
+                $item->stesen = DB::table('stesen')->where('stationcode', $item->stesen)->value('stationdesc');
                 return $item;
+
             })
             ->first(); // Retrieve the first item from the collection
 
-        return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak'));
+        // Get the last segment of the URL path, which should be the table_id
+        $tableId = request()->segment(count(request()->segments()));
+        // Find the specific item in $tanah where the table_id matches
+        $specificItem = collect([$tanah])->where('table_id', $tableId)->first();
+
+        return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak', 'specificItem'));
     }
 
     public function storeTuntutan(Request $request)

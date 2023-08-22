@@ -12,16 +12,19 @@
         <section class="content-header">
             <h1>Senarai Tanah</h1>
             <head>Sekiranya anda TIDAK ingin menuntut tanah di bawah, sila klik butang <button class="btn btn-danger disabled-button">Padam</button> pada tanah tersebut.</head><br>
+            <br>
+            <head>Jikalau tahun dalam senarai bukanlah tahun sekarang, sila klik butang <button class="btn btn-success disabled-button">Kemaskini Senarai</button></head>
         </section>
 
         <!-- Main content -->
         <section class="content">
             <div class="card">
                 <div class="card-body">
-                    <a class="btn btn-success float-left mr-2 mb-3" href="{{ route('senaraitanah') }}">Tambah Tanah Baru</a>
+                    <button class="btn btn-success mr-2 mb-3" id="refresh-button">Kemaskini Senarai</button>
+                    <a class="btn btn-success mr-2 mb-3" href="{{ route('senaraitanah') }}">Tambah Tanah Baru</a>
                     <a href="{{ route('pet_cetak', ['table_id' => isset($item->table_id) ? $item->table_id : '']) }}"
                         target="_blank"
-                        class="btn btn-info" style="margin-bottom: 10px;"
+                        class="btn btn-info mr-2 mb-3"
                         onclick="return confirm('Teruskan ke Cetakan Borang PP13.1')">Cetak Borang PP13.1</a>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
@@ -48,7 +51,7 @@
                                             <td class="text-center">{{ $item->pemilikgeran }}</td>
                                             <td class="text-center">{{ $item->nogeran }}</td>
                                             <td class="text-center">{{ $item->lokasi }}</td>
-                                            <td class="text-center">{{ $item->deskripsi }}</td>
+                                            <td class="text-center">{{ $item->pemilikan }}</td>
                                             <td class="text-center"><span class="badge bg-danger">Belum Tambah Geran</span></td>
                                             <td class="text-center">
                                                 <a href="{{ route('tanah.delete', ['id' => $item->table_id, 'success' => true]) }}"
@@ -136,6 +139,32 @@
                 row.style.display = 'table-row'; // Show the row if not expanded
             }
         }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#refresh-button').click(function() {
+                $.ajax({
+                    url: "{{ route('tanahindex.updateyear') }}",
+                    type: "GET",
+                    success: function(response) {
+                    // Handle the success response, if needed
+                    Swal.fire({
+                    title: 'Kemaskini',
+                    text: 'Berjaya!',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload(); // Refresh the page
+                });
+            },
+                    error: function(xhr) {
+                        // Handle the error response, if needed
+                    }
+                });
+            });
+        });
     </script>
 
     {{-- <script>

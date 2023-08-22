@@ -5,7 +5,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="{{ route('carian') }}" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Kembali</a>
+            <a href="{{ url('carian') }}" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Reset</a>
         </section>
 
         @if ($errors->any())

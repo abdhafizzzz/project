@@ -289,6 +289,7 @@
             <script src="dist/js/adminlte.js?v=3.2.0"></script>
 
             <script src="dist/js/pages/dashboard.js"></script>
+
             @yield('navigation')
         </main>
 
@@ -309,6 +310,9 @@
     </div>
 
     @yield('scripts')
+    {{-- @push('scripts')
+        <script src="{{ asset('js/allnav.js') }}"></script>
+    @endpush --}}
 </body>
 
 </html>

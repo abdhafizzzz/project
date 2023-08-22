@@ -290,6 +290,7 @@
             <script src="dist/js/adminlte.js?v=3.2.0"></script>
 
             <script src="dist/js/pages/dashboard.js"></script>
+
             <?php echo $__env->yieldContent('navigation'); ?>
         </main>
 
@@ -310,6 +311,7 @@
     </div>
 
     <?php echo $__env->yieldContent('scripts'); ?>
+    
 </body>
 
 </html>

@@ -43,8 +43,8 @@
                                                     <span class="badge badge-danger">Belum Tuntut</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a href="{{ route('ptundaf2', ['table_id' => $item->table_id]) }}"
-                                                        class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                                    <a href="{{ route('ptundaf2', ['table_id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                                    {{-- <a href="#" class="btn btn-warning" style="margin-bottom: 10px;" onclick="openPtundaf2Blade()">Edit</a> --}}
                                                     <!-- Remove the extra closing </a> tag -->
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </td>
@@ -59,4 +59,11 @@
             </div>
         </section>
     </div>
+
+    {{-- <script>
+        function openPtundaf2Blade() {
+            window.location.href = "{{ route('ptundaf2', ['table_id' => $item->table_id]) }}";
+        }
+    </script> --}}
+
 @endsection

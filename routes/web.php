@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     //Route tanahindex blade
     Route::get('/tanah/{id}/edit', [TanahController::class, 'edit'])->name('edit-tanah');
     Route::get('/tanahindex', [TanahController::class, 'index'])->name('tanahindex'); // Define the tanahindex route with the TanahController's index method
+    Route::get('/tanahindex/updateyear', [TanahController::class, 'updateyear'])->name('tanahindex.updateyear'); //button to update the year when duplicate
     Route::get('/tanah/{id}/delete', [TanahController::class, 'delete'])->name('tanah.delete');
 
     //Route senaraitanah blade
@@ -42,14 +43,14 @@ Route::middleware('auth')->group(function () {
     // Route::get('/ptundaf3', [TuntutanController::class, 'index'])->name('ptundaf3');
 
       // Define the route for displaying the search form (GET request)
-Route::get('/carian ', [TuntutanController::class, 'showSearchForm'])->name('carian');
+    Route::get('/carian ', [TuntutanController::class, 'showSearchForm'])->name('carian');
 
-Route::get('/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
-Route::post('/tuntutan', [TuntutanController::class, 'storeTuntutan'])->name('tuntutan.store');
+    Route::get('/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
+    Route::post('/tuntutan', [TuntutanController::class, 'storeTuntutan'])->name('tuntutan.store');
 
 
-// Define the route for handling the search request (POST request)
-Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
+    // Define the route for handling the search request (POST request)
+    Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
 
     Route::post('/upload', [TanahController::class, 'upload'])->name('upload');
 

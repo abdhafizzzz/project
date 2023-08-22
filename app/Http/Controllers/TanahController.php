@@ -29,11 +29,71 @@ class TanahController extends Controller
         $tanahWithLokasi = $tanah->map(function ($item) {
             $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
             $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-            $item->deskripsi = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+            $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
             return $item;
         });
 
         return view('tanahindex', compact('tanah'));
+    }
+
+    public function updateyear()
+    {
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
+
+        // Get the maximum available year from the 'tanah' table for the logged-in user
+        $maxYear = DB::table('tanah')
+            ->where('nokppetani', $nokp)
+            ->max(DB::raw('YEAR(tarikh)'));
+
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
+        $tanah = DB::table('tanah')
+            ->where('nokppetani', $nokp)
+            ->where(DB::raw('YEAR(tarikh)'), $maxYear)
+            ->get();
+
+        $currentYear = date('Y');
+
+        // Check if datasets already exist for the current year
+        $datasetsExist = DB::table('tanah')
+            ->where('nokppetani', $nokp)
+            ->where(DB::raw('YEAR(tarikh)'), $currentYear)
+            ->exists();
+
+        if (!$datasetsExist) {
+            // Retrieve all datasets from the previous year
+            $previousYearTanah = DB::table('tanah')
+                ->where('nokppetani', $nokp)
+                ->where(DB::raw('YEAR(tarikh)'), $maxYear)
+                ->get();
+
+            $latestTableId = DB::table('tanah')->max('table_id');
+
+            // Duplicate each dataset and update its date to the current year
+            foreach ($previousYearTanah as $previousDataset) {
+                $duplicatedDataset = clone $previousDataset;
+                $duplicatedDataset->tarikh = Carbon::now()->format('Y-m-d');
+                $duplicatedDataset->table_id = ++$latestTableId; // Reset the ID to create a new entry in the database
+
+                // Insert the duplicated dataset into the 'tanah' table
+                DB::table('tanah')->insert(get_object_vars($duplicatedDataset));
+            }
+        }
+
+        // // Retrieve the updated dataset from the 'tanah' table
+        // $updatedTanah = DB::table('tanah')
+        //     ->where('nokppetani', $nokp)
+        //     ->where(DB::raw('YEAR(tarikh)'), $currentYear)
+        //     ->get();
+
+        // $tanahWithLokasi = $tanah->map(function ($item) {
+        //     $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
+        //     $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+        //     $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+        //     return $item;
+        // });
+
+        // return view('tanahindex', compact('tanahWithLokasi', 'tanah'));
     }
 
     public function store(Request $request)

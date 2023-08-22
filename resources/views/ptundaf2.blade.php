@@ -20,15 +20,10 @@ $currentYear = date('Y');
         ->whereYear('tarikh', $currentYear)
         ->latest('tarikh')
         ->get();
-
-    // Get the last segment of the URL path, which should be the table_id
-    $tableId = request()->segment(count(request()->segments()));
-
     // Debug: Output the value of $tableId
     // dd($tableId);
 
-    // Find the specific item in $tanah where the table_id matches
-    $specificItem = $tanah->where('table_id', $tableId)->first();
+
 @endphp
 
 
@@ -70,39 +65,31 @@ $currentYear = date('Y');
                                 <tr>
                                     <td width="25%">1. Nama Pemohon</td>
                                     <td width="5%">:</td>
-                                    <td width="70%"><input type="text" class="form-control" id="nama"
-                                            name="nama" placeholder="Nama Pemohon" value="{{ Auth::user()->nama }}"
-                                            readonly></td>
+                                    <td width="70%"><span>{{ Auth::user()->nama }}</span></td>
 
                                 </tr>
                                 <tr>
                                     <td>2. Kad Pengenalan</td>
                                     <td>:</td>
-                                    <td><input type="text" class="form-control" id="nokp" name="nokp"
-                                            placeholder="No.Kad Pengenalan" value="{{ Auth::user()->nokp }}" readonly></td>
+                                    <td><span>{{ Auth::user()->nokp }}</span></td>
                                 </tr>
                                 <tr>
                                     <td width="25%">No. Petani</td>
                                     <td width="5%">:</td>
                                     <td width="70%">
-                                        <input type="text" class="form-control" id="nopetani" name="nopetani"
-                                            placeholder="No Petani (JIKA ADA)" value="{{ $petanibajak->nopetani ?? null }}"
-                                            readonly>
+                                        <span>{{ $petaniBajak->nopetani ?? null }}</span>
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td>3. Alamat Perhubungan</td>
                                     <td>:</td>
-                                    <td><input type="text" class="form-control" id="alamat" name="alamat"
-                                            placeholder="alamat"
-                                            value="{{ $petanibajak->alamat }} {{ $petanibajak->poskod }}" readonly></td>
+                                    <td><span>{{ $petanibajak->alamat }}, {{ $petanibajak->poskod }}</span></td>
                                 </tr>
                                 <tr>
                                     <td>4. Daerah</td>
                                     <td>:</td>
-                                    <td><input type="text" class="form-control" id="daerah" name="daerah"
-                                            placeholder="daerah" value="{{ $petanibajak->daerah }}" readonly></td>
+                                    <td><span>{{ $petaniBajak->daerah }}</span></td>
                                 </tr>
                             </table>
                         </div>
@@ -117,46 +104,38 @@ $currentYear = date('Y');
                             <tr>
                                 <td width="25%">Nama Pemilik Geran</td>
                                 <td width="5%">:</td>
-                                <td width="70%"><input type="text" class="form-control" id="pemilikgeran"
-                                        name="pemilikgeran" placeholder="Nama Pemohon"
-                                        value="{{ $specificItem->pemilikgeran }}" readonly></td>
+                                <td width="70%">{{ $specificItem->pemilikgeran }}</td>
                             </tr>
                             <tr>
                                 <td width="25%">Pemilikan Geran</td>
                                 <td width="5%">:</td>
                                 <td width="70%">
-                                    <input type="text" class="form-control" id="pemilikan" name="pemilikan"
-                                        placeholder="Nama Pemohon"
-                                        value="{{ DB::table('pemilikan')->where('kodmilik', $specificItem->pemilikan)->value('deskripsi') }}"
-                                        readonly>
+                                    <span>{{ $tanahWithLokasi->pemilikan }}</span>
                                 </td>
 
                             </tr>
 
                             <input type="text" class="form-control" id="bil" name="bil" placeholder="Bil"
-                                value="{{ $specificItem->bil }}" hidden>
+                                value="" hidden>
 
 
                             <tr>
                                 <td width="25%">Jabatan</td>
                                 <td width="5%">:</td>
-                                <td width="70%"><input type="text" class="form-control" id="stesen" name="stesen"
-                                        placeholder="Bil" value="{{ $specificItem->stesen }}" readonly></td>
+                                <td width="70%"><span>{{ $specificItem->stesen }}</span></td>
                             </tr>
 
                             <tr>
                                 <td>No. Geran</td>
                                 <td>:</td>
-                                <td><input type="text" class="form-control" id="nogeran" name="nogeran"
-                                        placeholder="No. Geran" value="{{ $specificItem->nogeran }}" readonly></td>
+                                <td><span>{{ $specificItem->nogeran }}</span></td>
                             </tr>
                             <tr>
                                 <td>Luas Permohonan (Ekar)</td>
                                 <td>:</td>
                                 <td>
-                                    <div class="input-group">
-                                        <input type="text" name="luaspohon" id="luaspohon" class="form-control"
-                                            value="{{ $specificItem->luaspohon }}" readonly>
+                                    <div>
+                                        {{ $specificItem->luaspohon }}
                                     </div>
                                 </td>
                             </tr>
@@ -164,18 +143,14 @@ $currentYear = date('Y');
                                 <td>Kampung</td>
                                 <td>:</td>
                                 <td>
-                                    <input type="text" class="form-control" id="lokasi" name="lokasi"
-                                        placeholder="lokasi"
-                                        value="{{ DB::table('lokasitanah')->where('id', $specificItem->lokasi)->value('namalokasi') }}"
-                                        readonly>
+                                    <span>{{ $specificItem->lokasi }}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Tahun Pohon</td>
                                 <td>:</td>
                                 <td>
-                                    <input type="text" class="form-control" id="tahunpohon" name="tahunpohon"
-                                        value="{{ $specificItem->tahunpohon }}" readonly>
+                                    <span>{{ $specificItem->tahunpohon }}</span>
                                 </td>
                             </tr>
                         </table>

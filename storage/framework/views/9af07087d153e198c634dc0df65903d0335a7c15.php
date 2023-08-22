@@ -41,8 +41,8 @@
                                                     <span class="badge badge-danger">Belum Tuntut</span>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>"
-                                                        class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                                    <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                                    
                                                     <!-- Remove the extra closing </a> tag -->
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </td>
@@ -57,6 +57,13 @@
             </div>
         </section>
     </div>
+
+    <script>
+        function openPtundaf2Blade() {
+            window.location.href = "<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>";
+        }
+    </script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/ptundaf.blade.php ENDPATH**/ ?>
