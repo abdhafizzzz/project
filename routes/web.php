@@ -40,12 +40,12 @@ Route::middleware('auth')->group(function () {
 
     //Route ptundaf blade
     Route::get('/ptundaf', [TuntutanController::class, 'index'])->name('ptundaf');
-    // Route::get('/ptundaf3', [TuntutanController::class, 'index'])->name('ptundaf3');
+    // Route::get('/ptundaf3/{table_id}', [TuntutanController::class, 'index3'])->name('ptundaf3');
 
       // Define the route for displaying the search form (GET request)
     Route::get('/carian ', [TuntutanController::class, 'showSearchForm'])->name('carian');
 
-    Route::get('/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
+    Route::match(['get', 'post'], '/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
     Route::post('/tuntutan', [TuntutanController::class, 'storeTuntutan'])->name('tuntutan.store');
 
 

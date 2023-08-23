@@ -11,9 +11,10 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Senarai Tanah</h1>
-            <head>Sekiranya anda TIDAK ingin menuntut tanah di bawah, sila klik butang <button class="btn btn-danger disabled-button">Padam</button> pada tanah tersebut.</head><br>
+            <head>Jikalau tahun dalam senarai bukanlah tahun sekarang, sila klik butang  <button class="btn btn-success disabled-button">Kemaskini Senarai</button></head>
             <br>
-            <head>Jikalau tahun dalam senarai bukanlah tahun sekarang, sila klik butang <button class="btn btn-success disabled-button">Kemaskini Senarai</button></head>
+            <head>Sekiranya anda TIDAK ingin menuntut tanah di bawah, sila klik butang  <button class="btn btn-danger disabled-button">Padam</button> pada tanah tersebut.</head><br>
+
         </section>
 
         <!-- Main content -->

@@ -30,12 +30,11 @@ $currentYear = date('Y');
 
 @extends('navigation')
 @section('navigation')
-    <html>
 
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    </head>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
 
 
     <!-- Content Wrapper. Contains page content -->
@@ -290,15 +289,8 @@ $currentYear = date('Y');
                                             value="{{ now()->format('Y-m-d') }}" readonly required>
                                     </td>
                                 </tr>
-
-
                         </table>
                     </div>
-
-
-
-
-
 
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary" name="submit" value="submit">Kemaskini
@@ -309,9 +301,4 @@ $currentYear = date('Y');
         </section>
         </form>
     </div>
-    <!-- /.content -->
-    </div>
-    </body>
-
-    </html>
 @endsection

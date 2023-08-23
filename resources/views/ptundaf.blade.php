@@ -40,7 +40,11 @@
                                                 <td>{{ $item->luaspohon }}</td>
                                                 <td>{{ $item->deskripsi }}</td>
                                                 <td class="project-state">
-                                                    <span class="badge badge-danger">Belum Tuntut</span>
+                                                    @if ($item->amaunlulus || $item->amaunlulus2)
+                                                    <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
+                                                @else
+                                                    <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
+                                                @endif
                                                 </td>
                                                 <td class="project-actions text-right">
                                                     <a href="{{ route('ptundaf2', ['table_id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
@@ -62,7 +66,7 @@
 
     {{-- <script>
         function openPtundaf2Blade() {
-            window.location.href = "{{ route('ptundaf2', ['table_id' => $item->table_id]) }}";
+            window.location.href = "{{ route('ptundaf3', ['table_id' => $item->table_id]) }}";
         }
     </script> --}}
 

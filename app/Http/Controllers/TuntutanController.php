@@ -37,6 +37,7 @@ class TuntutanController extends Controller
 
         return view('ptundaf', compact('tanah'));
     }
+
     // Function to show the view with necessary data
     public function showTanah($table_id)
     {

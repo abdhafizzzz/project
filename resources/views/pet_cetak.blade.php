@@ -69,6 +69,8 @@
             <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
                 @php
                 $counter = 1;
+                $totalLuasekar = 0;
+                $totalLuaspohon = 0;
                 @endphp
 
                 <!-- Your table markup here -->
@@ -97,6 +99,12 @@
                             <td class="text-center">{{ $item->pemilikan }}</td>
                             <!-- Add more columns if needed -->
                         </tr>
+
+                        @php
+                            $totalLuasekar += $item->luasekar;
+                            $totalLuaspohon += $item->luaspohon;
+                        @endphp
+
                     @endforeach
 
                 <tr>
@@ -104,8 +112,8 @@
                     <th width="25%" class="text-center"></th>
                     <th width="11%" class="text-center"></th>
                     <th width="15%" class="text-center">JUMLAH</th>
-                    <th width="15%" class="text-center">0</th>
-                    <th width="15%" class="text-center">0</th>
+                    <th width="15%" class="text-center">{{ $totalLuasekar }}</th>
+                    <th width="15%" class="text-center">{{ $totalLuaspohon }}</th>
                     <th width="15%" class="text-center"></th>
                 </tr>
             </table>

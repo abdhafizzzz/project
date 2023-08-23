@@ -38,7 +38,11 @@
                                                 <td><?php echo e($item->luaspohon); ?></td>
                                                 <td><?php echo e($item->deskripsi); ?></td>
                                                 <td class="project-state">
-                                                    <span class="badge badge-danger">Belum Tuntut</span>
+                                                    <?php if($item->amaunlulus || $item->amaunlulus2): ?>
+                                                    <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
+                                                <?php else: ?>
+                                                    <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
+                                                <?php endif; ?>
                                                 </td>
                                                 <td class="project-actions text-right">
                                                     <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
@@ -58,11 +62,7 @@
         </section>
     </div>
 
-    <script>
-        function openPtundaf2Blade() {
-            window.location.href = "<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>";
-        }
-    </script>
+    
 
 <?php $__env->stopSection(); ?>
 
