@@ -36,7 +36,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        $welcomeMessage = 'Selamat Datang, ' . $user->name ;
+        $welcomeMessage = 'Selamat Datang, ' . $user->nama ;
         session()->flash('success', $welcomeMessage);
     }
 }

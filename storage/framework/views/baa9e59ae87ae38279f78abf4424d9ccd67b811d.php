@@ -73,7 +73,7 @@ unset($__errorArgs, $__bag); ?>
                                 </div>
                                 <button class="btn btn-dark btn-outline-primary btn-lg px-5 mb-3" title="Klik untuk Log Masuk" aria-label="Log Masuk">Log Masuk</button>
                                 <p class="small mb-5 pb-lg-2"><a class="text-black-50" href="<?php echo e(route('password.request')); ?>">Lupa kata laluan? sila klik sini</a></p>
-                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href="http://ebajak.test/register" class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
+                                <p class="mb-0">Untuk pengguna baru sila daftar dahulu <a href=<?php echo e(url('register')); ?> class="btn btn-outline-light btn-lg px-5 btn-success" onclick="openNewPage()">Daftar</a></p>
                             </form>
 
 

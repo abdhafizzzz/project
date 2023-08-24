@@ -26,7 +26,8 @@
                     <a href="{{ route('pet_cetak', ['table_id' => isset($item->table_id) ? $item->table_id : '']) }}"
                         target="_blank"
                         class="btn btn-info mr-2 mb-3"
-                        onclick="return confirm('Teruskan ke Cetakan Borang PP13.1')">Cetak Borang PP13.1</a>
+                        {{-- onclick="return confirm('Teruskan ke Cetakan Borang PP13.1')" --}}
+                        onclick="printPage(event)">Cetak Borang PP13.1</a>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead>
@@ -168,12 +169,15 @@
         });
     </script>
 
-    {{-- <script>
-        function toggleRowExpansion(event, index) {
-            event.preventDefault();
-            var row = document.getElementById('expandableRow' + index);
-            row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
-        }
-    </script> --}}
+    <script>
+    function printPage(event) {
+        event.preventDefault(); // Prevent the link from navigating immediately
+
+        var printWindow = window.open(event.target.href, '_blank'); // Open the new tab
+        printWindow.onload = function() {
+            printWindow.print(); // Trigger the print dialog
+        };
+    }
+    </script>
 @endsection
 

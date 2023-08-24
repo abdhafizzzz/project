@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 
 class TanahController extends Controller
 {
@@ -107,7 +108,7 @@ class TanahController extends Controller
             'luasekar' => 'required',
             'luaspohon' => 'required',
             'pemilikan' => 'required',
-            'tarikh' => 'required|date',
+            // 'tarikh' => 'required|date',
         ]);
 
         // Get the logged-in user's ID (auth ID)
@@ -142,14 +143,13 @@ class TanahController extends Controller
             'luasekar' => $validatedData['luasekar'],
             'luaspohon' => $validatedData['luaspohon'],
             'pemilikan' => $validatedData['pemilikan'],
-            'tarikh' => $validatedData['tarikh'],
+            'tarikh' => Date::now(),
             // Add any other fields that need to be inserted
         ]);
 
         // Redirect the user to the 'tanahindex' page after storing the data
         return redirect()->route('tanahindex')->with('success', 'Data berhasil disimpan!');
     }
-
 
     public function delete($id)
     {
@@ -190,7 +190,12 @@ class TanahController extends Controller
     {
         // Validate the uploaded file
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:pdf|max:2048', // PDF and maximum 2MB
+            'file' => ['required', 'file', 'mimes:pdf', 'max:2048'], // PDF and maximum 2MB
+        ], [
+            'file.required' => 'Please choose a file to upload.',
+            'file.file' => 'The uploaded file is invalid.',
+            'file.mimes' => 'The file must be a PDF.',
+            'file.max' => 'The file size must not exceed 2MB.',
         ]);
 
         if ($validator->fails()) {
@@ -201,17 +206,21 @@ class TanahController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
 
-            // You may want to generate a unique name for the file
-            $filename = uniqid('geran_') . '.' . $file->getClientOriginalExtension();
+            // Get the authenticated user's NOKP value
+            $nokp = Auth::user()->nokp;
 
-            // Store the file in the 'public' disk (you may need to configure the filesystems.php for this)
+            // Generate a unique filename with 'geran' and the user's NOKP
+            $filename = 'geran_' . $nokp . '.' . $file->getClientOriginalExtension();
+
+            // Store the file in the 'public' disk with the generated filename
             $path = $file->storeAs('geran_files', $filename, 'public');
 
-            // Save the file path in the database or any other processing you want to do
-            // For example, if you have a 'gerans' table with a 'file_path' column, you can do:
-            // $geran = new Geran;
-            // $geran->file_path = $path;
-            // $geran->save();
+            // Save the file path in the database
+            DB::table('gerans')->insert([
+                'file_path' => $path,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
             // Redirect back with a success message
             return redirect()->back()->with('success', 'File uploaded successfully.');
