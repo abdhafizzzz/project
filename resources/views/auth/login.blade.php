@@ -17,7 +17,7 @@
                                 @csrf
                                 <img src="{{ asset('img/doalogo.gif') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 200px;">
                                 <h2 class="fw-bold mb-2">eBajak</h2>
-                                <p class="text-black-50 mb-5">Sistem Subsidi Petani</p>
+                                <p class="text-black-50 mb-5">Modul Petani</p>
                                 <div class="form-outline form-white mb-4">
                                     <label for="nokp" class="col-md-4 col-form-label text-md-right">{{('No Kad Pengenalan')}}</label>
                                     <input id="nokp" type="text" class="form-control @error('nokp') is-invalid @enderror" name="nokp"  required autocomplete="nokp" autofocus aria-label="Kad Pengenalan" aria-describedby="nokp_error">
@@ -37,10 +37,10 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="form-check mb-4">
+                                <div class="form-check mb-4 d-flex justify-content-left">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                    <label class="form-check-label" for="remember" style="padding-left: 12px">
+                                        {{ ('Ingat Saya') }}
                                     </label>
                                 </div>
                                 <button class="btn btn-dark btn-outline-primary btn-lg px-5 mb-3" title="Klik untuk Log Masuk" aria-label="Log Masuk">Log Masuk</button>

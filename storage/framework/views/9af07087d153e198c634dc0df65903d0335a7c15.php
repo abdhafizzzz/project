@@ -28,7 +28,7 @@
                                         <?php
                                             $counter = 1; // Start the counter
                                         ?>
-                                        <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php $__currentLoopData = $tanahWithLokasi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
                                                 <td><?php echo e($counter++); ?></td>
                                                 <td><?php echo e($item->pemilikgeran); ?></td>
@@ -36,9 +36,9 @@
                                                 <td><?php echo e($item->lokasi); ?></td>
                                                 <td><?php echo e($item->luasekar); ?></td>
                                                 <td><?php echo e($item->luaspohon); ?></td>
-                                                <td><?php echo e($item->deskripsi); ?></td>
+                                                <td><?php echo e($item->pemilikan); ?></td>
                                                 <td class="project-state">
-                                                    <?php if($item->amaunlulus || $item->amaunlulus2): ?>
+                                                <?php if($item->amaunlulus || $item->amaunlulus2): ?>
                                                     <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
                                                 <?php else: ?>
                                                     <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
@@ -46,8 +46,6 @@
                                                 </td>
                                                 <td class="project-actions text-right">
                                                     <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
-                                                    
-                                                    <!-- Remove the extra closing </a> tag -->
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </td>
                                             </tr>
@@ -61,9 +59,6 @@
             </div>
         </section>
     </div>
-
-    
-
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('navigation', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\project-master\resources\views/ptundaf.blade.php ENDPATH**/ ?>

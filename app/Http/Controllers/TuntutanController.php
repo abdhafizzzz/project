@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Daerah;
+use App\Models\Pemilikan;
+use App\Models\PetaniBajak;
+use App\Models\Stesen;
+use App\Models\Tanah;
+use App\Models\LokasiTanah;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -9,44 +17,123 @@ use Illuminate\Support\Facades\DB;
 
 class TuntutanController extends Controller
 {
+    // public function index()
+    // {
+    //     // Get the logged-in user's nokp
+    //     $nokp = Auth::user()->nokp;
+
+    //     // Show the current year
+    //     $Date = date('Y');
+
+    //     // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
+    //     $tanah = DB::table('tanah')
+    //         ->whereYear('tarikh', $Date)
+    //         ->where('nokppetani', $nokp)
+    //         ->get();
+
+    //     // Retrieve the 'namalokasi' value for each 'lokasi' in the 'tanah' collection
+    //     //map() method to iterate through the collection to include the 'namalokasi' into the $item
+    //     $tanahWithLokasi = $tanah->map(function ($item) {
+    //         $item->lokasi = DB::table('lokasitanah')
+    //             ->where('id', $item->lokasi)
+    //             ->value('namalokasi');
+    //         $item->pemilikan = DB::table('pemilikan')
+    //             ->where('kodmilik', $item->pemilikan)
+    //             ->value('deskripsi');
+    //         return $item;
+    //     });
+
+    //     return view('ptundaf', compact('tanah'));
+    // }
+
     public function index()
     {
         // Get the logged-in user's nokp
         $nokp = Auth::user()->nokp;
 
         // Show the current year
-        $Date = date('Y');
+        $currentYear = date('Y');
 
-        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
-        $tanah = DB::table('tanah')
-            ->whereYear('tarikh', $Date)
-            ->where('nokppetani', $nokp)
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the current year
+        $tanah = Tanah::where('nokppetani', $nokp)
+            ->whereYear('tarikh', $currentYear)
             ->get();
 
         // Retrieve the 'namalokasi' value for each 'lokasi' in the 'tanah' collection
-        //map() method to iterate through the collection to include the 'namalokasi' into the $item
+        // Use eager loading to fetch related data more efficiently
+        $tanahWithLokasi = $tanah->load('lokasiTanah', 'pemilikan');
+
         $tanahWithLokasi = $tanah->map(function ($item) {
-            $item->lokasi = DB::table('lokasitanah')
-                ->where('id', $item->lokasi)
-                ->value('namalokasi');
-            $item->deskripsi = DB::table('pemilikan')
-                ->where('kodmilik', $item->pemilikan)
-                ->value('deskripsi');
+            $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
+            $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
             return $item;
         });
-
-        return view('ptundaf', compact('tanah'));
+        return view('ptundaf', compact('tanah', 'tanahWithLokasi'));
     }
 
     // Function to show the view with necessary data
+    // public function showTanah($table_id)
+    // {
+    //     // Get the logged-in user's nokp
+    //     $nokp = Auth::user()->nokp;
+
+    //     // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
+    //     $tanah = DB::table('tanah')
+    //         ->where('nokppetani', $nokp)
+    //         ->where('table_id', $table_id)
+    //         ->first();
+
+    //     // Check if the $tanah is found
+    //     if (!$tanah) {
+    //         // If the $tanah is not found, redirect back with an error message
+    //         return redirect()
+    //             ->back()
+    //             ->with('error', 'Data not found.');
+    //     }
+
+    //     // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
+    //     $nama = DB::table('users')
+    //         ->where('nokp', $tanah->nokppetani)
+    //         ->value('nama');
+
+    //     // Fetch the lastkodbank value from the 'petanibajak' table
+    //     $petaniBajak = DB::table('petanibajak')
+    //     ->where('nokp', $nokp)
+    //     ->latest('tarpohon')
+    //     ->first();
+
+    //     $petaniBajak->daerah = DB::table('daerah')->where('koddaerah', $petaniBajak->daerah)->value('namadaerah');
+
+    //     // Use map to add additional fields to the $tanah object
+    //     $tanahWithLokasi = collect([$tanah])
+    //         ->map(function ($item) {
+    //             $item->lokasi = DB::table('lokasitanah')
+    //                 ->where('id', $item->lokasi)
+    //                 ->value('namalokasi');
+    //             $item->pemilikan = DB::table('pemilikan')
+    //                 ->where('kodmilik', $item->pemilikan)
+    //                 ->value('deskripsi');
+    //             $item->stesen = DB::table('stesen')->where('stationcode', $item->stesen)->value('stationdesc');
+    //             return $item;
+
+    //         })
+    //         ->first(); // Retrieve the first item from the collection
+
+    //     // Get the last segment of the URL path, which should be the table_id
+    //     $tableId = request()->segment(count(request()->segments()));
+    //     // Find the specific item in $tanah where the table_id matches
+    //     $specificItem = collect([$tanah])->where('table_id', $tableId)->first();
+
+    //     return view('ptundaf2', compact('nama', 'table_id', 'tanahWithLokasi', 'petaniBajak', 'specificItem'));
+    // }
+
     public function showTanah($table_id)
     {
         // Get the logged-in user's nokp
         $nokp = Auth::user()->nokp;
 
         // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'table_id' matches the provided $table_id
-        $tanah = DB::table('tanah')
-            ->where('nokppetani', $nokp)
+        $tanah = Tanah::where('nokppetani', $nokp)
             ->where('table_id', $table_id)
             ->first();
 
@@ -59,30 +146,22 @@ class TuntutanController extends Controller
         }
 
         // Retrieve the 'nama' value for the 'nokppetani' in the 'users' table
-        $nama = DB::table('users')
-            ->where('nokp', $tanah->nokppetani)
-            ->value('nama');
+        $nama = User::where('nokp', $tanah->nokppetani)->value('nama');
 
         // Fetch the lastkodbank value from the 'petanibajak' table
-        $petaniBajak = DB::table('petanibajak')
-        ->where('nokp', $nokp)
-        ->latest('tarpohon')
-        ->first();
+        $petaniBajak = PetaniBajak::where('nokp', $nokp)
+            ->latest('tarpohon')
+            ->first();
 
-        $petaniBajak->daerah = DB::table('daerah')->where('koddaerah', $petaniBajak->daerah)->value('namadaerah');
+        $petaniBajak->daerah = Daerah::where('koddaerah', $petaniBajak->daerah)->value('namadaerah');
 
         // Use map to add additional fields to the $tanah object
         $tanahWithLokasi = collect([$tanah])
             ->map(function ($item) {
-                $item->lokasi = DB::table('lokasitanah')
-                    ->where('id', $item->lokasi)
-                    ->value('namalokasi');
-                $item->pemilikan = DB::table('pemilikan')
-                    ->where('kodmilik', $item->pemilikan)
-                    ->value('deskripsi');
-                $item->stesen = DB::table('stesen')->where('stationcode', $item->stesen)->value('stationdesc');
+                $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
+                $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
+                $item->stesen = Stesen::where('stationcode', $item->stesen)->value('stationdesc');
                 return $item;
-
             })
             ->first(); // Retrieve the first item from the collection
 

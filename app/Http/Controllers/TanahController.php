@@ -2,40 +2,67 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LokasiTanah;
+use App\Models\Pemilikan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Date;
+use App\Models\Tanah;
 
 class TanahController extends Controller
 {
+    // public function index()
+    // {
+    //     // Get the logged-in user's nokp
+    //     $nokp = Auth::user()->nokp;
+
+    //     // Get the maximum available year from the 'tanah' table for the logged-in user
+    //     $maxYear = DB::table('tanah')
+    //         ->where('nokppetani', $nokp)
+    //         ->max(DB::raw('YEAR(tarikh)'));
+
+    //     // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
+    //     $tanah = DB::table('tanah')
+    //         ->where('nokppetani', $nokp)
+    //         ->where(DB::raw('YEAR(tarikh)'), $maxYear)
+    //         ->get();
+
+    //     $tanahWithLokasi = $tanah->map(function ($item) {
+    //         $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
+    //         $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
+    //         $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+    //         return $item;
+    //     });
+
+    //     return view('tanahindex', compact('tanah'));
+    // }
+
     public function index()
-    {
-        // Get the logged-in user's nokp
-        $nokp = Auth::user()->nokp;
+{
+    // Get the logged-in user's nokp
+    $nokp = Auth::user()->nokp;
 
-        // Get the maximum available year from the 'tanah' table for the logged-in user
-        $maxYear = DB::table('tanah')
-            ->where('nokppetani', $nokp)
-            ->max(DB::raw('YEAR(tarikh)'));
+    // Get the maximum available year from the 'tanah' table for the logged-in user
+    $maxYear = Tanah::where('nokppetani', $nokp)
+        ->max(DB::raw('YEAR(tarikh)'));
 
-        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
-        $tanah = DB::table('tanah')
-            ->where('nokppetani', $nokp)
-            ->where(DB::raw('YEAR(tarikh)'), $maxYear)
-            ->get();
+    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
+    $tanah = Tanah::where('nokppetani', $nokp)
+        ->whereYear('tarikh', $maxYear)
+        ->get();
 
-        $tanahWithLokasi = $tanah->map(function ($item) {
-            $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
-            $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-            $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
-            return $item;
-        });
+    $tanahWithLokasi = $tanah->map(function ($item) {
+        $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
+        $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
+        $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
+        return $item;
+    });
 
-        return view('tanahindex', compact('tanah'));
-    }
+    return view('tanahindex', compact('tanah'));
+}
 
     public function updateyear()
     {

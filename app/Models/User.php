@@ -13,6 +13,22 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    protected $table = 'users';
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'nama',
+        'nokp',
+        'email',
+        'password',
+    ];
+
+    public function petaniBajak()
+    {
+        return $this->hasOne(PetaniBajak::class, 'nokp', 'nokp');
+    }
+
     use HasApiTokens, HasFactory, Notifiable;
 
     public function sendPasswordResetNotification($token)
@@ -30,12 +46,6 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'nama',
-        'nokp',
-        'email',
-        'password',
-    ];
 
     /**
      * The attributes that should be hidden for serialization.

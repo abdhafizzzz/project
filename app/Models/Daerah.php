@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Daerah extends Model
 {
-    use HasFactory;
-
-    // Define the table associated with the model
     protected $table = 'daerah';
+    protected $primaryKey = 'koddaerah';
 
-    // Define the model's properties and relationships
+    // Define any relationships or additional methods here
+    public function tanah()
+    {
+        return $this->hasMany(PetaniBajak::class, 'daerah', 'koddaerah');
+    }
 }
