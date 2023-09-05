@@ -136,7 +136,7 @@
                 </div>
 
                 <label for="stesen">Jabatan :</label>
-                    <select class="form-control" name="stesen">
+                    <select class="form-control" name="stesen" required oninvalid="this.setCustomValidity('Sila pilih Jabatan.')" oninput="this.setCustomValidity('')">
                         <option value="">Sila pilih...</option>
                         <?php $__currentLoopData = DB::table('stesen')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $stesen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($stesen->stationcode); ?>" <?php echo e(DB::table('petanibajak')->where('nokp', Auth::user()->nokp)->value('stesen') == $stesen->stationcode ? 'selected' : ''); ?>>
@@ -144,7 +144,8 @@
 
                             </option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select><br>
+                    </select>
+                    <br>
 
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
@@ -192,6 +193,7 @@
         }
     });
 </script>
+
 
 
 <?php $__env->stopSection(); ?>

@@ -9,8 +9,9 @@
     <div class="content-wrapper" style="overflow-y: auto;">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>Senarai Tanah</h1>
+            <h1>Senarai Tanah</h1><br>
             <head>Jika tahun dalam senarai di bawah bukan tahun semasa, sila klik butang  <button class="btn btn-success disabled-button">Kemaskini Senarai</button></head>
+            <br>
             <br>
             <head>Sekiranya anda TIDAK ingin menuntut tanah di bawah, sila klik butang  <button class="btn btn-danger disabled-button">Padam</button> pada tanah tersebut.</head><br>
 

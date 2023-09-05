@@ -136,14 +136,15 @@
                 </div>
 
                 <label for="stesen">Jabatan :</label>
-                    <select class="form-control" name="stesen">
+                    <select class="form-control" name="stesen" required oninvalid="this.setCustomValidity('Sila pilih Jabatan.')" oninput="this.setCustomValidity('')">
                         <option value="">Sila pilih...</option>
                         @foreach (DB::table('stesen')->get() as $stesen)
                             <option value="{{ $stesen->stationcode }}" {{ DB::table('petanibajak')->where('nokp', Auth::user()->nokp)->value('stesen') == $stesen->stationcode ? 'selected' : '' }}>
                                 {{ $stesen->stationdesc }}
                             </option>
                         @endforeach
-                    </select><br>
+                    </select>
+                    <br>
 
                 <label for="tarikh" style="margin-bottom: 6px">Tarikh Memohon :</label>
                 <div class="form-group">
@@ -211,4 +212,5 @@
         }
     });
 </script> can use later--}}
+
 @endsection

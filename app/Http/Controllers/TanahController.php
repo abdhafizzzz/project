@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LokasiTanah;
 use App\Models\Pemilikan;
+use App\Models\PetaniBajak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -107,21 +108,6 @@ class TanahController extends Controller
                 DB::table('tanah')->insert(get_object_vars($duplicatedDataset));
             }
         }
-
-        // // Retrieve the updated dataset from the 'tanah' table
-        // $updatedTanah = DB::table('tanah')
-        //     ->where('nokppetani', $nokp)
-        //     ->where(DB::raw('YEAR(tarikh)'), $currentYear)
-        //     ->get();
-
-        // $tanahWithLokasi = $tanah->map(function ($item) {
-        //     $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
-        //     $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-        //     $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
-        //     return $item;
-        // });
-
-        // return view('tanahindex', compact('tanahWithLokasi', 'tanah'));
     }
 
     public function store(Request $request)
@@ -198,7 +184,10 @@ class TanahController extends Controller
 
     public function index2()
     {
-        $lokasiOptions = DB::table('lokasitanah')->get();
+        $lokasiOptions = DB::table('lokasitanah')->where('kodstesen', DB::table('petanibajak')
+                        ->where('nokp', Auth::user()->nokp)
+                        ->value('stesen'))
+                        ->get();
 
         // Call the getLatestTableId() method to fetch the latest table_id value
         $latestTableId = $this->getLatestTableId();
