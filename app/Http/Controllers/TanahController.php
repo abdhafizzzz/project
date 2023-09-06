@@ -42,28 +42,28 @@ class TanahController extends Controller
     // }
 
     public function index()
-{
-    // Get the logged-in user's nokp
-    $nokp = Auth::user()->nokp;
+    {
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
 
-    // Get the maximum available year from the 'tanah' table for the logged-in user
-    $maxYear = Tanah::where('nokppetani', $nokp)
-        ->max(DB::raw('YEAR(tarikh)'));
+        // Get the maximum available year from the 'tanah' table for the logged-in user
+        $maxYear = Tanah::where('nokppetani', $nokp)
+            ->max(DB::raw('YEAR(tarikh)'));
 
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
-    $tanah = Tanah::where('nokppetani', $nokp)
-        ->whereYear('tarikh', $maxYear)
-        ->get();
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
+        $tanah = Tanah::where('nokppetani', $nokp)
+            ->whereYear('tarikh', $maxYear)
+            ->get();
 
-    $tanahWithLokasi = $tanah->map(function ($item) {
-        $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
-        $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
-        $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
-        return $item;
-    });
+        $tanahWithLokasi = $tanah->map(function ($item) {
+            $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
+            $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
+            $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
+            return $item;
+        });
 
-    return view('tanahindex', compact('tanah'));
-}
+        return view('tanahindex', compact('tanah'));
+    }
 
     public function updateyear()
     {
@@ -97,17 +97,80 @@ class TanahController extends Controller
                 ->get();
 
             $latestTableId = DB::table('tanah')->max('table_id');
+            $latestPohonId = PetaniBajak::where('tahunpohon', Carbon::now()->format('Y'))->where('nokp', Auth::user()->nokp)->value('pohonid');
+            $latestNoPetani = PetaniBajak::where('tahunpohon', Carbon::now()->format('Y'))->where('nokp', Auth::user()->nokp)->value('nopetani');
 
             // Duplicate each dataset and update its date to the current year
             foreach ($previousYearTanah as $previousDataset) {
                 $duplicatedDataset = clone $previousDataset;
+                // $duplicatedDataset = new Tanah();
+                $duplicatedDataset->bil = $previousDataset->bil;
+                $duplicatedDataset->pohonid = $latestPohonId;
+                $duplicatedDataset->nopetani = substr($latestNoPetani, 0, 10);
+                $duplicatedDataset->nokppetani = $previousDataset->nokppetani;
+                $duplicatedDataset->zon = $previousDataset->zon;
+                $duplicatedDataset->mukim = $previousDataset->mukim;
+                $duplicatedDataset->kawasan = $previousDataset->kawasan;
+                $duplicatedDataset->stesen = $previousDataset->stesen;
+                $duplicatedDataset->noakaun = $previousDataset->noakaun;
+                $duplicatedDataset->bank = $previousDataset->bank;
+                $duplicatedDataset->bankcwgn = $previousDataset->bankcwgn;
+                $duplicatedDataset->tahunpohon = Carbon::now()->format('Y');
                 $duplicatedDataset->tarikh = Carbon::now()->format('Y-m-d');
                 $duplicatedDataset->table_id = ++$latestTableId; // Reset the ID to create a new entry in the database
+
+                // Set null values
+                $duplicatedDataset->de = null;
+                $duplicatedDataset->detuntut = null;
+                $duplicatedDataset->delulus = null;
+                $duplicatedDataset->sokong = null;
+                $duplicatedDataset->luastanam = null;
+                $duplicatedDataset->luaslulus = null;
+                $duplicatedDataset->rekomenlulus = null;
+                $duplicatedDataset->ulasan = null;
+                $duplicatedDataset->bulanbajak = null;
+                $duplicatedDataset->amaun = null;
+                $duplicatedDataset->idsyt = null;
+                $duplicatedDataset->nokpkon = null;
+                $duplicatedDataset->tarkon = null;
+                $duplicatedDataset->tartuntut = null;
+                $duplicatedDataset->tarlulus = null;
+                $duplicatedDataset->semlulus = null;
+                $duplicatedDataset->tarsemlulus = null;
+                $duplicatedDataset->amaunlulus = null;
+                $duplicatedDataset->sahlulus = null;
+                $duplicatedDataset->tarsahlulus = null;
+                $duplicatedDataset->nopenyatamusim = null;
+                $duplicatedDataset->tahunpenyata = null;
+                $duplicatedDataset->detuntut2 = null;
+                $duplicatedDataset->delulus2 = null;
+                $duplicatedDataset->sokong2 = null;
+                $duplicatedDataset->luastanam2 = null;
+                $duplicatedDataset->luaslulus2 = null;
+                $duplicatedDataset->rekomenlulus2 = null;
+                $duplicatedDataset->ulasan2 = null;
+                $duplicatedDataset->bulanbajak2 = null;
+                $duplicatedDataset->amaun2 = null;
+                $duplicatedDataset->idsyt2 = null;
+                $duplicatedDataset->nokpkon2 = null;
+                $duplicatedDataset->tarkon2 = null;
+                $duplicatedDataset->tartuntut2 = null;
+                $duplicatedDataset->tarlulus2 = null;
+                $duplicatedDataset->semlulus2 = null;
+                $duplicatedDataset->tarsemlulus2 = null;
+                $duplicatedDataset->amaunlulus2 = null;
+                $duplicatedDataset->sahlulus2 = null;
+                $duplicatedDataset->tarsahlulus2 = null;
+                $duplicatedDataset->nopenyatamusim2 = null;
+                $duplicatedDataset->tahunpenyata2 = null;
+                $duplicatedDataset->kpedit = null;
+                $duplicatedDataset->taredit = null;
 
                 // Insert the duplicated dataset into the 'tanah' table
                 DB::table('tanah')->insert(get_object_vars($duplicatedDataset));
             }
         }
+        return response()->json(['message' => 'Data duplicated successfully'], 200);
     }
 
     public function store(Request $request)
@@ -124,11 +187,14 @@ class TanahController extends Controller
             // 'tarikh' => 'required|date',
         ]);
 
+        $CurrentYear = Carbon::now()->format('Y');
+
         // Get the logged-in user's ID (auth ID)
         $nokppetani = Auth::user()->nokp;
         $pohonId = DB::table('petanibajak')->where('nokp', $nokppetani)->latest('tarpohon')->value('pohonid');
         $stesen = DB::table('petanibajak')->where('nokp', $nokppetani)->latest('tarpohon')->value('stesen');
         $tahunpohon = DB::table('petanibajak')->where('nokp', $nokppetani)->latest('tarpohon')->value('tahunpohon');
+        $nopetani = PetaniBajak::where('tahunpohon', $CurrentYear)->where('nokp', $nokppetani)->value('nopetani');
 
         $selectedLokasiId = $request->input('lokasi'); //read from the form
         $lokasi = DB::table('lokasitanah')->where('id', $selectedLokasiId)->first(); //read from the database, matching the id from the form
@@ -144,6 +210,7 @@ class TanahController extends Controller
             'table_id' => $validatedData['table_id'],
             'bil' => $newBil,
             'pohonid' => $pohonId,
+            'nopetani' => substr($nopetani, 0, 10),
             'nokppetani' => $nokppetani,
             'stesen' => $stesen,
             'tahunpohon' => $tahunpohon,
@@ -185,6 +252,7 @@ class TanahController extends Controller
     public function index2()
     {
         $lokasiOptions = DB::table('lokasitanah')->where('kodstesen', DB::table('petanibajak')
+                        ->where('tahunpohon', Carbon::now()->format('Y'))
                         ->where('nokp', Auth::user()->nokp)
                         ->value('stesen'))
                         ->get();

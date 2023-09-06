@@ -1,7 +1,10 @@
-
-
 <?php $__env->startSection('navigation'); ?>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
 <div class="content-wrapper">
+    <div class="content-header">
 
     <div class="back-button">
         <a href="<?php echo e(route('tanahindex')); ?>" class="btn btn-secondary" style="margin-top: 15px;margin-left: 15px;">Kembali</a>
@@ -54,7 +57,7 @@
                                     <label for="lokasi_tanah">Lokasi Tanah</label>
                                     <select class="form-control" id="lokasi" name="lokasi">
                                         <option value="">Sila pilih...</option>
-                                        <?php $__currentLoopData = $lokasiOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php $__currentLoopData = $lokasiOptions->sortBy('namalokasi'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($lokasi->id); ?>"><?php echo e($lokasi->namalokasi); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
@@ -115,6 +118,7 @@
     </section>
     <!-- /.content -->
 </div>
+</div>
 
 <script>
     // Get the current date
@@ -126,6 +130,8 @@
     // Set the value of the input field to the current date
     document.getElementById('tarikh').value = formattedDate;
 </script>
+
+
 <?php $__env->stopSection(); ?>
 
 

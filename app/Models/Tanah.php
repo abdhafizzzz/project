@@ -13,7 +13,26 @@ class Tanah extends Model
 
     protected $fillable = [
         'nokppetani',
-        // Other fillable attributes
+        'bil',
+        'pohonid',
+        'pemilikgeran',
+        'nogeran',
+        'lokasi',
+        'luasekar',
+        'luaspohon',
+        'pemilikan',
+        'nopetani',
+        'nokppetani',
+        'zon',
+        'mukim',
+        'kawasan',
+        'stesen',
+        'noakaun',
+        'bank',
+        'bankcwgn',
+        'tahunpohon',
+        'tarikh',
+        'table_id',
     ];
 
     public function petaniBajak()

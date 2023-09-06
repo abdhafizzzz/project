@@ -1,7 +1,12 @@
 @extends('navigation')
 
 @section('navigation')
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
 <div class="content-wrapper">
+    <div class="content-header">
 
     <div class="back-button">
         <a href="{{ route('tanahindex') }}" class="btn btn-secondary" style="margin-top: 15px;margin-left: 15px;">Kembali</a>
@@ -54,7 +59,7 @@
                                     <label for="lokasi_tanah">Lokasi Tanah</label>
                                     <select class="form-control" id="lokasi" name="lokasi">
                                         <option value="">Sila pilih...</option>
-                                        @foreach ($lokasiOptions as $lokasi)
+                                        @foreach ($lokasiOptions->sortBy('namalokasi') as $lokasi)
                                             <option value="{{ $lokasi->id }}">{{ $lokasi->namalokasi }}</option>
                                         @endforeach
                                     </select>
@@ -115,6 +120,7 @@
     </section>
     <!-- /.content -->
 </div>
+</div>
 
 <script>
     // Get the current date
@@ -126,6 +132,8 @@
     // Set the value of the input field to the current date
     document.getElementById('tarikh').value = formattedDate;
 </script>
+
+
 @endsection
 
 
