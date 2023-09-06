@@ -100,21 +100,21 @@
                             </div><br>
                             <label>Tahun Permohonan :</label>
                             <div class="input-group date">
-                                <input name="tahunpohon" type="text" class="form-control" id="tahunpohon" value="{{ date('Y') }}">
+                                <input name="tahunpohon" type="text" class="form-control" id="tahunpohon" value="{{ date('Y') }}" disabled>
                             </div><p id="yearValidationMessage" style="color: red; display: none;">Tahun permohonan tidak boleh kurang daripada tahun kini.</p>
                             <br>
 
-                <div class="form-group">
-                    <label>Pendaftaran</label><br>
-                    <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
-                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar1" value=1 {{ $userData->baru == 1 ? 'checked' : '' }}>
-                        <label class="form-check-label" for="rd_daftar1">Baru</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar2" value=2 {{ $userData->baru == 2 ? 'checked' : '' }}>
-                        <label class="form-check-label" for="rd_daftar2">Lama</label>
-                    </div>
-                </div>
+                            <div class="form-group">
+                                <label>Pendaftaran</label><br>
+                                <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
+                                    <input class="form-check-input" type="radio" name="baru" id="rd_daftar1" value="1" {{ $userData->baru == 1 || ($userData->baru === null && $userData->tarpohon !== null && Carbon::parse($userData->tarpohon)->year < Carbon::now()->year - 1) ? 'checked' : '' }} disabled>
+                                    <label class="form-check-label" for="rd_daftar1">Baru</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="baru" id="rd_daftar2" value="2" {{ $userData->baru == 2 || ($userData->baru === null && $userData->tarpohon !== null && Carbon::parse($userData->tarpohon)->year >= Carbon::now()->year - 1) ? 'checked' : '' }} disabled>
+                                    <label class="form-check-label" for="rd_daftar2">Lama</label>
+                                </div>
+                            </div>
 
                 <div class="form-group">
                     <label for="Pemohon">Musim Penanaman</label>
