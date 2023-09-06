@@ -50,18 +50,24 @@ class RegisterController extends Controller
         ]);
     }
 
-
     public function checkNokp(Request $request)
     {
         $nokp = $request->input('nokp');
+        $name = $request->input('name'); // Get the provided name
+
         $existingNokp = DB::table('petanibajak')->where('nokp', $nokp)->first();
 
         if ($existingNokp) {
-            // If 'nokp' exists, return the JSON response with 'exists' as true and 'nama' value
-            return response()->json(['exists' => true, 'nama' => $existingNokp->nama]);
+            // If 'nokp' exists, check if 'nama' matches the provided name
+            if ($existingNokp->nama === $name) {
+                return response()->json(['exists' => true, 'match' => true]);
+            } else {
+                return response()->json(['exists' => true, 'match' => false]);
+            }
         } else {
             // If 'nokp' does not exist, return the JSON response with 'exists' as false
             return response()->json(['exists' => false]);
         }
     }
+
 }

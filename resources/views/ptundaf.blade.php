@@ -39,18 +39,19 @@
                                                 <td>{{ $item->luasekar }}</td>
                                                 <td>{{ $item->luaspohon }}</td>
                                                 <td>{{ $item->pemilikan }}</td>
-                                                <td class="project-state">
                                                 @if ($item->amaunlulus || $item->amaunlulus2)
-                                                    <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
-                                                @else
-                                                    <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
-                                                @endif
-                                                </td>
-                                                <td class="project-actions text-right">
-                                                    <a href="{{ route('ptundaf2', ['table_id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
-                                                    <i class="fas fa-pencil-alt"></i>
-                                                </td>
-                                            </tr>
+                                                <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
+                                            @else
+                                                <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
+                                            @endif
+                                        </td>
+                                        <td class="project-actions text-right">
+                                            {{-- @if (!$item->amaunlulus && !$item->amaunlulus2) --}}
+                                                <a href="{{ route('ptundaf2', ['table_id' => $item->table_id]) }}" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
+                                            {{-- @endif --}}
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </td>
+                                    </tr>
                                         @endforeach
                                     </tbody>
                                 </table>

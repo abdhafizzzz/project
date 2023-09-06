@@ -5,7 +5,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="{{ url('carian') }}" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Reset</a>
+            <a href="{{ route('carian') }}" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Kembali</a>
         </section>
 
         @if ($errors->any())
@@ -95,7 +95,14 @@
                                 <th style="width: 15%" class="text-center">Stesen</th>
                                 <th style="width: 25%" class="text-center">Pemilik Geran</th>
                                 <th style="width: 10%" class="text-center">No Geran</th>
-                                <th style="width: 15%" class="text-center">Luas Pohon (ekar)</th>
+                                <th style="width: 10%" class="text-center">Luas Pohon (ekar)</th>
+                                <th style="width: 10%" class="text-center">
+                                    @if ($searchResults->first() && ($searchResults->first()->luaslulus !== null || $searchResults->first()->luaslulus2 !== null))
+                                        Luas Lulus (ekar)
+                                    @else
+                                        Luas Lulus (ekar)
+                                    @endif
+                                </th>
                                 <th style="width: 25%" class="text-center">Jumlah Tuntutan</th>
                             </tr>
                         </thead>
@@ -107,6 +114,15 @@
                                     <td>{{ $result->pemilikgeran }}</td>
                                     <td>{{ $result->nogeran }}</td>
                                     <td class="text-center">{{ $result->luaspohon }}</td>
+                                    <td class="text-center">
+                                        @if ($result->luaslulus !== null)
+                                            {{ $result->luaslulus }}
+                                        @elseif ($result->luaslulus2 !== null)
+                                            {{ $result->luaslulus2 }}
+                                        @else
+                                           Tiada Data
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if ($result->nopenyatamusim)
                                             <span class="badge badge-success badge-sudah-diluluskan">DILULUSKAN</span>
