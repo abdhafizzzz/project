@@ -1,6 +1,6 @@
 @php
     use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Auth;
 
 // Get the logged-in user's nokp
 $nokp = Auth::user()->nokp;
@@ -23,8 +23,6 @@ if (!$petanibajak) {
 $tanah = DB::table('tanah')
     ->where('nokppetani', $nokp)
     ->first();
-
-// ...
 
 @endphp
 
@@ -162,19 +160,19 @@ $tanah = DB::table('tanah')
                                         <input type="date" class="form-control" id="tarikh" name="tarikh" placeholder="Tarikh" value="{{ date('Y-m-d') }}" readonly>
                                     </td>
                                 </tr>
-                            </table>
+                            </table><br>
 
                             <!-- Upload IC -->
                             <div class="form-group">
-                                <label for="nokpgambar">Upload IC (JPEG, PNG, JPG, GIF, or PDF):</label>
+                                <label for="nokpgambar">Upload Salinan Kad Pengenalan (JPEG, PNG, JPG, GIF, or PDF):</label><br>
                                 <input type="file" class="form-control" id="nokpgambar" name="nokpgambar" accept=".jpeg,.png,.jpg,.gif,.pdf" required>
-                            </div>
+                            </div><br>
 
                             <!-- Upload No Penyata Bank -->
                             <div class="form-group">
-                                <label for="nobank">Upload No Penyata Bank (PDF):</label>
+                                <label for="nobank">Upload No. Penyata Bank (PDF):</label><br>
                                 <input type="file" class="form-control" id="nobank" name="nobank" accept=".pdf" required>
-                            </div>
+                            </div><br>
 
                             <!-- Terms and conditions -->
                             <div class="form-check form-check-flat form-check-primary">

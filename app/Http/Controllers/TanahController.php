@@ -186,6 +186,7 @@ class TanahController extends Controller
     {
         $lokasiOptions = DB::table('lokasitanah')->where('kodstesen', DB::table('petanibajak')
                         ->where('nokp', Auth::user()->nokp)
+                        ->latest('tahunpohon')
                         ->value('stesen'))
                         ->get();
 

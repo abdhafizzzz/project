@@ -41,13 +41,9 @@
                     <label for="pemohon">Nama Pemohon :</label>
                     <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Pemohon" value="{{ $userData && $userData->nama ? $userData->nama : Auth::user()->nama }}" readonly><br>
 
-                   <!-- Existing input field for No.Kad Pengenalan -->
-<label for="pendaftaran">No.Kad Pengenalan :</label>
-<input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ $userData && $userData->nokp ? $userData->nokp : Auth::user()->nokp }}" readonly><br>
-
-
-
-
+                    <!-- Existing input field for No.Kad Pengenalan -->
+                    <label for="pendaftaran">No.Kad Pengenalan :</label>
+                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ $userData && $userData->nokp ? $userData->nokp : Auth::user()->nokp }}" readonly><br>
 
                     <div class="form-group">
                         <label>Jantina</label><br>
@@ -162,6 +158,7 @@
                 <div class="box-footer">
                     <button type="submit" style="margin-top:2rem" class="btn btn-primary">Kemaskini</button>
                 </div>
+                <br>
 
 
                 <section class="content">
