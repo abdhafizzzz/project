@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\SetPasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController; // Add this line
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -24,6 +24,23 @@ Route::middleware('auth')->group(function () {
     // Route for handling and displaying the edit form of daftar blade
     Route::post('/daftar/update', [DaftarController::class, 'update'])->name('daftar.update');
     Route::match(['GET', 'POST'], '/daftar', [DaftarController::class, 'edit'])->name('daftar'); // Make it handle both GET (view) and POST (create, edit, and store) method
+// Upload IC
+Route::post('/upload-ic', [DaftarController::class, 'uploadIC'])->name('upload.ic');
+// View IC
+Route::get('/view-ic', [DaftarController::class, 'viewIC'])->name('view.ic');
+
+// Routes for No Penyata Bank
+Route::post('upload-nobank', [DaftarController::class, 'uploadNobank'])->name('upload.nobank');
+Route::get('view-nobank', [DaftarController::class, 'viewNobank'])->name('view.nobank');
+
+
+Route::get('/daftar2', function () {
+    return view('daftar2');
+})->name('daftar2');
+
+
+
+
 
     //Route tanahindex blade
     Route::get('/tanah/{id}/edit', [TanahController::class, 'edit'])->name('edit-tanah');
@@ -34,27 +51,24 @@ Route::middleware('auth')->group(function () {
     //Route senaraitanah blade
     Route::post('/senaraitanah/store', [TanahController::class, 'store'])->name('senaraitanah.store');
     Route::get('/senaraitanah', [TanahController::class, 'index2'])->name('senaraitanah'); // Define the tanahindex route with the TanahController's index method
-    Route::get('/senaraitanah/change-date/{id}', [TuntutanController::class, 'changeDate'])->name('tanah.changeDate');//for ptundaf to be able to read tuntutan user
+    Route::get('/senaraitanah/change-date/{id}', [TuntutanController::class, 'changeDate'])->name('tanah.changeDate'); //for ptundaf to be able to read tuntutan user
 
-    Route::get('/get-latest-table-id', [TanahController::class, 'getLatestTableId']);//retrieve the latest table id
+    Route::get('/get-latest-table-id', [TanahController::class, 'getLatestTableId']); //retrieve the latest table id
 
     //Route ptundaf blade
     Route::get('/ptundaf', [TuntutanController::class, 'index'])->name('ptundaf');
-    // Route::get('/ptundaf3/{table_id}', [TuntutanController::class, 'index3'])->name('ptundaf3');
+    // Route::get('/ptundaf3', [TuntutanController::class, 'index'])->name('ptundaf3');
 
-      // Define the route for displaying the search form (GET request)
+    // Define the route for displaying the search form (GET request)
     Route::get('/carian ', [TuntutanController::class, 'showSearchForm'])->name('carian');
 
-    Route::match(['get', 'post'], '/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
+    Route::get('/tanah/{table_id}', [TuntutanController::class, 'showTanah'])->name('ptundaf2');
     Route::post('/tuntutan', [TuntutanController::class, 'storeTuntutan'])->name('tuntutan.store');
-
 
     // Define the route for handling the search request (POST request)
     Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
 
     Route::post('/upload', [TanahController::class, 'upload'])->name('upload');
-
-
 });
 
 Auth::routes();
@@ -73,7 +87,3 @@ Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkReques
 
 // Subsidi Daftar Form Page
 Route::get('/pet_cetak', [DaftarController::class, 'showPetCetakForm'])->name('pet_cetak');
-
-
-
-

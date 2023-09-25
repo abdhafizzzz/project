@@ -28,7 +28,7 @@
                                         <?php
                                             $counter = 1; // Start the counter
                                         ?>
-                                        <?php $__currentLoopData = $tanahWithLokasi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $tanah; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
                                                 <td><?php echo e($counter++); ?></td>
                                                 <td><?php echo e($item->pemilikgeran); ?></td>
@@ -38,17 +38,20 @@
                                                 <td><?php echo e($item->luaspohon); ?></td>
                                                 <td><?php echo e($item->pemilikan); ?></td>
                                                 <td class="project-state">
-                                                <?php if($item->amaunlulus || $item->amaunlulus2): ?>
-                                                    <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
-                                                <?php else: ?>
-                                                    <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
-                                                <?php endif; ?>
+                                                    <?php if($item->tartuntut): ?>
+                                                        <span class="badge badge-success badge-sudah-diluluskan">Sudah Tuntut</span>
+                                                    <?php else: ?>
+                                                        <span class="badge badge-danger badge-sedang-diproses">Belum Tuntut</span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td class="project-actions text-right">
-                                                    <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Edit</a>
-                                                    <i class="fas fa-pencil-alt"></i>
+                                                    <?php if(!$item->noakaun): ?>
+                                                        <a href="<?php echo e(route('ptundaf2', ['table_id' => $item->table_id])); ?>" class="btn btn-warning" style="margin-bottom: 10px;">Tuntut</a>
+                                                    <?php endif; ?>
+
                                                 </td>
-                                            </tr>
+
+                                    </tr>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </tbody>
                                 </table>

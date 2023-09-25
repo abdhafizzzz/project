@@ -35,6 +35,12 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'nobank' => [
+            'driver' => 'local',
+            'root' => storage_path('app/nobank'),
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

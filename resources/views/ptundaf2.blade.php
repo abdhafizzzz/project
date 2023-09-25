@@ -10,6 +10,8 @@ $petanibajak = DB::table('petanibajak')
     ->where('nokp', $nokp)
     ->first(); // Assuming you expect only one row for the logged-in user
 
+
+
 // Get the current year
 $currentYear = date('Y');
 
@@ -20,174 +22,138 @@ $currentYear = date('Y');
         ->whereYear('tarikh', $currentYear)
         ->latest('tarikh')
         ->get();
-    // Debug: Output the value of $tableId
-    // dd($tableId);
 
 
-@endphp
+  // Fetch data from 'rm_subsidi' table where 'tarikhkuatkuasa' year is the current year
+  $latestRmSubsidi = DB::table('rm_subsidi')
+        ->whereYear('tarikhkuatkuasa', $currentYear)
+        ->latest('tarikhkuatkuasa')
+        ->first();
 
-
+    // Check if $latestRmSubsidi is not null before accessing the 'rm' attribute
+    if($latestRmSubsidi) {
+        $latestRmValue = $latestRmSubsidi->rm;
+    } else {
+        $latestRmValue = 0; // Set a default value if needed
+    }
+    @endphp
 
 @extends('navigation')
+
 @section('navigation')
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-</head>
-
-
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-
+<div class="content-wrapper">
+    <div class="content-header">
         <div class="back-button">
-            <a href="{{ route('ptundaf') }}" class="btn btn-secondary" style="margin-top: 15px;margin-left: 15px;">Kembali</a>
+            <a href="{{ route('ptundaf') }}" class="btn btn-secondary mt-2 ml-2">Kembali</a>
         </div>
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
+        <section class="content-header"></section>
+    </div>
 
-        </section>
-
-        <!-- Main content -->
-
-        <section class="content container-fluid">
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title"><b>TUNTUTAN SUBSIDI PEMBAJAKAN </b></h3>
+    <section class="content container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>BUTIRAN PETANI</b></h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Nama Pemohon:</label>
+                                <span>{{ Auth::user()->nama }}</span>
                             </div>
-                            <table id="tuntutan" class="table table-bordered table-hover">
-
-                                <tr>
-                                    <td width="25%">1. Nama Pemohon</td>
-                                    <td width="5%">:</td>
-                                    <td width="70%"><span>{{ Auth::user()->nama }}</span></td>
-
-                                </tr>
-                                <tr>
-                                    <td>2. Kad Pengenalan</td>
-                                    <td>:</td>
-                                    <td><span>{{ Auth::user()->nokp }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td width="25%">No. Petani</td>
-                                    <td width="5%">:</td>
-                                    <td width="70%">
-                                        <span>{{ $petaniBajak->nopetani ?? null }}</span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>3. Alamat Perhubungan</td>
-                                    <td>:</td>
-                                    <td><span>{{ $petanibajak->alamat }}, {{ $petanibajak->poskod }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4. Daerah</td>
-                                    <td>:</td>
-                                    <td><span>{{ $petaniBajak->daerah }}</span></td>
-                                </tr>
-                            </table>
+                            <div class="form-group">
+                                <label>Kad Pengenalan:</label>
+                                <span>{{ Auth::user()->nokp }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>No. Petani:</label>
+                                <span>{{ $petaniBajak->nopetani ?? null }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Alamat Perhubungan:</label>
+                                <span>{{ $petanibajak->alamat }}, {{ $petanibajak->poskod }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Daerah:</label>
+                                <span>{{ $petaniBajak->daerah }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>No Tel</label>
+                                <span>{{ $petaniBajak->telrumah }}</span>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Maklumat Geran -->
-                    <div class="box box-primary">
-                        <table width="100%" class="table table-bordered table-hover" id="geran">
-                            <tr>
-                                <th colspan="3">Maklumat Geran</th>
-                            </tr>
-                            <tr>
-                                <td width="25%">Nama Pemilik Geran</td>
-                                <td width="5%">:</td>
-                                <td width="70%">{{ $specificItem->pemilikgeran }}</td>
-                            </tr>
-                            <tr>
-                                <td width="25%">Pemilikan Geran</td>
-                                <td width="5%">:</td>
-                                <td width="70%">
-                                    <span>{{ $tanahWithLokasi->pemilikan }}</span>
-                                </td>
-
-                            </tr>
-
-                            <input type="text" class="form-control" id="bil" name="bil" placeholder="Bil"
-                                value="" hidden>
-
-
-                            <tr>
-                                <td width="25%">Jabatan</td>
-                                <td width="5%">:</td>
-                                <td width="70%"><span>{{ $specificItem->stesen }}</span></td>
-                            </tr>
-
-                            <tr>
-                                <td>No. Geran</td>
-                                <td>:</td>
-                                <td><span>{{ $specificItem->nogeran }}</span></td>
-                            </tr>
-                            <tr>
-                                <td>Luas Permohonan (Ekar)</td>
-                                <td>:</td>
-                                <td>
-                                    <div>
-                                        {{ $specificItem->luaspohon }}
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Kampung</td>
-                                <td>:</td>
-                                <td>
-                                    <span>{{ $specificItem->lokasi }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tahun Pohon</td>
-                                <td>:</td>
-                                <td>
-                                    <span>{{ $specificItem->tahunpohon }}</span>
-                                </td>
-                            </tr>
-                        </table>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>BUTIRAN TANAH</b></h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Nama Pemilik Geran:</label>
+                                <span>{{ $specificItem->pemilikgeran }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Pemilikan Geran:</label>
+                                <span>{{ $tanahWithLokasi->pemilikan }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Jabatan:</label>
+                                <span>{{ $specificItem->stesen }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>No. Geran:</label>
+                                <span>{{ $specificItem->nogeran }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Luas Permohonan (Ekar):</label>
+                                <span>{{ $specificItem->luaspohon }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Kampung:</label>
+                                <span>{{ $specificItem->lokasi }}</span>
+                            </div>
+                            <div class="form-group" hidden>
+                                <label>Tahun Pohon:</label>
+                                <span>{{ $specificItem->tahunpohon }}</span>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Maklumat Tuntutan -->
-                    <div class="box box-primary">
-                        <table width="100%" class="table table-bordered table-hover" id="bayaran">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="container">
+                            <div class="card-header">
+                                <h3 class="card-title"><b>MAKLUMAT PEMBAYARAN</b></h3>
+                            </div>
+                            <div class="form-group">
+                                <!-- Content for the third card goes here -->
 
-                            <!-- flash message of success -->
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
 
-                            <form action="{{ route('tuntutan.store') }}" method="POST">
-                                @csrf
-                                <tr>
-                                    <th colspan="3">Maklumat Tuntutan</th>
-                                </tr>
+                                <form action="{{ route('tuntutan.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" class="form-control" name="table_id" value="{{ $specificItem->table_id }}" readonly>
+                                    <input type='hidden' class="form-control" name="luaspohon" value="{{ $specificItem->luaspohon }}" readonly>
+                                    <input type='hidden' class="form-control" name="luaspohon" value="{{ $latestRmValue }}" readonly>
 
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            var rmValue = parseFloat("{{ $latestRmValue }}");
+                                            var luasPohon = parseFloat("{{ $specificItem->luaspohon }}");
+                                            var result = luasPohon * rmValue;
+                                            document.getElementById('amaun').value = result;
+                                        });
+                                    </script>
 
-                                <input type="hidden" class="form-control" name="table_id"
-                                    value="{{ $specificItem->table_id }}" readonly>
-
-
-
-                                <input type="hidden" class="form-control" name="luaspohon"
-                                    value="{{ $specificItem->luaspohon }}" readonly>
-
-
-
-
-                                <tr>
-                                    <td>Siap Bajak</td>
-                                    <td>:</td>
-                                    <td>
+                                    <div class="form-group">
+                                        <label>Siap Bajak:</label>
                                         <select class="form-control" name="bulanbajak" id="bulanbajak">
                                             <option value="">Sila pilih...</option>
                                             <option value="1">Januari</option>
@@ -202,103 +168,50 @@ $currentYear = date('Y');
                                             <option value="10">Oktober</option>
                                             <option value="11">November</option>
                                             <option value="12">Disember</option>
-                                        </select>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Tuntutan (RM)</td>
-                                    <td>:</td>
-                                    <td>
-                                        <div class="input-group">
-                                            @php
-                                                $bulanbajakValue = old('bulanbajak') ?? 0;
-                                            @endphp
-
-                                            <input type="text" name="amaunlulus" id="amaunlulus" class="form-control"
-                                                style="display: none;">
-                                            <input type="text" name="amaunlulus2" id="amaunlulus2"
-                                                class="form-control" style="display: none;">
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <script>
-                                    document.getElementById('bulanbajak').addEventListener('change', function() {
-                                        var selectedValue = this.value;
-                                        var amaunlulusField = document.getElementById('amaunlulus');
-                                        var amaunlulus2Field = document.getElementById('amaunlulus2');
-
-                                        if (selectedValue >= 3 && selectedValue <= 7) {
-                                            amaunlulusField.style.display = 'block';
-                                            amaunlulus2Field.style.display = 'none';
-                                        } else {
-                                            amaunlulusField.style.display = 'none';
-                                            amaunlulus2Field.style.display = 'block';
-                                        }
-                                    });
-                                </script>
-
-
-
-
-
-
-
-                                <td>No Akaun Bank</td>
-                                <td>:</td>
-                                <td>
-                                    <div class="input-group">
-                                        <input type="number" name="noakaun" id="noakaun" class="form-control"
-                                            value="{{ $petanibajak->lastnoakaun }}">
+                                                                  </select>
                                     </div>
-                                </td>
-                                </tr>
-                                <tr>
-                                    <td>Nama Bank</td>
-                                    <td>:</td>
-                                    <td>
-                                        <select class="form-control" name="bank" id="bank"
-                                            value="{{ $petanibajak->lastkodbank }}">
+
+                                    <div class="form-group">
+                                        <label>Tuntutan (RM):</label>
+                                        <input type="number" name="amaun" id="amaun" class="form-control" readonly>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>No Akaun Bank:</label>
+                                        <input type="number" name="noakaun" id="noakaun" class="form-control" value="{{ $petanibajak->lastnoakaun }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Nama Bank:</label>
+                                        <select class="form-control" name="bank" id="bank" value="{{ $petanibajak->lastkodbank }}">
                                             <option value="">Sila pilih...</option>
                                             @foreach (DB::table('bank')->get() as $bank)
                                                 <option value="{{ $bank->kodbank }}">{{ $bank->namabank }}</option>
                                             @endforeach
                                         </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Cawangan Bank</td>
-                                    <td>:</td>
-                                    <td>
-                                        <select class="form-control" name="bankcwgn" id="bankcwgn"
-                                            value="{{ $petanibajak->lastcwgnbnk }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Cawangan Bank:</label>
+                                        <select class="form-control" name="bankcwgn" id="bankcwgn" value="{{ $petanibajak->lastcwgnbnk }}">
                                             <option value="">Sila pilih...</option>
                                             @foreach (DB::table('daerah')->get() as $daerah)
-                                                <option value="{{ $daerah->koddaerah }}">{{ $daerah->namadaerah }}
-                                                </option>
+                                                <option value="{{ $daerah->koddaerah }}">{{ $daerah->namadaerah }}</option>
                                             @endforeach
                                         </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Tarikh Permohonan</td>
-                                    <td>:</td>
-                                    <td>
-                                        <input type="date" class="form-control" id="tartuntut" name="tartuntut"
-                                            value="{{ now()->format('Y-m-d') }}" readonly required>
-                                    </td>
-                                </tr>
-                        </table>
-                    </div>
+                                    </div>
 
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary" name="submit" value="submit">Kemaskini
-                            Tuntutan</button>
+                                    <div class="form-group">
+                                        <label>Tarikh Permohonan:</label>
+                                        <input type="date" class="form-control" id="tartuntut" name="tartuntut" value="{{ now()->format('Y-m-d') }}" readonly required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" name="submit" value="submit">Kemaskini Tuntutan</button>
+
+                                                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
-        </form>
     </div>
 @endsection

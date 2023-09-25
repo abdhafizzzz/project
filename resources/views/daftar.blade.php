@@ -25,6 +25,8 @@
     <section class="content">
         <div class="row ">
 
+
+
         <!-- left column -->
         <div class="col-md-6">
             <!-- general form elements -->
@@ -39,8 +41,13 @@
                     <label for="pemohon">Nama Pemohon :</label>
                     <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama Pemohon" value="{{ $userData && $userData->nama ? $userData->nama : Auth::user()->nama }}" readonly><br>
 
-                    <label for="pendaftaran">No.Kad Pengenalan :</label>
-                    <input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ $userData && $userData->nokp ? $userData->nokp : Auth::user()->nokp }}" readonly><br>
+                   <!-- Existing input field for No.Kad Pengenalan -->
+<label for="pendaftaran">No.Kad Pengenalan :</label>
+<input type="text" class="form-control" id="nokp" name="nokp" placeholder="No.Kad Pengenalan" value="{{ $userData && $userData->nokp ? $userData->nokp : Auth::user()->nokp }}" readonly><br>
+
+
+
+
 
                     <div class="form-group">
                         <label>Jantina</label><br>
@@ -100,21 +107,21 @@
                             </div><br>
                             <label>Tahun Permohonan :</label>
                             <div class="input-group date">
-                                <input name="tahunpohon" type="text" class="form-control" id="tahunpohon" value="{{ date('Y') }}" disabled>
+                                <input name="tahunpohon" type="text" class="form-control" id="tahunpohon" value="{{ date('Y') }}">
                             </div><p id="yearValidationMessage" style="color: red; display: none;">Tahun permohonan tidak boleh kurang daripada tahun kini.</p>
                             <br>
 
-                            <div class="form-group">
-                                <label>Pendaftaran</label><br>
-                                <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
-                                    <input class="form-check-input" type="radio" name="baru" id="rd_daftar1" value="1" {{ $userData->baru == 1 || ($userData->baru === null && $userData->tarpohon !== null && Carbon::parse($userData->tarpohon)->year < Carbon::now()->year - 1) ? 'checked' : '' }} disabled>
-                                    <label class="form-check-label" for="rd_daftar1">Baru</label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="baru" id="rd_daftar2" value="2" {{ $userData->baru == 2 || ($userData->baru === null && $userData->tarpohon !== null && Carbon::parse($userData->tarpohon)->year >= Carbon::now()->year - 1) ? 'checked' : '' }} disabled>
-                                    <label class="form-check-label" for="rd_daftar2">Lama</label>
-                                </div>
-                            </div>
+                <div class="form-group">
+                    <label>Pendaftaran</label><br>
+                    <div class="form-check-inline" style="margin-left: 15px; margin-right: 100px">
+                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar1" value=1 {{ $userData->baru == 1 ? 'checked' : '' }}>
+                        <label class="form-check-label" for="rd_daftar1">Baru</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" name="baru" id="rd_daftar2" value=2 {{ $userData->baru == 2 ? 'checked' : '' }}>
+                        <label class="form-check-label" for="rd_daftar2">Lama</label>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="Pemohon">Musim Penanaman</label>
@@ -155,6 +162,22 @@
                 <div class="box-footer">
                     <button type="submit" style="margin-top:2rem" class="btn btn-primary">Kemaskini</button>
                 </div>
+
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Maklumat Pembayaran Subsidi</h3>
+                                    <a href="{{ route('daftar2') }}" class="btn btn-primary">Kemaskini Maklumat Pembayaran</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
                 </div> <!-- /.form-group -->
                 </div> <!-- /.box-body -->
                 </div> <!-- /.box -->
@@ -169,18 +192,9 @@
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-{{-- <script src="plugins/jquery/jquery.min.js"></script> , after commented this, logout dropout working herm--}}
+{{-- <script src="plugins/jquery/jquery.min.js"></script> , after commented this, logout dropout working here --}}
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-
-{{-- <script>
-    $(document).ready(function() {
-        $('#notel').inputmask('(999) 999-9999', {
-            greedy: false,
-            placeholder: '(___) ___-____'
-        });
-    });
-</script> need to modify later--}}
 
 <script>
     const tahunPohonInput = document.getElementById('tahunpohon');
@@ -199,6 +213,10 @@
         }
     });
 </script>
+
+<!-- Add JavaScript to Handle Upload and View IC -->
+
+
 
 {{-- <script>
     const tarikhInput = document.getElementById('tarpohon');

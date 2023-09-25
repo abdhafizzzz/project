@@ -179,6 +179,14 @@
                             </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="<?php echo e(route('daftar2')); ?>" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Butiran Akaun</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
                                     <a href="<?php echo e(route('tanahindex')); ?>" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Senarai Tanah</p>

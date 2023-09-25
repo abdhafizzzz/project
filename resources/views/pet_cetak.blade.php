@@ -47,7 +47,7 @@
                     <td>3. No. Telefon/Handphone: {{ $petanibajakData->telrumah }} ,&nbsp;{{$petanibajakData->telhp }}</td>
                 <tr>
                     <td colspan="2">
-                        4. Alamat Perhubungan: {{ $petanibajakData->alamat }}&nbsp;{{ $petanibajakData->poskod }}&nbsp;{{ $daerah }}
+                        4. Alamat Perhubungan: {{ $petanibajakData->alamat }}&nbsp;{{ $petanibajakData->poskod }}&nbsp;{{ DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->value('namadaerah') }}
                     </td>
 
                 </tr>
@@ -68,57 +68,69 @@
 
             <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
                 @php
-                $counter = 1;
-                $totalLuasekar = 0;
-                $totalLuaspohon = 0;
+                // Get the logged-in user's nokp
+                $nokp = Auth::id();
+
+                // Get the current year
+                $currentYear = date('Y');
+
+                // Fetch data from 'petanibajak' table where 'nokppetani' matches the user's 'nokp' and 'tarikh' is in the current year
+                $petanibajak = DB::table('tanah')
+                    ->where('nokppetani', $nokp)
+                    ->whereYear('tarikh', $currentYear)
+                    ->get();
                 @endphp
 
-                <!-- Your table markup here -->
-                <table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
-                    <tr>
-                        <!-- Add your table headers here -->
-                        <td class="text-center"><b>BIL</b></td>
-                        <td class="text-center"><b>PEMILIK GERAN</b></td>
-                        <td class="text-center"><b>NO. GERAN</b></td>
-                        <td class="text-center"><b>LOKASI TANAH</b></td>
-                        <td class="text-center"><b>LUAS TANAH (Ekar)</b></td>
-                        <td class="text-center"><b>LUAS DIPOHON (Ekar)</b></td>
-                        <td class="text-center"><b>STATUS PEMILIKAN</b></td>
-                    </tr>
+              <!-- Your table markup here -->
+<table align="center" style="FONT-FAMILY: Arial Narrow; FONT-SIZE:12px" border="1" cellpadding="2" cellspacing="1" width="90%">
+    <tr>
+        <!-- Add your table headers here -->
+        <td class="text-center"><b>BIL</b></td>
+        <td class="text-center"><b>PEMILIK GERAN</b></td>
+        <td class="text-center"><b>NO. GERAN</b></td>
+        <td class="text-center"><b>LOKASI TANAH</b></td>
+        <td class="text-center"><b>LUAS TANAH (Ekar)</b></td>
+        <td class="text-center"><b>LUAS DIPOHON (Ekar)</b></td>
+        <td class="text-center"><b>STATUS PEMILIKAN</b></td>
+    </tr>
 
-                    </tr>
-                    @foreach ($tanah as $item)
-                        <tr>
-                            <!-- Display data in each row -->
-                            <td class="text-center">{{ $counter++ }}</td>
-                            <td class="text-center">{{ $item->pemilikgeran }}</td>
-                            <td class="text-center">{{ $item->nogeran }}</td>
-                            <td class="text-center">{{ $item->lokasi }}</td>
-                            <td class="text-center">{{ $item->luasekar }}</td>
-                            <td class="text-center">{{ $item->luaspohon }}</td>
-                            <td class="text-center">{{ $item->pemilikan }}</td>
-                            <!-- Add more columns if needed -->
-                        </tr>
+    @php
+    $counter = 1; // Start the counter
+    $sumLuasekar = 0; // Initialize the sum variable
+    $sumLuaspohon = 0;
+    @endphp
 
-                        @php
-                            $totalLuasekar += $item->luasekar;
-                            $totalLuaspohon += $item->luaspohon;
-                        @endphp
+    @foreach ($tanah as $item)
+        <tr>
+            <!-- Display data in each row -->
+            <td class="text-center">{{ $counter++ }}</td>
+            <td class="text-center">{{ $item->pemilikgeran }}</td>
+            <td class="text-center">{{ $item->nogeran }}</td>
+            <td class="text-center">{{ $item->lokasi }}</td>
+            <td class="text-center">{{ $item->luasekar }}</td>
+            <td class="text-center">{{ $item->luaspohon }}</td>
+            <td class="text-center">{{ DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi') }}</td>
+            <!-- Update the sumLuasekar -->
+            @php
+            $sumLuasekar += $item->luasekar;
+            $sumLuaspohon += $item->luaspohon;
+            @endphp
+        </tr>
+    @endforeach
 
-                    @endforeach
+    <tr>
+        <th width="6%" class="text-center"></th>
+        <th width="25%" class="text-center"></th>
+        <th width="11%" class="text-center"></th>
+        <th width="15%" class="text-center">JUMLAH</th>
+        <th width="15%" class="text-center">{{ $sumLuasekar }}</th>
+        <th width="15%" class="text-center">{{ $sumLuaspohon }}</th>
+        <th width="15%" class="text-center"></th>
+    </tr>
+</table>
+</td>
+</table>
 
-                <tr>
-                    <th width="6%" class="text-center"></th>
-                    <th width="25%" class="text-center"></th>
-                    <th width="11%" class="text-center"></th>
-                    <th width="15%" class="text-center">JUMLAH</th>
-                    <th width="15%" class="text-center">{{ $totalLuasekar }}</th>
-                    <th width="15%" class="text-center">{{ $totalLuaspohon }}</th>
-                    <th width="15%" class="text-center"></th>
-                </tr>
-            </table>
-																</td>
-								</table>
 
 								<table align="center" style=" FONT-FAMILY: Arial Narrow; FONT-SIZE:14px" border="0" cellPadding="2"
 												cellSpacing="1" width="90%">
@@ -136,12 +148,12 @@
 												<tr>
 																<td align="left" valign="top" width="38%">
 																				(...............................................)<br>Tandatangan/Cop Ibu Jari Kanan
-																				Pemohon<br>Tarikh Permohonan: {{ $tarikhPohon }}
+																				Pemohon<br>Tarikh Permohonan: {{ date('d-m-Y', strtotime($petanibajakData->tarpohon)) }}
 																<td align="middle" valign="top" width="10%"><B><BR>COP<BR>JABATAN</B>
 																<td align="middle" valign="top" width="4%">
 																<td align="left" valign="top" width="38%">
 																				(...............................................)<br>Tandatangan Pendaftar<br><b>
-																								ERWATI </b><br>b.p. Pegawai/Penguasa Pertanian Daerah<br>Tarikh : 07/06/2023
+																								ERWATI </b><br>b.p. Pegawai/Penguasa Pertanian Daerah<br>Tarikh : {{ date('d-m-Y', strtotime($petanibajakData->tarpohon)) }}
 												<tr>
 																<td align="left" valign="top">
 																<td align="middle" valign="top">
@@ -255,4 +267,16 @@
 				}
 </STYLE>
 
+{{--
+<script Language="Javascript">
+function printit(){
+if (window.print) {
+window.print() ;
+} else {
+var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+WebBrowser1.ExecWB(6, 2);//Use a 1 vs. a 2 for a prompting dialog box    WebBrowser1.outerHTML = "";
+}
+}
+</script> --}}
 

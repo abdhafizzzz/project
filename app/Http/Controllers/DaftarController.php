@@ -2,39 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PetaniBajak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 
 class DaftarController extends Controller
 {
     public function showPetCetakForm()
     {
-        $user = Auth::user()->nokp;
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
 
-        $tarikhPohon = DB::table('petanibajak')->where('nokp', $user)->latest('tarpohon')->value('tarpohon');
-        $tarikhPohon = Carbon::parse($tarikhPohon)->format('Y-m-d');
+        // Fetch data from 'petanibajak' table for the logged-in user
+$petanibajakData = DB::table('petanibajak')
+->where('nokp', $nokp)
 
+->first(); // Assuming you expect only one row for the logged-in user
+
+$daerah = DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->value('namadaerah');
+
+        // Show the current year
         $Date = date('Y');
 
         // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' is in the last year
         $tanah = DB::table('tanah')
             ->whereYear('tarikh', $Date)
-            ->where('nokppetani', $user)
+            ->where('nokppetani', $nokp)
             ->get();
 
+        // Retrieve the 'namalokasi' value for each 'lokasi' in the 'tanah' collection
+        //map() method to iterate through the collection to include the 'namalokasi' into the $item
+        $tanahWithLokasi = $tanah->map(function ($item) {
+            $item->lokasi = DB::table('lokasitanah')
+                ->where('id', $item->lokasi)
+                ->value('namalokasi');
 
-        $petanibajakData = DB::table('petanibajak')->where('nokp', $user)->latest('tarpohon')->first();
-        $daerah = DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->value('namadaerah');
 
-        $tanahname = $tanah->map(function ($item) {
-            $item->lokasi = DB::table('lokasitanah')->where('id', $item->lokasi)->value('namalokasi');
-            $item->pemilikan = DB::table('pemilikan')->where('kodmilik', $item->pemilikan)->value('deskripsi');
+
+            $item->deskripsi = DB::table('pemilikan')
+                ->where('kodmilik', $item->pemilikan)
+                ->value('deskripsi');
             return $item;
         });
 
-        return view('pet_cetak', compact('user', 'tanah', 'petanibajakData', 'tarikhPohon', 'daerah'));
+        return view('pet_cetak', compact( 'tanah','petanibajakData' ));
     }
 
     public function edit($id = null)//this function is used to retrieve the petanibajak record
@@ -153,4 +169,138 @@ class DaftarController extends Controller
             return back()->with('success', 'Data berhasil disimpan!');
         }
     }
+    public function uploadIC(Request $request)
+{
+    // Validate the uploaded file
+    $validator = Validator::make($request->all(), [
+        'nokpgambar' => ['required', 'file', 'max:2048', 'mimes:jpeg,png,jpg,pdf'], // Accept images (jpeg, png, jpg) and PDF files
+    ], [
+        'nokpgambar.required' => 'Please choose a file to upload.',
+        'nokpgambar.file' => 'The uploaded file is invalid.',
+        'nokpgambar.mimes' => 'The file must be an image (JPEG, PNG, JPG) or a PDF.',
+        'nokpgambar.max' => 'The file size must not exceed 2MB.',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Process the file upload
+    if ($request->hasFile('nokpgambar')) {
+        $nokpgambarFile = $request->file('nokpgambar');
+
+        // Get the authenticated user's NOKP value
+        $nokp = Auth::user()->nokp;
+
+        // Determine the storage directory - 'nokpgambar'
+        $storageDirectory = 'nokpgambar';
+
+        // Generate a unique filename with 'nokpgambar' and the user's NOKP
+        $filename = 'nokpgambar_' . $nokp . '.' . $nokpgambarFile->getClientOriginalExtension();
+
+        // Store the file in the designated directory
+        $path = $nokpgambarFile->storeAs($storageDirectory, $filename);
+
+            // Update the 'petanibajak' table with the file information
+            DB::table('petanibajak')
+            ->where('nokp', $nokp)
+            ->update([
+                'nokpgambar' => $path,
+            ]);
+
+
+        return redirect()->route('daftar2')->with('success', 'IC uploaded successfully.');
+    }
+
+    return redirect()->back()->with('error', 'File upload failed.');
+}
+
+
+    public function viewIC()
+    {
+        $nokp = Auth::user()->nokp;
+        $storageDisk = 'local'; // Make sure this matches your storage disk configuration
+
+        // List of acceptable file extensions
+        $allowedExtensions = ['jpg', 'png', 'jpeg', 'pdf'];
+
+        foreach ($allowedExtensions as $extension) {
+            $fileName = 'nokpgambar_' . $nokp . '.' . $extension;
+
+            // Check if the file exists
+            if (Storage::disk($storageDisk)->exists('nokpgambar/' . $fileName)) {
+                $filePath = storage_path('app/nokpgambar/' . $fileName);
+                return response()->file($filePath);
+            }
+        }
+
+        return response()->json(['error' => 'IC not found.'], 404);
+    }
+    public function uploadNobank(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'nobank' => ['required', 'file', 'max:2048', 'mimes:jpeg,png,jpg,pdf'], // Accept images (jpeg, png, jpg) and PDF files
+        'nobank.required' => 'Please choose a No Penyata Bank file to upload.',
+        'nobank.file' => 'The uploaded file is invalid.',
+        'nobank.mimes' => 'The file must be a between (JPEG, PNG, JPG) or PDF.',
+        'nobank.max' => 'The file size must not exceed 2MB.',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Process the No Penyata Bank file upload
+    if ($request->hasFile('nobank')) {
+        $nobankFile = $request->file('nobank');
+
+        // Get the authenticated user's NOKP value
+        $nokp = Auth::user()->nokp;
+
+        // Determine the storage directory based on file type (PDF)
+        $storageDirectory = 'nobank';
+
+        // Generate a unique filename with 'nobank' and the user's NOKP
+        $filename = 'nobank_' . $nokp . '.' . $nobankFile->getClientOriginalExtension();
+
+        // Store the file in the designated directory
+        $path = $nobankFile->storeAs($storageDirectory, $filename);
+
+            // Update the 'petanibajak' table with the file information
+    DB::table('petanibajak')
+    ->where('nokp', $nokp)
+    ->update([
+        'nobank' => $path,
+    ]);
+
+        return redirect()->route('daftar2')->with('success', 'No Penyata Bank uploaded successfully.');
+    }
+
+    return redirect()->back()->with('error', 'File upload failed.');
+}
+
+public function viewNobank()
+{
+    $nokp = Auth::user()->nokp;
+    $storagePath = storage_path('app/nobank');
+    $allowedExtensions = ['jpg', 'png', 'jpeg', 'pdf'];
+
+    foreach ($allowedExtensions as $extension) {
+        $fileExtension = $extension;
+        $fileName = 'nobank_' . $nokp . '.' . $fileExtension;
+        $filePath = $storagePath . '/' . $fileName;
+
+        if (file_exists($filePath)) {
+            return response()->file($filePath);
+        }
+    }
+
+    return response()->json(['error' => 'No Penyata Bank not found.'], 404);
+}
+public function show($id)
+{
+    $petaniBajak = PetaniBajak::find($id);
+
+    return view('daftar2', compact('petaniBajak'));
+}
 }

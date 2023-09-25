@@ -124,14 +124,20 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if ($result->nopenyatamusim)
-                                            <span class="badge badge-success badge-sudah-diluluskan">DILULUSKAN</span>
-                                            <span class="badge badge-success badge-sudah-diluluskan">No Penyata
-                                                (No.{{ $result->nopenyatamusim }})</span>
+                                        @if ($result->nopenyatamusim !== null | $result->amaunlulus !== null || $result->amaunlulus2 !== null)
+                                            <span class="badge badge-success badge-sudah-diluluskan">
+                                                DILULUSKAN (RM{{ $result->amaunlulus2 }} {{ $result->amaunlulus }})
+                                            </span>
+                                            <span class="badge badge-success badge-sudah-diluluskan">
+                                                No Penyata (No.{{ $result->nopenyatamusim }})
+                                            </span>
                                         @else
                                             <span class="badge badge-warning badge-sedang-diproses">Sedang Diproses</span>
                                         @endif
                                     </td>
+
+
+
                                 </tr>
                             @endforeach
                         </tbody>

@@ -5,7 +5,7 @@
 <style>
     /* CSS styles to make text black and slightly larger */
     body {
-        color: black;
+        color: rgb(255, 255, 255);
         font-size: 18px;
     }
 
@@ -16,14 +16,13 @@
 </style>
 <form method="POST" action="{{ route('register') }}">
     @csrf
-    <section class="vh-100 bg-image" style="background-image: url('{{ asset('img/padionlykabur.png') }}'); background-size: center;">
+    <section class="vh-100 bg-image" style="background-image: url('{{ asset('img/back.png') }}'); background-size: cover;">
         <div class="mask d-flex align-items-center h-100 gradient-custom-3">
             <div class="container h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                        <div class="card" style="border-radius: 15px; background-color: rgba(0, 128, 0, 0.5);">
-                            <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5" style="background-color: rgba(53, 179, 21, 0.945); padding: 10px; border-radius: 5px;">Daftar Pengguna Baru</h2>
+                            <div class="card custom-card" style="background-image: url('img/back2.png'); background-size: cover; border-radius: 1rem;">
+                                <div class="card-body" style="margin-top: 150px;"> <!-- Adjust the margin-top here -->
 
                                 <!-- Separate 'No Kad Pengenalan' field with a button to check if 'nokp' exists -->
                                 <div class="form-group">
@@ -36,14 +35,16 @@
                                     </div>
                                 </div>
 
-                                <!-- 'Nama Penuh' input field -->
                                 <div class="form-group">
                                     <label for="name" class="col-md-4 col-form-label text-md-right">Nama Penuh</label>
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required>
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary" id="checkNama">Periksa Nama</button>
+                                    <div class="input-group">
+                                        <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary" id="checkNama">Periksa Nama</button>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <br>
 
                                 <div class="form-outline mb-4">

@@ -3,7 +3,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <a href="<?php echo e(url('carian')); ?>" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Reset</a>
+            <a href="<?php echo e(route('carian')); ?>" class="btn btn-info" style="margin-top: 15px; margin-left: 15px;">Kembali</a>
         </section>
 
         <?php if($errors->any()): ?>
@@ -93,7 +93,14 @@
                                 <th style="width: 15%" class="text-center">Stesen</th>
                                 <th style="width: 25%" class="text-center">Pemilik Geran</th>
                                 <th style="width: 10%" class="text-center">No Geran</th>
-                                <th style="width: 15%" class="text-center">Luas Pohon (ekar)</th>
+                                <th style="width: 10%" class="text-center">Luas Pohon (ekar)</th>
+                                <th style="width: 10%" class="text-center">
+                                    <?php if($searchResults->first() && ($searchResults->first()->luaslulus !== null || $searchResults->first()->luaslulus2 !== null)): ?>
+                                        Luas Lulus (ekar)
+                                    <?php else: ?>
+                                        Luas Lulus (ekar)
+                                    <?php endif; ?>
+                                </th>
                                 <th style="width: 25%" class="text-center">Jumlah Tuntutan</th>
                             </tr>
                         </thead>
@@ -106,14 +113,31 @@
                                     <td><?php echo e($result->nogeran); ?></td>
                                     <td class="text-center"><?php echo e($result->luaspohon); ?></td>
                                     <td class="text-center">
-                                        <?php if($result->nopenyatamusim): ?>
-                                            <span class="badge badge-success badge-sudah-diluluskan">DILULUSKAN</span>
-                                            <span class="badge badge-success badge-sudah-diluluskan">No Penyata
-                                                (No.<?php echo e($result->nopenyatamusim); ?>)</span>
+                                        <?php if($result->luaslulus !== null): ?>
+                                            <?php echo e($result->luaslulus); ?>
+
+                                        <?php elseif($result->luaslulus2 !== null): ?>
+                                            <?php echo e($result->luaslulus2); ?>
+
+                                        <?php else: ?>
+                                           Tiada Data
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php if($result->nopenyatamusim !== null | $result->amaunlulus !== null || $result->amaunlulus2 !== null): ?>
+                                            <span class="badge badge-success badge-sudah-diluluskan">
+                                                DILULUSKAN (RM<?php echo e($result->amaunlulus2); ?> <?php echo e($result->amaunlulus); ?>)
+                                            </span>
+                                            <span class="badge badge-success badge-sudah-diluluskan">
+                                                No Penyata (No.<?php echo e($result->nopenyatamusim); ?>)
+                                            </span>
                                         <?php else: ?>
                                             <span class="badge badge-warning badge-sedang-diproses">Sedang Diproses</span>
                                         <?php endif; ?>
                                     </td>
+
+
+
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
