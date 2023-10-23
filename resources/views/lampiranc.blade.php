@@ -70,16 +70,17 @@
         <p>Nombor Akaun Bank: (sila pastikan nombor akaun masih aktif dan dicatat dengan betul)</p> <br>
         @if ($lampiran->noakaun)
             @foreach (str_split($lampiran->noakaun) as $digit)
-                <span style="display: inline-block; border: 1px solid black; padding: 5px;">{{ $digit }}</span>
+                <span style="border: 1px solid black; padding: 5px; float: left;">{{ $digit }}</span>
             @endforeach
+            <div style="clear: both;"></div>
         @else
             belum di-isi/tiada
         @endif
     </p><br>
 
-    <p style="text-align: center; margin-bottom: 10pt;"><em>(diisi tanpa sengkang dan jarak)</em></p>
-    <p style="margin-bottom: 10pt;">Nama Bank: {{ strtoupper($lampiran->bank) ?? '' }}</p>
-    <p style="margin-bottom: 10pt;">Cawangan Bank: {{ strtoupper($lampiran->bankcwgn) ?? '' }}</p>
+    <p style="text-align: center; margin-bottom: 10pt;"><em>(diisi tanpa sengkang dan jarak)</em></p><br>
+    <p style="margin-bottom: 10pt;">Nama Bank: {{ strtoupper($namabank) ?? '' }}</p>
+    <p style="margin-bottom: 10pt;">Cawangan Bank: {{ strtoupper($namacwgn) ?? '' }}</p>
     <p style="margin-bottom: 10pt;">Saya sahkan bahawa maklumat dan butir-butir mengenai akaun Bank seperti di atas adalah benar dan milik sah saya/Syarikat kami:</p>
     <p style="margin-bottom: 10pt;">( _____________________________________ )</p>
     <p style="margin-left: 36pt; text-indent: 36pt; margin-bottom: 10pt;">Tandatangan</p>

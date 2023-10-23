@@ -99,7 +99,6 @@ class TuntutanController extends Controller
                     ->value('deskripsi');
                 $item->stesen = DB::table('stesen')->where('stationcode', $item->stesen)->value('stationdesc');
                 return $item;
-
             })
             ->first(); // Retrieve the first item from the collection
 
@@ -230,6 +229,11 @@ class TuntutanController extends Controller
 
         $lampiran = PetaniBajak::where('nokp', $user)->latest('tarpohon')->first();
 
-        return view('lampiranc',compact('lampiran', 'email'));
+        $codebank = $lampiran->bank;
+        $cawangan = $lampiran->bankcwgn;
+        $namabank = DB::table('bank')->where('kodbank', $codebank)->value('namabank');
+        $namacwgn = DB::table('daerah')->where('koddaerah', $cawangan)->value('namadaerah');
+
+        return view('lampiranc',compact('lampiran', 'email', 'namabank', 'namacwgn'));
     }
 }
