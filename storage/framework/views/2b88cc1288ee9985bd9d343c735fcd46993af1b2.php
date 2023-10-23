@@ -6,7 +6,10 @@
 <?php endif; ?>
 
 <?php $__env->startSection('navigation'); ?>
-    <div class="content-wrapper" style="overflow-y: auto;">
+
+
+
+    <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Senarai Tanah</h1><br>
@@ -63,15 +66,25 @@
                                                     onclick="toggleRowExpansion(event, '<?php echo e($index); ?>')">Tambah Geran</a>
 
                                                 <tr id="expandableRow<?php echo e($index); ?>" style="display: none;">
-                                                    <td colspan="5">
+                                                    <td colspan="10">
                                                         <div>
                                                             <form action="<?php echo e(route('upload')); ?>" method="POST" enctype="multipart/form-data">
                                                                 <?php echo csrf_field(); ?>
+
                                                                 <div class="form-group">
-                                                                    <input type="file" name="file" accept=".pdf" required>
+                                                                    <input type="file" name="file1" accept=".pdf" required>
+                                                                    <button type="submit" class="btn btn-primary">Upload File 1</button>
+                                                                    <small>*PDF sahaja</small>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary">Muatnaik fail</button>
-                                                                <small>*PDF sahaja</small>
+
+                                                                <div class="form-group">
+                                                                    <input type="file" name="file2" accept=".pdf" required>
+                                                                    <button type="submit" class="btn btn-primary">Upload File 2</button>
+                                                                    <small>*PDF sahaja</small>
+                                                                </div>
+
+                                                                <!-- Add more file input and upload button sections as needed -->
+
                                                             </form>
                                                         </div>
                                                         <div>

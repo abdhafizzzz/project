@@ -86,6 +86,48 @@ $daerah = DB::table('daerah')->where('koddaerah', $petanibajakData->daerah)->val
         return view('daftar', compact('userData', 'tarikhMemohon'));
     }
 
+    public function storeDaftar(Request $request)
+{
+    // Validate the input data
+    $request->validate([
+        // Add validation rules for the fields in your form
+        'nama' => 'required',
+        'nokp' => 'required',
+        'noakaun' => 'required',
+        'bank' => 'required',
+        'bankcwgn' => 'required',
+        'tarakaun' => 'required',
+        'nokpgambar' => 'required',
+        'nobank' => 'required',
+    ]);
+
+
+    $dataToUpdate = [
+
+        'noakaun' => $request->input('noakaun'),
+        'bank' => $request->input('bank'),
+        'bankcwgn' => $request->input('bankcwgn'),
+        'tarakaun' => $request->input('tarakaun'),
+    ];
+
+     // Call the uploadIC function to handle IC upload
+     $this->uploadIC($request);
+
+     // Call the uploadNobank function to handle No Penyata Bank upload
+     $this->uploadNobank($request);
+
+
+    DB::table('petanibajak')
+    ->where('nokp', Auth::user()->nokp)
+    ->update($dataToUpdate);
+    // Redirect to the 'ptundaf' route with a success message
+    return redirect()
+        ->route('daftar2')
+        ->with('success', 'Daftar Maklumat Akaun Bank berjaya disimpan.');
+}
+
+
+
     public function update(Request $request)//this function is used to update the petanibajak record
     {
         // Retrieve the existing data for the authenticated user

@@ -7,7 +7,13 @@
 @endif
 
 @section('navigation')
-    <div class="content-wrapper" style="overflow-y: auto;">
+
+{{-- <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head> --}}
+
+    <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>Senarai Tanah</h1><br>
@@ -64,15 +70,25 @@
                                                     onclick="toggleRowExpansion(event, '{{ $index }}')">Tambah Geran</a>
 
                                                 <tr id="expandableRow{{ $index }}" style="display: none;">
-                                                    <td colspan="5">
+                                                    <td colspan="10">
                                                         <div>
                                                             <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
                                                                 @csrf
+
                                                                 <div class="form-group">
-                                                                    <input type="file" name="file" accept=".pdf" required>
+                                                                    <input type="file" name="file1" accept=".pdf" required>
+                                                                    <button type="submit" class="btn btn-primary">Upload File 1</button>
+                                                                    <small>*PDF sahaja</small>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-primary">Muatnaik fail</button>
-                                                                <small>*PDF sahaja</small>
+
+                                                                <div class="form-group">
+                                                                    <input type="file" name="file2" accept=".pdf" required>
+                                                                    <button type="submit" class="btn btn-primary">Upload File 2</button>
+                                                                    <small>*PDF sahaja</small>
+                                                                </div>
+
+                                                                <!-- Add more file input and upload button sections as needed -->
+
                                                             </form>
                                                         </div>
                                                         <div>

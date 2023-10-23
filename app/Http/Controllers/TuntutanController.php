@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LokasiTanah;
+use App\Models\Pemilikan;
+use App\Models\PetaniBajak;
+use App\Models\Tanah;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -216,5 +221,15 @@ class TuntutanController extends Controller
             }
 
         return view('carian', compact('searchResults'));
+    }
+
+    public function lampiran()
+    {
+        $user = Auth::user()->nokp;
+        $email = Auth::user()->email;
+
+        $lampiran = PetaniBajak::where('nokp', $user)->latest('tarpohon')->first();
+
+        return view('lampiranc',compact('lampiran', 'email'));
     }
 }

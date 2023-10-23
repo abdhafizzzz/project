@@ -204,7 +204,7 @@ $tanah = DB::table('tanah')
                                 <br>
                                 <button class="btn btn-info text-white" style="margin-bottom: 10px"><a href="{{ route('view.ic') }}" target="_blank">Lihat Kad Pengenalan</a></button>&emsp;
                                 <button class="btn btn-info text-white" style="margin-bottom: 10px"><a href="{{ route('view.nobank') }}" target="_blank">Lihat No. Penyata Bank</a></button>&emsp;
-                                <button class="btn btn-info text-white" style="margin-bottom: 10px"><a href="{{ route('view.nobank') }}" target="_blank">Cetak Lampiran C</a></button>&emsp;
+                                <button class="btn btn-info text-white" style="margin-bottom: 10px" onclick="printLampiranC()">Cetak Lampiran C</button>&emsp;
                             </td>
                         </tr>
                     </table>
@@ -215,6 +215,15 @@ $tanah = DB::table('tanah')
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function printLampiranC() {
+        var newWindow = window.open('{{ route('lampiranc') }}', '_blank');
+        newWindow.onload = function() {
+            newWindow.print();
+        };
+        }
+    </script>
 
 </body>
 </html>

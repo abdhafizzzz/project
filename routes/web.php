@@ -23,8 +23,11 @@ Route::middleware('auth')->group(function () {
 
     // Route for handling and displaying the edit form of daftar blade
     Route::post('/daftar/update', [DaftarController::class, 'update'])->name('daftar.update');
-    Route::match(['GET', 'POST'], '/daftar', [DaftarController::class, 'edit'])->name('daftar'); // Make it handle both GET (view) and POST (create, edit, and store) method
-// Upload IC
+    Route::match(['GET', 'POST'], '/daftar', [DaftarController::class, 'edit'])->name('daftar');
+
+    Route::post('/daftar/store', [DaftarController::class, 'storeDaftar'])->name('daftar.store');
+
+    // Upload IC
 Route::post('/upload-ic', [DaftarController::class, 'uploadIC'])->name('upload.ic');
 // View IC
 Route::get('/view-ic', [DaftarController::class, 'viewIC'])->name('view.ic');
@@ -69,6 +72,8 @@ Route::get('/daftar2', function () {
     Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
 
     Route::post('/upload', [TanahController::class, 'upload'])->name('upload');
+
+    Route::get('/lampiranc', [TuntutanController::class, 'lampiran'])->name('lampiranc');
 });
 
 Auth::routes();
