@@ -8,6 +8,7 @@ use App\Models\PetaniBajak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Date;
@@ -42,28 +43,29 @@ class TanahController extends Controller
     // }
 
     public function index()
-{
-    // Get the logged-in user's nokp
-    $nokp = Auth::user()->nokp;
+    {
+        // Get the logged-in user's nokp
+        $nokp = Auth::user()->nokp;
 
-    // Get the maximum available year from the 'tanah' table for the logged-in user
-    $maxYear = Tanah::where('nokppetani', $nokp)
-        ->max(DB::raw('YEAR(tarikh)'));
+        // Get the maximum available year from the 'tanah' table for the logged-in user
+        $maxYear = Tanah::where('nokppetani', $nokp)
+            ->max(DB::raw('YEAR(tarikh)'));
 
-    // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
-    $tanah = Tanah::where('nokppetani', $nokp)
-        ->whereYear('tarikh', $maxYear)
-        ->get();
+        // Fetch data from 'tanah' table where 'nokppetani' matches the logged-in user's nokp and 'tarikh' matches the maximum available year
+        $tanah = Tanah::where('nokppetani', $nokp)
+            ->whereYear('tarikh', $maxYear)
+            ->get();
 
-    $tanahWithLokasi = $tanah->map(function ($item) {
-        $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
-        $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
-        $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
-        return $item;
-    });
+        $tanahWithLokasi = $tanah->map(function ($item) {
+            $item->tarikh = Carbon::parse($item->tarikh)->format('Y-m-d');
+            $item->lokasi = LokasiTanah::where('id', $item->lokasi)->value('namalokasi');
+            $item->pemilikan = Pemilikan::where('kodmilik', $item->pemilikan)->value('deskripsi');
+            $item->file_path = DB::table('gerans')->value('file_path');
+            return $item;
+        });
 
-    return view('tanahindex', compact('tanah'));
-}
+        return view('tanahindex', compact('tanah'));
+    }
 
     public function updateyear()
     {
@@ -203,46 +205,103 @@ class TanahController extends Controller
         return response()->json(['latestTableId' => $latestTableId + 1]);
     }
 
-    public function upload(Request $request)
+    public function uploadGeran(Request $request)
     {
         // Validate the uploaded file
         $validator = Validator::make($request->all(), [
-            'file' => ['required', 'file', 'mimes:pdf', 'max:2048'], // PDF and maximum 2MB
+            'file1' => ['required', 'file', 'mimes:pdf', 'max:2048'], // PDF and maximum 2MB
         ], [
-            'file.required' => 'Please choose a file to upload.',
-            'file.file' => 'The uploaded file is invalid.',
-            'file.mimes' => 'The file must be a PDF.',
-            'file.max' => 'The file size must not exceed 2MB.',
+            'file1.required' => 'Please choose a file to upload.',
+            'file1.file' => 'The uploaded file is invalid.',
+            'file1.mimes' => 'The file must be a PDF.',
+            'file`.max' => 'The file size must not exceed 2MB.',
         ]);
+
+
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
         // Process the file upload
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
+        if ($request->hasFile('file1')) {
+            $file1 = $request->file('file1');
+            $fileType = 'Geran'; // Retrieve the value of file_type
 
             // Get the authenticated user's NOKP value
             $nokp = Auth::user()->nokp;
 
-            // Generate a unique filename with 'geran' and the user's NOKP
-            $filename = 'geran_' . $nokp . '.' . $file->getClientOriginalExtension();
+            // Generate a unique filename based on the file_type and the user's NOKP
+            $filename1 = $fileType . '_' . $nokp . '.' . $file1->getClientOriginalExtension();
 
             // Store the file in the 'public' disk with the generated filename
-            $path = $file->storeAs('geran_files', $filename, 'public');
+            $path = $file1->storeAs('geran_files', $filename1, 'public');
+
+            $tanahid = DB::table('tanah')->where('nokppetani', $nokp)->value('bil');
 
             // Save the file path in the database
             DB::table('gerans')->insert([
                 'file_path' => $path,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'tanahid' => $tanahid,
+                'jenis' => 1,
+                'nokp' => $nokp
             ]);
 
-            // Redirect back with a success message
-            return redirect()->back()->with('success', 'File uploaded successfully.');
+            // Return a response or redirect as needed
+            return redirect()->back()->with('success', 'File uploaded successfully to the "geran" folder.');
+        } else {
+            return redirect()->back()->with('error', 'Please choose a file to upload.');
+        }
+    }
+
+    public function uploadDokumenSokongan(Request $request)
+    {
+        // Validate the uploaded file
+        $validator = Validator::make($request->all(), [
+            'file2' => ['required', 'file', 'mimes:pdf', 'max:2048'], // PDF and maximum 2MB
+        ], [
+            'file2.required' => 'Please choose a file to upload.',
+            'file2.file' => 'The uploaded file is invalid.',
+            'file2.mimes' => 'The file must be a PDF.',
+            'file2.max' => 'The file size must not exceed 2MB.',
+        ]);
+
+
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        return redirect()->back()->withErrors(['file' => 'File upload failed.'])->withInput();
+        // Process the file upload
+        if ($request->hasFile('file2')) {
+            $file2 = $request->file('file2');
+            $fileType = 'DokSokongan';
+
+            // Get the authenticated user's NOKP value
+            $nokp = Auth::user()->nokp;
+
+            // Generate a unique filename based on the file_type and the user's NOKP
+            $filename2 = $fileType . '_' . $nokp . '.' . $file2->getClientOriginalExtension();
+
+            // Store the file in the 'public' disk with the generated filename
+            $tanahid = DB::table('tanah')->where('nokppetani', $nokp)->value('bil');
+
+            // Save the file path in the database
+            DB::table('gerans')->insert([
+                'file_path' => $filename2,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'tanahid' => $tanahid,
+                'jenis' => 2,
+                'nokp' => $nokp
+            ]);
+
+            // Return a response or redirect as needed
+            return redirect()->back()->with('success', 'File uploaded successfully to the "Dokumen Sokongan" folder.');
+        } else {
+            return redirect()->back()->with('error', 'Please choose a file to upload.');
+        }
     }
 }

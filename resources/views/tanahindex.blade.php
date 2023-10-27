@@ -72,27 +72,35 @@
                                                 <tr id="expandableRow{{ $index }}" style="display: none;">
                                                     <td colspan="10">
                                                         <div>
-                                                            <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                                                            <form action="{{ route('upload.geran') }}" method="POST" enctype="multipart/form-data">
                                                                 @csrf
 
                                                                 <div class="form-group">
-                                                                    <input type="file" name="file1" accept=".pdf" required>
-                                                                    <button type="submit" class="btn btn-primary">Upload File 1</button>
-                                                                    <small>*PDF sahaja</small>
+                                                                    <input type="file" name="file1" accept=".pdf">
+                                                                    <button type="submit" class="btn btn-primary">Upload Geran</button>
+                                                                    <small>*PDF sahaja &emsp14; (Previously uploaded: {{$item->file_path ?? 'Tiada Fail'}})</small>
                                                                 </div>
-
-                                                                <div class="form-group">
-                                                                    <input type="file" name="file2" accept=".pdf" required>
-                                                                    <button type="submit" class="btn btn-primary">Upload File 2</button>
-                                                                    <small>*PDF sahaja</small>
-                                                                </div>
-
-                                                                <!-- Add more file input and upload button sections as needed -->
-
                                                             </form>
                                                         </div>
+
                                                         <div>
-                                                            <p>something to put here for future reference etc</p>
+                                                            <form action="{{ route('upload.dokumen-sokongan') }}" method="POST" enctype="multipart/form-data">
+                                                                @csrf
+
+                                                                <div class="form-group">
+                                                                    <input type="file" name="file2" accept=".pdf">
+                                                                    <button type="submit" class="btn btn-primary">Upload Dokumen Sokongan</button>
+                                                                    <small>*PDF sahaja  &emsp14; (Previously uploaded: {{$item->file_path ?? 'Tiada Fail'}})</small>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+
+                                                        <div>
+                                                            <p>
+                                                                Nota: Dokumen Sokongan seperti Surat Perjanjian (bagi tanah berstatus 'SEWA')
+                                                                atau Surat Tuntut Waris (bagi tanah berstatus 'TUNTUT WARIS') perlu diupload dalam bentuk PDF.
+                                                                Sekiranya tanah berstatus 'SENDIRI', hanya perlu upload dokumen geran tanah sahaja.
+                                                            </p>
                                                         </div>
                                                     </td>
                                                 </tr>

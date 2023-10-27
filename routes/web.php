@@ -71,7 +71,12 @@ Route::get('/daftar2', function () {
     // Define the route for handling the search request (POST request)
     Route::match(['GET', 'POST'], '/carian', [TuntutanController::class, 'search'])->name('carian');
 
-    Route::post('/upload', [TanahController::class, 'upload'])->name('upload');
+    //Route for upload files in tanahindex page
+    // Route for uploading geran
+    Route::post('/upload/geran', [TanahController::class, 'uploadGeran'])->name('upload.geran');
+
+    // Route for uploading dokumen sokongan
+    Route::post('/upload/dokumen-sokongan', [TanahController::class, 'uploadDokumenSokongan'])->name('upload.dokumen-sokongan');
 
     Route::get('/lampiranc', [TuntutanController::class, 'lampiran'])->name('lampiranc');
 });
